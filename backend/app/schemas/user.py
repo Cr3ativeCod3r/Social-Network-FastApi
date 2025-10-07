@@ -94,11 +94,57 @@ class UserPasswordChange(BaseModel):
             raise ValueError('Hasło musi zawierać minimum jedną cyfrę')
         return v
 
+
+class UserAdminUpdate(BaseModel):
+    """Schema do aktualizacji użytkownika przez admina"""
+    is_verified: Optional[bool] = None
+    is_admin: Optional[bool] = None
+    is_banned: Optional[bool] = None
+    ban_expires_at: Optional[datetime] = None
+    comment_permission: Optional[bool] = None
+    post_permission: Optional[bool] = None
+    chat_permission: Optional[bool] = None
+
+
+class UserBan(BaseModel):
+    """Schema do banowania użytkownika"""
+    reason: str = Field(..., min_length=1, max_length=500)
+    duration_days: Optional[int] = Field(None, gt=0, description="Liczba dni bana, None = permanentny")
+
+    @field_validator('duration_days')
+    @classmethod
+    def validate_duration(cls, v):
+        if v is not None and v > 365:
+            raise ValueError('Maksymalny czas bana to 365 dni')
+        return v
+
+
+class UserPermissionUpdate(BaseModel):
+    """Schema do aktualizacji uprawnień użytkownika"""
+    comment_permission: Optional[bool] = None
+    post_permission: Optional[bool] = None
+    chat_permission: Optional[bool] = None
+
+
+class UserListResponse(BaseModel):
+    """Schema do listy użytkowników z paginacją"""
+    total: int
+    page: int
+    page_size: int
+    users: list[UserResponse]
+
+
+class UserAdminResponse(UserResponse):
+    """Rozszerzona odpowiedź dla admina"""
+    last_login: Optional[datetime] = None
+    ban_reason: Optional[str] = None
+
+    class Config:
+        from_attributes = True
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
-
-
 
 class TokenResponse(BaseModel):
     access_token: str

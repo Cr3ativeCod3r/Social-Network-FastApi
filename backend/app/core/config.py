@@ -15,6 +15,8 @@ class Settings(BaseSettings):
     DATABASE_URL: str  = os.getenv('DATABASE_URL')
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     SECRET_KEY: str = os.getenv('SECRET_KEY')
+    ADMIN_EMAIL: EmailStr = os.getenv('ADMIN_EMAIL')
+    ADMIN_PASSWORD: str = os.getenv('ADMIN_PASSWORD')
 
     class Config:
         env_file = ".env"
