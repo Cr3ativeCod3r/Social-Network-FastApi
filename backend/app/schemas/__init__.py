@@ -6,6 +6,11 @@ from ..schemas.user import (
     TokenResponse,
     UserPublicProfile,
     UserPasswordChange,
+    UserAdminUpdate,
+    UserBan,
+    UserPermissionUpdate,
+    UserListResponse,
+    UserAdminResponse,
 )
 
 __all__ = [
@@ -16,4 +21,9 @@ __all__ = [
     "TokenResponse",
     "UserPublicProfile",
     "UserPasswordChange",
+    "UserAdminUpdate",
+    "UserBan",
+    "UserPermissionUpdate",
+    "UserListResponse",
+    "UserAdminResponse",
 ]

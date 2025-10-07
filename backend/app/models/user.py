@@ -20,8 +20,8 @@ class User(Base):
     is_verified = Column(Boolean, default=False)
     is_admin = Column(Boolean, default=False)
     is_banned = Column(Boolean, default=False)
+    ban_reason = Column(String(500))
     ban_expires_at = Column(DateTime(timezone=True))
     comment_permission = Column(Boolean, default=True)
     post_permission = Column(Boolean, default=True)
     chat_permission = Column(Boolean, default=True)
-    
