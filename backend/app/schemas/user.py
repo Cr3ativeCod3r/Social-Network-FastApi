@@ -76,6 +76,24 @@ class UserPublicProfile(BaseModel):
     university: Optional[str] = None
     department: Optional[str] = None
 
+
+class UserPasswordChange(BaseModel):
+    old_password: str = Field(..., min_length=1)
+    new_password: str = Field(..., min_length=8, max_length=100)
+
+    @field_validator('new_password')
+    @classmethod
+    def validate_password(cls, v: str) -> str:
+        if len(v) < 8:
+            raise ValueError('Hasło musi mieć minimum 8 znaków')
+        if not re.search(r'[A-Z]', v):
+            raise ValueError('Hasło musi zawierać minimum jedną wielką literę')
+        if not re.search(r'[a-z]', v):
+            raise ValueError('Hasło musi zawierać minimum jedną małą literę')
+        if not re.search(r'\d', v):
+            raise ValueError('Hasło musi zawierać minimum jedną cyfrę')
+        return v
+
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"

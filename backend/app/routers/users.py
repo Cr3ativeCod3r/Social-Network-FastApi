@@ -1,12 +1,13 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
+from starlette import status
 from starlette.exceptions import HTTPException
 
 from ..schemas import user
 from ..db.base import get_db
 from ..core.dependencies import get_current_user, get_current_active_user
 from ..models.user import User
-
+from ..core.security import get_password_hash, verify_password
 router = APIRouter(prefix="/users", tags=["users"])
 
 
@@ -46,3 +47,32 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     if not user:
         raise HTTPException(status_code=404, detail="Użytkownik nie znaleziony")
     return user
+
+
+@router.post("/me/change-password", status_code=status.HTTP_200_OK)
+def change_password(
+        password_data: user.UserPasswordChange,
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
+):
+    """
+    Zmień hasło zalogowanego użytkownika
+    """
+    if not verify_password(password_data.old_password, current_user.password):
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nieprawidłowe stare hasło"
+        )
+
+    if password_data.old_password == password_data.new_password:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Nowe hasło musi być inne niż stare"
+        )
+
+    current_user.password = get_password_hash(password_data.new_password)
+    db.commit()
+
+    return {
+        "message": "Hasło zostało pomyślnie zmienione"
+    }

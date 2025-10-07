@@ -5,6 +5,7 @@ from ..schemas.user import (
     Token,
     TokenResponse,
     UserPublicProfile,
+    UserPasswordChange,
 )
 
 __all__ = [
@@ -14,4 +15,5 @@ __all__ = [
     "Token",
     "TokenResponse",
     "UserPublicProfile",
+    "UserPasswordChange",
 ]
