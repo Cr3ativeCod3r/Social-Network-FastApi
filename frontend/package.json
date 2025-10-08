@@ -11,8 +11,10 @@
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.1.14",
+    "axios": "^1.12.2",
     "clsx": "^2.1.1",
     "formik": "^2.4.6",
+    "js-cookie": "^3.0.5",
     "lucide-react": "^0.545.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -23,6 +25,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@types/js-cookie": "^3.0.6",
     "@types/node": "^24.6.0",
     "@types/react": "^19.1.16",
     "@types/react-dom": "^19.1.9",

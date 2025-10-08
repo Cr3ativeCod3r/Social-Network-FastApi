@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import Input from '../common/Input';
-import { Mail, Lock, LogIn } from 'lucide-react';
+import { Mail, Lock } from 'lucide-react';
 import PortalCard from '../common/PortalCard';
 
 const loginSchema = Yup.object({
@@ -12,7 +12,7 @@ const loginSchema = Yup.object({
     .email('Nieprawidłowy adres email')
     .required('Email jest wymagany'),
   password: Yup.string()
-    .min(6, 'Hasło musi mieć co najmniej 6 znaków')
+    .min(4, 'Hasło musi mieć co najmniej 6 znaków')
     .required('Hasło jest wymagane'),
 });
 
@@ -29,9 +29,8 @@ const Login: React.FC = () => {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-        navigate('/dashboard');
+        navigate('/profile');
       } catch (err) {
-        // Błąd obsługiwany w store
       }
     },
   });
@@ -52,8 +51,8 @@ const Login: React.FC = () => {
 
         <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg p-8">
           <h2 className="text-3xl font-bold text-center mb-8 text-basic1 flex items-center justify-center gap-2">
-            <LogIn className="w-8 h-8" />
-            Logowanie
+       
+            Witamy ponownie
           </h2>
 
           {error && (
@@ -96,7 +95,7 @@ const Login: React.FC = () => {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-basic1 text-white py-3 rounded-lg font-medium hover:bg-basic2 disabled:bg-blue-400 disabled:cursor-not-allowed transition-colors"
+              className="w-full bg-basic1 text-white py-3 rounded-lg font-medium hover:bg-basic2 disabled:bg-green-400 disabled:cursor-not-allowed transition-colors"
             >
               {isLoading ? 'Logowanie...' : 'Zaloguj się'}
             </button>

@@ -1,34 +1,44 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
-button{
+button {
   cursor: pointer;
 }
 
 @theme {
-  --color-basic1: #2C5F2D;
-  --color-basic2: #97BC62;
+  --color-basic1: #2c5f2d;
+  --color-basic2: #97bc62;
 
-  /* --color-second1: #C4DFE6;
-  --color-second2: #66A5AD; */
-
-  --color-second1: #6AB187;
-  --color-second2: #20948B;
-
+  --color-second1: #6ab187;
+  --color-second2: #20948b;
 }
 
 .bg-gradient-basic {
-  background: linear-gradient(to bottom, var(--color-basic2) 0%, var(--color-basic2) 10%, white 100%);
+  background: linear-gradient(
+    to bottom,
+    var(--color-basic2) 0%,
+    var(--color-basic2) 10%,
+    white 100%
+  );
 }
 
 .bg-gradient-basic2 {
-  background: linear-gradient(to top, var(--color-second2) 0%, var(--color-second2) 10%, white 100%);
+  background: linear-gradient(
+    to top,
+    var(--color-second2) 0%,
+    var(--color-second2) 10%,
+    white 100%
+  );
+}
+
+.bg-nav{
+background-color: var(--color-second1);
 }
 
 .animate-fade-in {
   opacity: 0;
   transform: translateY(-16px);
-  animation: fadeInTranslate 0.5s forwards; 
+  animation: fadeInTranslate 0.5s forwards;
 }
 
 @keyframes fadeInTranslate {
@@ -38,9 +48,16 @@ button{
   }
 }
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap");
 
 * {
-  font-family: 'Inter', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  
+  font-family: "Inter", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+
+input{
+  color: black;
+}
+textarea{
+  color: black;
 }
