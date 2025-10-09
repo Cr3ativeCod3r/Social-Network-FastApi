@@ -3,9 +3,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import Input from '../common/Input';
+import Input from '../components/Input';
 import { Mail, Lock } from 'lucide-react';
-import PortalCard from '../common/PortalCard';
+import PortalCard from '../components/PortalCard';
 
 const loginSchema = Yup.object({
   email: Yup.string()
@@ -31,6 +31,7 @@ const Login: React.FC = () => {
         await login(values.email, values.password);
         navigate('/profile');
       } catch (err) {
+        console.log(err)
       }
     },
   });

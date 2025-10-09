@@ -19,3 +19,4 @@ export interface UserData extends User {
   chat_permission: boolean;
   ban_expires_at: string | null;
 }
+

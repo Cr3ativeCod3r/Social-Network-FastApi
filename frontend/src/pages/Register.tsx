@@ -3,9 +3,9 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import Input from '../common/Input';
+import Input from '../components/Input';
 import { Mail, Lock, User, Building, BookOpen } from 'lucide-react';
-import PortalCard from '../common/PortalCard';
+import PortalCard from '../components/PortalCard';
 
 const registerSchema = Yup.object({
     email: Yup.string()
@@ -56,7 +56,7 @@ const Register: React.FC = () => {
                     state: { message: 'Rejestracja zakończona pomyślnie! Możesz się teraz zalogować.' }
                 });
             } catch (err) {
-                // Błąd jest obsługiwany w store
+                       console.log(err)
             }
         },
     });

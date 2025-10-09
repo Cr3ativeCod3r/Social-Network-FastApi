@@ -1,12 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
-import { BookCopy, User, LogOut, MessageSquare, FileText, Shield } from "lucide-react";
+import { BookCopy, User, LogOut, MessageSquare, FileText, Shield, Menu, X } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const handleLogout = () => {
@@ -16,6 +18,17 @@ const Navbar: React.FC = () => {
 
   const handleProfileClick = () => {
     setMenuOpen((prev) => !prev);
+  };
+
+  const isActive = (path: string) => {
+    return location.pathname === path;
+  };
+
+  const getLinkClasses = (path: string) => {
+    const baseClasses = "flex items-center gap-2 uppercase hover:text-[var(--color-basic1)] transition";
+    return isActive(path) 
+      ? `${baseClasses} text-[var(--color-basic1)] border-b-2 border-[var(--color-basic1)]` 
+      : baseClasses;
   };
 
   useEffect(() => {
@@ -28,45 +41,51 @@ const Navbar: React.FC = () => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const navItems = (
+    <>
+      <li className="flex items-center">
+        <a href="/chat" className={getLinkClasses("/chat")}>
+          <MessageSquare className="w-5 h-5" />
+          <span>Chat</span>
+        </a>
+      </li>
+      <li className="flex items-center">
+        <a href="/posty" className={getLinkClasses("/posty")}>
+          <FileText className="w-5 h-5" />
+          <span>Posty</span>
+        </a>
+      </li>
+      {user?.is_admin && (
+        <li className="flex items-center">
+          <a href="/admin" className={getLinkClasses("/admin")}>
+            <Shield className="w-5 h-5" />
+            <span>Admin</span>
+          </a>
+        </li>
+      )}
+    </>
+  );
+
   return (
-    <nav className="bg-nav text-white shadow-md top-0 sticky z-10">
+    <nav className="bg-nav text-white shadow-md top-0 sticky z-1">
       <div className="mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <a
           href="/posty"
-          className="flex items-center gap-2 text-2xl font-semibold ml-12"
+          className="flex items-center gap-2 text-2xl font-semibold"
         >
-          <BookCopy />
-          Study Share
+         <img src="./ico.svg" className="h-12"/>
+          <span className="hidden sm:inline">Study Share</span>
         </a>
 
-        {/* Linki */}
+        {/* Desktop Navigation */}
         <ul className="hidden lg:flex gap-8 text-lg font-medium items-center">
-            <li className="flex items-center">
-                <a href="/chat" className="flex items-center gap-2 underline-anim uppercase hover:text-[var(--color-basic1)] transition">
-                    <MessageSquare className="w-5 h-5 inline-block align-middle mr-2" />
-                    <span className="inline-block align-middle">Chat</span>
-                </a>
-            </li>
-            <li className="flex items-center">
-                <a href="/posty" className="flex items-center gap-2 underline-anim uppercase hover:text-[var(--color-basic1)] transition">
-                    <FileText className="w-5 h-5 inline-block align-middle mr-2" />
-                    <span className="inline-block align-middle ">Posty</span>
-                </a>
-            </li>
-            {user?.is_admin && (
-                <li className="flex items-center">
-                    <a href="/admin" className="flex items-center gap-2 underline-anim uppercase hover:text-[var(--color-basic1)] transition">
-                        <Shield className="w-5 h-5 inline-block align-middle mr-2" />
-                        <span className="inline-block align-middle">Admin</span>
-                    </a>
-                </li>
-            )}
+          {navItems}
         </ul>
 
         {/* Avatar + menu */}
-        <div className="flex items-center gap-3 mr-4 relative" ref={menuRef}>
-          <p className="font-medium text-white">
+        <div className="flex items-center gap-3 relative" ref={menuRef}>
+          <p className="hidden sm:inline font-medium text-white">
             {user?.first_name} {user?.last_name}
           </p>
           <img
@@ -76,7 +95,7 @@ const Navbar: React.FC = () => {
             src="https://www.neptumar.pl/wp-content/uploads/facebook-profile-picture-no-pic-avatar.jpg"
           />
 
-          {/* Menu rozwijane */}
+          {/* Profile Menu */}
           {menuOpen && (
             <div className="absolute right-0 top-14 bg-white text-black rounded-xl shadow-lg w-44 py-2 z-50">
               <button
@@ -98,8 +117,33 @@ const Navbar: React.FC = () => {
               </button>
             </div>
           )}
+
+          {/* Hamburger Menu */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="lg:hidden ml-4"
+          >
+            {mobileMenuOpen ? (
+              <X className="w-6 h-6" />
+            ) : (
+              <Menu className="w-6 h-6" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile Navigation */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-nav border-t border-white/20">
+          <ul className="flex flex-col gap-2 px-6 py-4">
+            {React.Children.map(navItems, (item: React.ReactNode) => (
+              <div onClick={() => setMobileMenuOpen(false)}>
+                {item}
+              </div>
+            ))}
+          </ul>
+        </div>
+      )}
     </nav>
   );
 };

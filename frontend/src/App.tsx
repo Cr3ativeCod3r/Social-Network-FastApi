@@ -1,13 +1,13 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 
-import Profile from "./pages/Profile";
+import Profile from "./pages/Profile/Profile";
 import Chat from "./pages/Chat";
 import Posts from "./pages/Posty";
-import UsersList from "./pages/Admin";
+import UsersList from "./pages/Admin/Admin";
 
 import Layout from "./layout/layout";
 

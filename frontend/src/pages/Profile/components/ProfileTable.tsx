@@ -1,4 +1,4 @@
-import type { UserData } from "../Types/User"
+import type { UserData } from "../../Types/User"
 import {
   User as Building, BookOpen, ShieldCheck, Info, CalendarDays,
   MessageSquare, Edit, CheckCircle, XCircle, Save, X
@@ -92,7 +92,7 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
   ];
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div className="min-h-screen flex items-center justify-center  p-4">
       <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl w-full animate-fade-in">
 
         <div className="flex flex-col items-center text-center mb-8">
