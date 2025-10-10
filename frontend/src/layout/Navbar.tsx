@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { BookCopy, User, LogOut, MessageSquare, FileText, Shield, Menu, X } from "lucide-react";
+import { User, LogOut, MessageSquare, FileText, Shield, Menu, X } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
 

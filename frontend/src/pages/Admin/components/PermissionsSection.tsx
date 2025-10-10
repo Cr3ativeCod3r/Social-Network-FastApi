@@ -1,5 +1,6 @@
 import { Shield, MessageSquare, FileText, MessageCircle } from 'lucide-react';
 import React from 'react';
+import { toast, Toaster } from 'sonner';
 
 type FormData = {
   comment_permission: boolean;
@@ -11,7 +12,7 @@ interface PermissionsSectionProps {
   formData: FormData;
   saving: boolean;
   onToggle: (field: keyof FormData) => void;
-  onUpdate: () => void;
+  onUpdate: () => Promise<boolean>; 
 }
 
 interface PermissionCheckboxProps {
@@ -28,8 +29,24 @@ export function PermissionsSection({
   onToggle,
   onUpdate,
 }: PermissionsSectionProps) {
+ const handleUpdate = async () => {
+  try {
+    const success = await onUpdate?.(); 
+
+    if (success === false) {
+      toast.error('Nie udało się zapisać uprawnień ');
+      return;
+    }
+
+    toast.success('Uprawnienia zapisane pomyślnie ');
+  } catch (err) {
+    toast.error('Wystąpił błąd podczas zapisu ');
+  }
+};
+
   return (
     <div className="space-y-4">
+      <Toaster richColors position="top-right" />
       <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
         <Shield size={20} />
         Uprawnienia
@@ -62,11 +79,11 @@ export function PermissionsSection({
       </div>
 
       <button
-        onClick={onUpdate}
+        onClick={handleUpdate}
         disabled={saving}
         className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition disabled:opacity-50 font-medium mt-4"
       >
-        Zapisz uprawnienia
+        {saving ? 'Zapisywanie...' : 'Zapisz uprawnienia'}
       </button>
     </div>
   );

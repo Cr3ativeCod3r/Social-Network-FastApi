@@ -9,7 +9,7 @@ const Footer: React.FC = () => {
         <p>© {currentYear} Study Share. Wszystkie prawa zastrzeżone.</p>
       </aside>
     </footer>
-  );x
+  );
 };
 
 export default Footer;

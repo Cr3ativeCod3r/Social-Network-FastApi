@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import type { User } from "../../Types/User";
 import UserAdminModal from './UserAdminModal';
-import { Settings, UserRound, ShieldCheck, ShieldAlert, Ban, Hash, Mail } from "lucide-react";
-
+import { Settings, UserRound, ShieldCheck, ShieldAlert, Ban, Hash, Mail, Trash2, AlertTriangle } from "lucide-react";
 
 interface UserListResponse {
   total: number;
@@ -25,6 +24,8 @@ export default function UsersList() {
   const [searchInput, setSearchInput] = useState('');
 
   const [selectedUser, setSelectedUser] = useState<{ id: string; email: string } | null>(null);
+  const [userToDelete, setUserToDelete] = useState<User | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -33,13 +34,11 @@ export default function UsersList() {
   const fetchUsers = async () => {
     setLoading(true);
     setError(null);
-
     try {
       const params: any = { page, page_size: pageSize };
       if (search) params.search = search;
       if (isBanned !== null) params.is_banned = isBanned;
       if (isVerified !== null) params.is_verified = isVerified;
-
       const response = await axiosInstance.get('/admin/users', { params });
       setData(response.data);
     } catch (err: any) {
@@ -76,13 +75,29 @@ export default function UsersList() {
     fetchUsers();
   };
 
+  const handleDeleteClick = (user: User) => {
+    setUserToDelete(user);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!userToDelete) return;
+    setIsDeleting(true);
+    try {
+      await axiosInstance.delete(`/admin/users/${userToDelete.user_id}`);
+      setUserToDelete(null);
+      fetchUsers();
+    } catch (err: any) {
+      alert(err.response?.data?.detail || 'Błąd podczas usuwania użytkownika.');
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0;
 
   return (
     <div className="min-h-screen p-6">
       <div className="max-w-7xl mx-auto animate-fade-in">
-
-        {/* Filters */}
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <form onSubmit={handleSearch} className="mb-4">
             <div className="flex gap-2">
@@ -125,12 +140,11 @@ export default function UsersList() {
               <span className="text-sm font-medium text-gray-700">Status bana:</span>
               <button onClick={() => handleFilterChange('banned', null)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === null ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Wszyscy</button>
               <button onClick={() => handleFilterChange('banned', true)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === true ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Tak</button>
-              <button onClick={() => handleFilterChange('banned', false)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === false ? 'bg-gray-200 text-gray-700 hover:bg-gray-300' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Nie</button>
+              <button onClick={() => handleFilterChange('banned', false)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === false ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Nie</button>
             </div>
           </div>
         </div>
 
-        {/* Content Area */}
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="text-center p-12">
@@ -146,35 +160,14 @@ export default function UsersList() {
           ) : data && data.users.length > 0 ? (
             <>
               <div className="overflow-x-auto">
-
                 <table className="w-full text-sm text-left text-gray-600">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100">
                     <tr>
-                      <th scope="col" className="px-6 py-3">
-                        <span className="flex items-center">
-                          <Hash size={14} /> ID
-                        </span>
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        <span className="flex items-center">
-                          <Mail size={14} className="mr-1" /> Email
-                        </span>
-                      </th>
-                      <th scope="col" className="px-6 py-3">
-                        <span className="flex items-center">
-                          <UserRound size={14} className="mr-1" /> Imię i Nazwisko
-                        </span>
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-center">
-                        <span className="flex items-center justify-center">
-                          <ShieldCheck size={14} className="mr-1" /> Status
-                        </span>
-                      </th>
-                      <th scope="col" className="px-6 py-3 text-right">
-                        <span className="flex items-center justify-end">
-                          <Settings size={14} className="mr-1" /> Akcje
-                        </span>
-                      </th>
+                      <th scope="col" className="px-6 py-3"><span className="flex items-center"><Hash size={14} className="mr-1" />ID</span></th>
+                      <th scope="col" className="px-6 py-3"><span className="flex items-center"><Mail size={14} className="mr-1" />Email</span></th>
+                      <th scope="col" className="px-6 py-3"><span className="flex items-center"><UserRound size={14} className="mr-1" />Imię i Nazwisko</span></th>
+                      <th scope="col" className="px-6 py-3 text-center"><span className="flex items-center justify-center"><ShieldCheck size={14} className="mr-1" />Status</span></th>
+                      <th scope="col" className="px-6 py-3 text-right"><span className="flex items-center justify-end"><Settings size={14} className="mr-1" />Akcje</span></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -186,15 +179,7 @@ export default function UsersList() {
                         <td className="px-6 py-4 text-center">
                           <div className="flex items-center justify-center gap-2">
                             <span className={`flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full ${user.is_verified ? 'bg-green-100 text-green-800' : 'bg-yellow-100 text-yellow-800'}`}>
-                              {user.is_verified ? (
-                                <>
-                                  <ShieldCheck size={12} /> Zweryfikowany
-                                </>
-                              ) : (
-                                <>
-                                  <ShieldAlert size={12} /> Niezwerfikowany
-                                </>
-                              )}
+                              {user.is_verified ? (<><ShieldCheck size={12} /> Zweryfikowany</>) : (<><ShieldAlert size={12} /> Niezwerfikowany</>)}
                             </span>
                             {user.is_banned && (
                               <span className="flex items-center gap-1 px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">
@@ -204,28 +189,37 @@ export default function UsersList() {
                           </div>
                         </td>
                         <td className="px-6 py-4 text-right">
-                          <button
-                            onClick={() => handleAdminClick(user.user_id, user.email)}
-                            className="p-2 text-gray-500 rounded-full hover:bg-gray-200 hover:text-gray-800 transition"
-                          >
-                            <Settings size={18} />
-                          </button>
+                          <div className="flex items-center justify-end gap-1">
+                            <button
+                              onClick={() => handleAdminClick(user.user_id, user.email)}
+                              className="p-2 text-gray-500 rounded-full hover:bg-gray-200 hover:text-gray-800 transition"
+                              title="Zarządzaj użytkownikiem"
+                            >
+                              <Settings size={18} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteClick(user)}
+                              className="p-2 text-gray-500 rounded-full hover:bg-red-100 hover:text-red-700 transition"
+                              title="Usuń użytkownika"
+                            >
+                              <Trash2 size={18} />
+                            </button>
+                          </div>
                         </td>
                       </tr>
                     ))}
                   </tbody>
                 </table>
               </div>
-              {/* Pagination */}
               <div className="flex items-center justify-between p-4 border-t">
                 <span className="text-sm text-gray-700">
                   Strona <span className="font-semibold">{data.page}</span> z <span className="font-semibold">{totalPages}</span> (Razem: {data.total})
                 </span>
                 <div className="flex gap-2">
-                  <button onClick={() => setPage(page - 1)} disabled={page <= 1} className="px-4 py-2 text-sm bg-green-500 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button onClick={() => setPage(page - 1)} disabled={page <= 1} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed">
                     Poprzednia
                   </button>
-                  <button onClick={() => setPage(page + 1)} disabled={page >= totalPages} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-gray-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button onClick={() => setPage(page + 1)} disabled={page >= totalPages} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed">
                     Następna
                   </button>
                 </div>
@@ -247,6 +241,45 @@ export default function UsersList() {
           onClose={handleCloseModal}
           onUpdate={handleUpdateSuccess}
         />
+      )}
+
+      {userToDelete && (
+        <div className="fixed inset-0 bg-black/50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg shadow-xl p-6 w-full max-w-md mx-4">
+            <div className="flex items-start">
+              <div className="mx-auto flex-shrink-0 flex items-center justify-center h-12 w-12 rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                <AlertTriangle className="h-6 w-6 text-red-600" aria-hidden="true" />
+              </div>
+              <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">
+                  Potwierdź usunięcie
+                </h3>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    Czy na pewno chcesz usunąć użytkownika <span className="font-bold">{userToDelete.email}</span>? Tej akcji nie można cofnąć.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 sm:mt-4 sm:flex sm:flex-row-reverse">
+              <button
+                type="button"
+                className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm disabled:opacity-50"
+                onClick={handleConfirmDelete}
+                disabled={isDeleting}
+              >
+                {isDeleting ? 'Usuwanie...' : 'Usuń'}
+              </button>
+              <button
+                type="button"
+                className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:w-auto sm:text-sm"
+                onClick={() => setUserToDelete(null)}
+              >
+                Anuluj
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );

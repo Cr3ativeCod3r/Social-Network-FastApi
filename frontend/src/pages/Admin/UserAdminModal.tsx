@@ -5,6 +5,8 @@ import { PermissionsSection } from './components/PermissionsSection';
 import { BanSection } from './components/BanSection';
 import axiosInstance from '../../api/axiosInstance';
 
+
+
 interface UserAdminModalProps {
   userId: string;
   userEmail: string;
