@@ -27,7 +27,6 @@ def get_all_users(
     """
     query = db.query(User)
 
-    # Filtrowanie po wyszukiwaniu
     if search:
         search_filter = f"%{search}%"
         query = query.filter(
