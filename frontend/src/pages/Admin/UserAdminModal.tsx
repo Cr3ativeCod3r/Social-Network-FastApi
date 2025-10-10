@@ -136,7 +136,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       });
       onUpdate?.();
     } catch (err) {
-      setError('Błąd podczas aktualizacji uprawnień');
+      console.log(err)
     } finally {
       setSaving(false);
     }
