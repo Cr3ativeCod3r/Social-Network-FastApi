@@ -17,7 +17,7 @@ export default function UsersList() {
   const [error, setError] = useState<string | null>(null);
 
   const [page, setPage] = useState(1);
-  const [pageSize, setPageSize] = useState(20);
+  const [pageSize, setPageSize] = useState(6);
   const [search, setSearch] = useState('');
   const [isBanned, setIsBanned] = useState<boolean | null>(null);
   const [isVerified, setIsVerified] = useState<boolean | null>(null);
@@ -96,7 +96,7 @@ export default function UsersList() {
   const totalPages = data ? Math.ceil(data.total / data.page_size) : 0;
 
   return (
-    <div className="min-h-screen p-6">
+    <div className="px-6">
       <div className="max-w-7xl mx-auto animate-fade-in">
         <div className="bg-white rounded-lg shadow p-6 mb-6">
           <form onSubmit={handleSearch} className="mb-4">
@@ -113,7 +113,7 @@ export default function UsersList() {
               </div>
               <button
                 type="submit"
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                className="px-6 py-2 bg-second1 text-white rounded-lg hover:bg-second2 transition"
               >
                 Szukaj
               </button>
@@ -132,13 +132,13 @@ export default function UsersList() {
           <div className="flex gap-6 flex-wrap">
             <div className="flex gap-2 items-center">
               <span className="text-sm font-medium text-gray-700">Weryfikacja:</span>
-              <button onClick={() => handleFilterChange('verified', null)} className={`px-3 py-1 text-sm rounded-full transition ${isVerified === null ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Wszyscy</button>
+              <button onClick={() => handleFilterChange('verified', null)} className={`px-3 py-1 text-sm rounded-full transition ${isVerified === null ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Wszyscy</button>
               <button onClick={() => handleFilterChange('verified', true)} className={`px-3 py-1 text-sm rounded-full transition ${isVerified === true ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Tak</button>
               <button onClick={() => handleFilterChange('verified', false)} className={`px-3 py-1 text-sm rounded-full transition ${isVerified === false ? 'bg-yellow-500 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Nie</button>
             </div>
             <div className="flex gap-2 items-center">
               <span className="text-sm font-medium text-gray-700">Status bana:</span>
-              <button onClick={() => handleFilterChange('banned', null)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === null ? 'bg-blue-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Wszyscy</button>
+              <button onClick={() => handleFilterChange('banned', null)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === null ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Wszyscy</button>
               <button onClick={() => handleFilterChange('banned', true)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === true ? 'bg-red-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Tak</button>
               <button onClick={() => handleFilterChange('banned', false)} className={`px-3 py-1 text-sm rounded-full transition ${isBanned === false ? 'bg-green-600 text-white' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}>Nie</button>
             </div>
@@ -216,10 +216,10 @@ export default function UsersList() {
                   Strona <span className="font-semibold">{data.page}</span> z <span className="font-semibold">{totalPages}</span> (Razem: {data.total})
                 </span>
                 <div className="flex gap-2">
-                  <button onClick={() => setPage(page - 1)} disabled={page <= 1} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button onClick={() => setPage(page - 1)} disabled={page <= 1} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed  text-white">
                     Poprzednia
                   </button>
-                  <button onClick={() => setPage(page + 1)} disabled={page >= totalPages} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                  <button onClick={() => setPage(page + 1)} disabled={page >= totalPages} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed text-white">
                     Następna
                   </button>
                 </div>
