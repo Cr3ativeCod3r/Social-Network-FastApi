@@ -11,8 +11,6 @@ from ..schemas.admin import AdminNoteListResponse, AdminStatistics
 from ..db.base import get_db
 from ..core.dependencies import get_current_admin_user
 from ..models.user import User
-from ..core.dependencies import get_current_admin_user
-from ..models.user import User
 from ..models.note import Note
 from ..models.note_rating import NoteRating
 from ..models.saved_note import SavedNote
