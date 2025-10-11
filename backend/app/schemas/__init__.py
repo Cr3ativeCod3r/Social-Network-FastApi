@@ -42,6 +42,16 @@ from ..schemas.note_comment import (
     NoteCommentResponse,
     CommentAuthor
 )
+from ..schemas.chat_message import (
+    ChatMessageBase,
+    ChatMessageCreate,
+    ChatMessageUpdate,
+    MessageAuthor,
+    ChatMessageResponse,
+    ChatStats
+
+
+)
 from ..schemas.common import PaginatedResponse
 
 __all__ = [
@@ -81,6 +91,13 @@ __all__ = [
     "NoteCommentUpdate",
     "NoteCommentResponse",
     "CommentAuthor",
+    # chat
+    "ChatMessageBase",
+    "ChatMessageCreate",
+    "ChatMessageUpdate",
+    "MessageAuthor",
+    "ChatMessageResponse",
+    "ChatStats",
     #pagination
     "PaginatedResponse",
 ]
