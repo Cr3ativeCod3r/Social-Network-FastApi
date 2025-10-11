@@ -26,6 +26,18 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="FastAPI Auth",
               lifespan=lifespan)
+origins = [
+    "http://localhost:5173", 
+    "http://127.0.0.1:5173",  
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,         
+    allow_credentials=True,       
+    allow_methods=["*"],          
+    allow_headers=["*"], 
+)
 
 origins = [
     "http://localhost:5173",
@@ -47,7 +59,8 @@ app.include_router(notes.router)
 app.include_router(saved_notes.router)
 app.include_router(note_ratings.router)
 app.include_router(note_comments.router)
-@app.get("/")
+
+@app.get("/api")
 def root():
     return {
         "message": "API is running",

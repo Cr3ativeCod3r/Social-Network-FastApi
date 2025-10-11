@@ -1,12 +1,15 @@
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+import Cookies from "js-cookie";
 
 interface User {
   id: string;
   email: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
+  first_name: string;
+  last_name: string;
+  university: string;
+  department: string;
+  is_admin:string;
 }
 
 interface AuthState {
@@ -24,12 +27,34 @@ interface AuthState {
 interface RegisterData {
   email: string;
   password: string;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: string;
+  first_name: string;
+  last_name: string;
+  university: string;
+  department: string;
 }
 
-const API_URL = import.meta.env.VITE_API;
+interface LoginResponse {
+  access_token: string;
+  token_type: string;
+}
+
+const API_URL = import.meta.env.VITE_API_URL;
+
+const cookieStorage = {
+  getItem: (name: string): string | null => {
+    return Cookies.get(name) || null;
+  },
+  setItem: (name: string, value: string): void => {
+    Cookies.set(name, value, {
+      expires: 7, 
+      secure: true, 
+      sameSite: "strict",
+    });
+  },
+  removeItem: (name: string): void => {
+    Cookies.remove(name);
+  },
+};
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -44,23 +69,50 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/login`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify({ email, password }),
           });
 
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.message || 'Błąd logowania');
+            let errorMessage = "Błąd logowania";
+            try {
+              const errorData = await response.json();
+              if (typeof errorData.detail === "string") {
+                errorMessage = errorData.detail;
+              } else if (Array.isArray(errorData.detail)) {
+                errorMessage = errorData.detail
+                  .map((e: any) => e.msg)
+                  .join(", ");
+              } else {
+                errorMessage = JSON.stringify(errorData);
+              }
+            } catch {
+              errorMessage = "Nie udało się odczytać błędu z serwera";
+            }
+            throw new Error(errorMessage);
           }
 
-          const data = await response.json();
-          
+          const data: LoginResponse = await response.json();
+
+          const userResponse = await fetch(`${API_URL}/users/me`, {
+            method: "GET",
+            headers: {
+              Authorization: `Bearer ${data.access_token}`,
+            },
+          });
+
+          if (!userResponse.ok) {
+            throw new Error("Nie udało się pobrać danych użytkownika");
+          }
+
+          const userData: User = await userResponse.json();
+
           set({
-            user: data.user,
-            token: data.token,
+            user: userData,
+            token: data.access_token,
             isAuthenticated: true,
             isLoading: false,
             error: null,
@@ -68,7 +120,7 @@ export const useAuthStore = create<AuthState>()(
         } catch (error) {
           set({
             isLoading: false,
-            error: error instanceof Error ? error.message : 'Wystąpił błąd',
+            error: error instanceof Error ? error.message : "Wystąpił błąd",
           });
           throw error;
         }
@@ -78,31 +130,25 @@ export const useAuthStore = create<AuthState>()(
         set({ isLoading: true, error: null });
         try {
           const response = await fetch(`${API_URL}/auth/register`, {
-            method: 'POST',
+            method: "POST",
             headers: {
-              'Content-Type': 'application/json',
+              "Content-Type": "application/json",
             },
             body: JSON.stringify(registerData),
           });
 
           if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.message || 'Błąd rejestracji');
+            throw new Error(errorData.detail || "Błąd rejestracji");
           }
-
-          const data = await response.json();
-          
           set({
-            user: data.user,
-            token: data.token,
-            isAuthenticated: true,
             isLoading: false,
             error: null,
           });
         } catch (error) {
           set({
             isLoading: false,
-            error: error instanceof Error ? error.message : 'Wystąpił błąd',
+            error: error instanceof Error ? error.message : "Wystąpił błąd",
           });
           throw error;
         }
@@ -122,11 +168,17 @@ export const useAuthStore = create<AuthState>()(
       },
     }),
     {
-      name: 'auth-storage',
+      name: "token",
+      storage: createJSONStorage(() => cookieStorage),
       partialize: (state) => ({
-        user: state.user,
         token: state.token,
-        isAuthenticated: state.isAuthenticated,
+        user: state.user
+          ? {
+              first_name: state.user.first_name,
+              last_name: state.user.last_name,
+              is_admin: state.user.is_admin
+            }
+          : null
       }),
     }
   )

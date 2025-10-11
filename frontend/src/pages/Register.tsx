@@ -3,26 +3,29 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import Input from '../common/Input';
-import { Mail, Lock, User, Calendar, UserPlus } from 'lucide-react';
-import PortalCard from '../common/PortalCard';
+import Input from '../components/Input';
+import { Mail, Lock, User, Building, BookOpen } from 'lucide-react';
+import PortalCard from '../components/PortalCard';
 
 const registerSchema = Yup.object({
     email: Yup.string()
         .email('Nieprawidłowy adres email')
         .required('Email jest wymagany'),
     password: Yup.string()
-        .min(6, 'Hasło musi mieć co najmniej 6 znaków')
+        .min(8, 'Hasło musi mieć co najmniej 8 znaków')
         .required('Hasło jest wymagane'),
-    firstName: Yup.string()
+    first_name: Yup.string()
         .min(2, 'Imię musi mieć co najmniej 2 znaki')
         .required('Imię jest wymagane'),
-    lastName: Yup.string()
+    last_name: Yup.string()
         .min(2, 'Nazwisko musi mieć co najmniej 2 znaki')
         .required('Nazwisko jest wymagane'),
-    dateOfBirth: Yup.date()
-        .max(new Date(), 'Data urodzenia nie może być z przyszłości')
-        .required('Data urodzenia jest wymagana'),
+    university: Yup.string()
+        .min(2, 'Nazwa uczelni musi mieć co najmniej 2 znaki')
+        .required('Uczelnia jest wymagana'),
+    department: Yup.string()
+        .min(2, 'Nazwa wydziału musi mieć co najmniej 2 znaki')
+        .required('Wydział jest wymagany'),
 });
 
 const Register: React.FC = () => {
@@ -33,9 +36,10 @@ const Register: React.FC = () => {
         initialValues: {
             email: '',
             password: '',
-            firstName: '',
-            lastName: '',
-            dateOfBirth: '',
+            first_name: '',
+            last_name: '',
+            university: '',
+            department: '',
         },
         validationSchema: registerSchema,
         onSubmit: async (values) => {
@@ -43,13 +47,16 @@ const Register: React.FC = () => {
                 await register({
                     email: values.email,
                     password: values.password,
-                    firstName: values.firstName,
-                    lastName: values.lastName,
-                    dateOfBirth: values.dateOfBirth,
+                    first_name: values.first_name,
+                    last_name: values.last_name,
+                    university: values.university,
+                    department: values.department,
                 });
-                navigate('/empty');
+                navigate('/login', { 
+                    state: { message: 'Rejestracja zakończona pomyślnie! Możesz się teraz zalogować.' }
+                });
             } catch (err) {
-                // Błąd jest obsługiwany w store
+                       console.log(err)
             }
         },
     });
@@ -70,8 +77,7 @@ const Register: React.FC = () => {
 
                 <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg p-8">
                     <h2 className="text-3xl font-bold text-center mb-8 text-second2 flex items-center justify-center gap-2">
-                        <UserPlus className="w-8 h-8" />
-                        Rejestracja
+                        Dołącz do nas
                     </h2>
 
                     {error && (
@@ -116,48 +122,64 @@ const Register: React.FC = () => {
                         <div>
                             <Input
                                 type="text"
-                                name="firstName"
+                                name="first_name"
                                 placeholder="Imię"
                                 icon={<User size={16} />}
-                                value={formik.values.firstName}
+                                value={formik.values.first_name}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 textcolor="text-second2"
                             />
-                            {formik.touched.firstName && formik.errors.firstName && (
-                                <p className="mt-1 text-sm text-red-600">{formik.errors.firstName}</p>
+                            {formik.touched.first_name && formik.errors.first_name && (
+                                <p className="mt-1 text-sm text-red-600">{formik.errors.first_name}</p>
                             )}
                         </div>
 
                         <div>
                             <Input
                                 type="text"
-                                name="lastName"
+                                name="last_name"
                                 placeholder="Nazwisko"
                                 icon={<User size={16} />}
-                                value={formik.values.lastName}
+                                value={formik.values.last_name}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 textcolor="text-second2"
                             />
-                            {formik.touched.lastName && formik.errors.lastName && (
-                                <p className="mt-1 text-sm text-red-600">{formik.errors.lastName}</p>
+                            {formik.touched.last_name && formik.errors.last_name && (
+                                <p className="mt-1 text-sm text-red-600">{formik.errors.last_name}</p>
                             )}
                         </div>
 
                         <div>
                             <Input
-                                type="date"
-                                name="dateOfBirth"
-                                placeholder="Data urodzenia"
-                                icon={<Calendar size={16} />}
-                                value={formik.values.dateOfBirth}
+                                type="text"
+                                name="university"
+                                placeholder="Uczelnia"
+                                icon={<Building size={16} />}
+                                value={formik.values.university}
                                 onChange={formik.handleChange}
                                 onBlur={formik.handleBlur}
                                 textcolor="text-second2"
                             />
-                            {formik.touched.dateOfBirth && formik.errors.dateOfBirth && (
-                                <p className="mt-1 text-sm text-red-600">{formik.errors.dateOfBirth}</p>
+                            {formik.touched.university && formik.errors.university && (
+                                <p className="mt-1 text-sm text-red-600">{formik.errors.university}</p>
+                            )}
+                        </div>
+
+                        <div>
+                            <Input
+                                type="text"
+                                name="department"
+                                placeholder="Wydział"
+                                icon={<BookOpen size={16} />}
+                                value={formik.values.department}
+                                onChange={formik.handleChange}
+                                onBlur={formik.handleBlur}
+                                textcolor="text-second2"
+                            />
+                            {formik.touched.department && formik.errors.department && (
+                                <p className="mt-1 text-sm text-red-600">{formik.errors.department}</p>
                             )}
                         </div>
 
@@ -174,7 +196,7 @@ const Register: React.FC = () => {
                         <p className="text-gray-600">
                             Masz już konto?{' '}
                             <button
-                                onClick={() => navigate('/login')}
+                                onClick={() => navigate('/')}
                                 className="text-second2 hover:text-second1 font-medium"
                             >
                                 Zaloguj się

@@ -1,26 +1,21 @@
-// import React, { useEffect, useState, type ReactNode } from "react";
+import React from 'react';
+import Navbar from './Navbar';
+import Footer from './Footer';
 
-// interface ALayoutProps {
-//     children: ReactNode;
-// }
+interface LayoutProps {
+  children: React.ReactNode;
+}
 
-// const Layout: React.FC<ALayoutProps> = ({ children }) => {
-//     const [visible, setVisible] = useState(false);
+const Layout: React.FC<LayoutProps> = ({ children }) => {
+  return (
+    <div className="flex flex-col min-h-screen">
+      <Navbar />
+      <main className=" pb-[100px] bg-gray-50">
+        {children}
+      </main>
+      <Footer />
+    </div>
+  );
+};
 
-//     useEffect(() => {
-//         const timer = setTimeout(() => setVisible(true), 10);
-//         return () => clearTimeout(timer);
-//     }, []);
-
-//     return (
-//         <div
-//             className={`transition-all duration-500 ${visible ? "opacity-100 translate-y-0" : "opacity-0 -translate-y-4"
-//                 }`}
-//         >
-//             {children}
-
-//         </div>
-//     );
-// };
-
-// export default Layout;
+export default Layout;
