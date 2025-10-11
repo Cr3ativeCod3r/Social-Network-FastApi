@@ -52,7 +52,7 @@ const Navbar: React.FC = () => {
       <li className="flex items-center">
         <a href="/posty" className={getLinkClasses("/posty")}>
           <FileText className="w-5 h-5" />
-          <span>Posty</span>
+          <span>Notatki</span>
         </a>
       </li>
       {user?.is_admin && (

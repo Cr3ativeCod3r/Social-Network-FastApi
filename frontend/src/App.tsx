@@ -1,54 +1,92 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-
-
 import Profile from "./pages/Profile/Profile";
 import Chat from "./pages/Chat";
-import Posts from "./pages/Posty";
+import Posts from "./pages/Notes/Posty";
 import UsersList from "./pages/Admin/Admin";
-;
-
+import NoteDetail from "./pages/Notes/crud/ReadNote";
 import Layout from "./layout/layout";
+
+
+const ScrollToTop: React.FC = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0 });
+  }, [pathname]);
+
+  return null;
+};
 
 const App: React.FC = () => {
   return (
-      <Router>
-        <Routes>
-          {/* Public routes */}
-          <Route path="/" element={<Login />} />
-          <Route path="/register" element={<Register />} />
+    <Router>
 
-          {/* Protected or layout routes */}
-          <Route path="/profile" element={
+      <ScrollToTop />
+
+      <Routes>
+
+        <Route path="/" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+
+        <Route
+          path="/profile"
+          element={
             <Layout>
               <Profile />
             </Layout>
-          } />
+          }
+        />
 
-          <Route path="/chat" element={
+        <Route
+          path="/chat"
+          element={
             <Layout>
               <Chat />
             </Layout>
-          } />
+          }
+        />
 
-          <Route path="/Admin" element={
+        <Route
+          path="/Admin"
+          element={
             <Layout>
               <UsersList />
             </Layout>
-          } />
+          }
+        />
 
-          <Route path="/posty" element={
+        <Route
+          path="/posty"
+          element={
             <Layout>
               <Posts />
             </Layout>
-          } />
+          }
+        />
 
-          {/* 404 */}
-          <Route path="*" element={<div className="p-8 text-center text-gray-500">404 – Page not found</div>} />
-        </Routes>
-      </Router>
+        <Route
+          path="/note/:id"
+          element={
+            <Layout>
+              <NoteDetail />
+            </Layout>
+          }
+        />
+
+        {/* 404 */}
+        <Route
+          path="*"
+          element={
+            <div className="p-8 text-center text-gray-500">
+              404 – Page not found
+            </div>
+          }
+        />
+      </Routes>
+    </Router>
   );
 };
 
