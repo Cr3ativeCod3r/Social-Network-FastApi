@@ -20,9 +20,13 @@ const Navbar: React.FC = () => {
     setMenuOpen((prev) => !prev);
   };
 
-  const isActive = (path: string) => {
-    return location.pathname === path;
-  };
+const isActive = (path: string) => {
+  if (path.endsWith("/*")) {
+    const base = path.replace("/*", "");
+    return location.pathname.startsWith(base);
+  }
+  return location.pathname === path;
+};
 
   const getLinkClasses = (path: string) => {
     const baseClasses = "flex items-center gap-2 uppercase hover:text-[var(--color-basic1)] transition";
@@ -57,7 +61,7 @@ const Navbar: React.FC = () => {
       </li>
       {user?.is_admin && (
         <li className="flex items-center">
-          <a href="/admin" className={getLinkClasses("/admin")}>
+          <a href="/admin/users" className={getLinkClasses("/admin/*")}>
             <Shield className="w-5 h-5" />
             <span>Admin</span>
           </a>

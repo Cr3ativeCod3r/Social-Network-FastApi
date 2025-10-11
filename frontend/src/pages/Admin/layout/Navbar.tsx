@@ -4,9 +4,9 @@ import { Shield, Users, FileText, BarChart3 } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const links = [
-    { name: "Users", path: "/admin", icon: Users },
-    { name: "Notes", path: "/notes", icon: FileText },
-    { name: "Statistics", path: "/stats", icon: BarChart3 },
+    { name: "Users", path: "/admin/users", icon: Users },
+    { name: "Notes", path: "/admin/notes", icon: FileText },
+    { name: "Statistics", path: "/admin/stats", icon: BarChart3 },
   ];
 
   return (

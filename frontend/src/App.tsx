@@ -51,7 +51,7 @@ const App: React.FC = () => {
         />
 
         <Route
-          path="/Admin"
+          path="/Admin/users"
           element={
             <Layout>
               <AdminLayout>
@@ -62,7 +62,7 @@ const App: React.FC = () => {
         />
 
            <Route
-          path="/Notes"
+          path="/Admin/Notes"
           element={
             <Layout>
               <AdminLayout>
