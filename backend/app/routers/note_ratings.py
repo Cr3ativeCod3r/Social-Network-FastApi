@@ -12,8 +12,7 @@ from ..schemas import (
     NoteRatingResponse,
 )
 
-router = APIRouter(prefix="/notes", tags=["note-ratings"])
-
+router = APIRouter()
 
 @router.post("/{note_id}/rate", response_model=NoteRatingResponse)
 async def rate_note(

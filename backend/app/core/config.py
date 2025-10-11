@@ -12,6 +12,7 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 sys.path.append(BASE_DIR)
 
 class Settings(BaseSettings):
+    API_V1_STR: str = "/api/v1"
     DATABASE_URL: str  = os.getenv('DATABASE_URL')
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 8
     SECRET_KEY: str = os.getenv('SECRET_KEY')

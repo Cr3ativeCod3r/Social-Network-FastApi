@@ -17,8 +17,7 @@ from ..schemas.note_comment import (
 )
 from ..schemas import PaginatedResponse
 
-router = APIRouter(prefix="/notes", tags=["note-comments"])
-
+router = APIRouter()
 
 @router.post("/{note_id}/comments", response_model=NoteCommentResponse, status_code=status.HTTP_201_CREATED)
 async def create_comment(

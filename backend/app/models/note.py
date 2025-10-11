@@ -16,7 +16,6 @@ class Note(Base):
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     user_id = Column(Integer, ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
-    group_id = Column(Integer, index=True)
     average_rating = Column(DECIMAL(2, 1))
     rating_count = Column(Integer, default=0)
 

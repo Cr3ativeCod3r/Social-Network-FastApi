@@ -10,7 +10,6 @@ class NoteBase(BaseModel):
     title: str = Field(..., max_length=255)
     content: str
     subject: Optional[str] = Field(None, max_length=255)
-    group_id: Optional[int] = None
 
 
 class NoteCreate(NoteBase):
@@ -20,7 +19,6 @@ class NoteUpdate(BaseModel):
     title: Optional[str] = Field(None, max_length=255)
     content: Optional[str] = None
     subject: Optional[str] = Field(None, max_length=255)
-    group_id: Optional[int] = None
 
 
 class NoteResponse(NoteBase):
