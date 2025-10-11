@@ -2,6 +2,8 @@ import React, { useState, useRef, useEffect } from "react";
 import { User, LogOut, MessageSquare, FileText, Shield, Menu, X } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
+import image from "../assets/image/ico.svg"
+import student from "../assets/image/student.svg"
 
 const Navbar: React.FC = () => {
   const { user, logout } = useAuthStore();
@@ -54,7 +56,7 @@ const isActive = (path: string) => {
         </a>
       </li>
       <li className="flex items-center">
-        <a href="/posty" className={getLinkClasses("/posty")}>
+        <a href="/notatki" className={getLinkClasses("/notatki/*")}>
           <FileText className="w-5 h-5" />
           <span>Notatki</span>
         </a>
@@ -78,7 +80,7 @@ const isActive = (path: string) => {
           href="/posty"
           className="flex items-center gap-2 text-2xl font-semibold"
         >
-         <img src="./ico.svg" className="h-12"/>
+         <img src={image} className="h-12 "/>
           <span className="hidden sm:inline">Study Share</span>
         </a>
 
@@ -94,9 +96,9 @@ const isActive = (path: string) => {
           </p>
           <img
             onClick={handleProfileClick}
-            className="w-10 h-10 rounded-full border-2 border-[var(--color-second1)] object-cover cursor-pointer"
+            className="w-10 h-10 rounded-full border-1 p-1 border-gray-500 bg-white object-cover cursor-pointer"
             alt="Avatar"
-            src="https://www.neptumar.pl/wp-content/uploads/facebook-profile-picture-no-pic-avatar.jpg"
+            src={student}
           />
 
           {/* Profile Menu */}

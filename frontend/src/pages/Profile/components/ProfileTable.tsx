@@ -4,6 +4,7 @@ import {
   MessageSquare, Edit, CheckCircle, XCircle, Save, X
 } from 'lucide-react';
 import Demo from "./ChangePasswordModal"
+import student from "../../../assets/image/student.svg"
 
 const PermissionBadge: React.FC<{ granted: boolean }> = ({ granted }) => (
   <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${granted
@@ -100,9 +101,9 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
           <div className="flex flex-col items-center text-center mb-8">
             <div className="relative mb-4">
               <img
-                src={'https://www.neptumar.pl/wp-content/uploads/facebook-profile-picture-no-pic-avatar.jpg'}
+                src={student}
                 alt="Zdjęcie profilowe"
-                className="w-32 h-32 rounded-full object-cover border-4 border-blue-500"
+                className="w-32 h-32 rounded-full object-cover border-4 border-blue-500 p-2"
               />
               {userData.is_verified && (
                 <div className="absolute bottom-1 right-1 bg-blue-500 rounded-full p-1.5 border-2 border-white" title="Konto zweryfikowane">

@@ -9,13 +9,12 @@ const Profile: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const API_BASE_URL = import.meta.env.VITE_API_URL;
   const [editMode, setEditMode] = useState<{ [key: string]: boolean }>({});
   const [editValues, setEditValues] = useState<{ [key: string]: string | null }>({});
 
   const fetchUserData = async () => {
     try {
-      const response = await axiosInstance.get(`${API_BASE_URL}/users/me`,);
+      const response = await axiosInstance.get(`/users/me`,);
       setUserData(response.data);
       setEditValues({
         first_name: response.data.first_name,
@@ -45,7 +44,7 @@ const Profile: React.FC = () => {
 
   useEffect(() => {
     fetchUserData();
-  }, [API_BASE_URL]);
+  }, []);
 
   const handleEdit = (field: string) => {
     setEditMode(prev => ({ ...prev, [field]: true }));
@@ -65,7 +64,7 @@ const Profile: React.FC = () => {
 
       const payload = { [field]: editValues[field] === '' ? null : editValues[field] };
 
-      const response = await axios.patch(`${API_BASE_URL}/users/me`, payload, {
+      const response = await axios.patch(`/users/me`, payload, {
         headers: { 'Authorization': `Bearer ${token}` }
       });
 

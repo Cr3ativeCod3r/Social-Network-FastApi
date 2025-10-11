@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { X } from 'lucide-react';
-import { StatusSection } from './components/StatusSection';
-import { PermissionsSection } from './components/PermissionsSection';
-import { BanSection } from './components/BanSection';
-import axiosInstance from '../../api/axiosInstance';
+import { StatusSection } from './StatusSection';
+import { PermissionsSection } from './PermissionsSection';
+import { BanSection } from './BanSection';
+import axiosInstance from '../../../api/axiosInstance';
 
 
 

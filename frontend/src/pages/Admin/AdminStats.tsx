@@ -1,0 +1,139 @@
+import { useEffect, useState } from 'react';
+import axiosInstance from '../../api/axiosInstance';
+import {
+  Users,
+  UserCheck,
+  UserX,
+  UserCog,
+  MessageCircleOff,
+  MessageSquareOff,
+  FilePenLine,
+  FileText,
+  Paperclip,
+  Star,
+  Bookmark,
+  Medal,
+  CalendarClock,
+  Loader2,
+  AlertTriangle,
+} from 'lucide-react';
+
+interface AdminStats {
+  total_users: number;
+  verified_users: number;
+  banned_users: number;
+  admin_users: number;
+  users_with_restrictions: {
+    without_chat: number;
+    without_comments: number;
+    without_posts: number;
+  };
+  notes_stats: {
+    total_notes: number;
+    total_ratings: number;
+    total_saved_notes: number;
+  };
+}
+
+interface NotesStats {
+  total_notes: number;
+  notes_with_files: number;
+  notes_without_files: number;
+  total_ratings: number;
+  total_saved: number;
+  average_rating: number;
+  notes_last_30_days: number;
+}
+
+export default function AdminStats() {
+  const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
+  const [notesStats, setNotesStats] = useState<NotesStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const [admin, notes] = await Promise.all([
+          axiosInstance.get('/admin/stats'),
+          axiosInstance.get('/admin/notes/stats')
+        ]);
+        setAdminStats(admin.data);
+        setNotesStats(notes.data);
+      } catch (error) {
+        console.error('Error fetching stats:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchStats();
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="p-6 flex justify-center items-center h-screen">
+        <Loader2 className="w-8 h-8 animate-spin text-gray-500" />
+      </div>
+    );
+  }
+
+  if (!adminStats || !notesStats) {
+    return (
+      <div className="p-6 flex flex-col justify-center items-center h-screen text-red-500">
+        <AlertTriangle className="w-12 h-12 mb-4" />
+        <p className="text-xl">Błąd ładowania danych statystycznych.</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className=" bg-gray-50 animate-fade-in">
+    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+      <h2 className="text-xl font-semibold text-gray-700 mb-4">Użytkownicy</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <StatCard label="Użytkownicy" value={adminStats.total_users} icon={Users} color="text-blue-500" />
+        <StatCard label="Zweryfikowani" value={adminStats.verified_users} icon={UserCheck} color="text-green-500" />
+        <StatCard label="Zbanowani" value={adminStats.banned_users} icon={UserX} color="text-red-500" />
+        <StatCard label="Admini" value={adminStats.admin_users} icon={UserCog} color="text-purple-500" />
+      </div>
+    </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">Ograniczenia użytkowników</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <StatCard label="Bez czatu" value={adminStats.users_with_restrictions.without_chat} icon={MessageCircleOff} color="text-yellow-500" />
+          <StatCard label="Bez komentarzy" value={adminStats.users_with_restrictions.without_comments} icon={MessageSquareOff} color="text-orange-500" />
+          <StatCard label="Bez postów" value={adminStats.users_with_restrictions.without_posts} icon={FilePenLine} color="text-pink-500" />
+        </div>
+      </div>
+
+      <div className="bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">Statystyki notatek</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard label="Notatki" value={notesStats.total_notes} icon={FileText} color="text-blue-500" />
+          <StatCard label="Z plikami" value={notesStats.notes_with_files} icon={Paperclip} color="text-gray-600" />
+          <StatCard label="Oceny" value={notesStats.total_ratings} icon={Star} color="text-yellow-400" />
+          <StatCard label="Zapisane" value={notesStats.total_saved} icon={Bookmark} color="text-green-500" />
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+          <StatCard label="Średnia ocena" value={notesStats.average_rating.toFixed(2)} icon={Medal} color="text-indigo-500" />
+          <StatCard label="Ostatnie 30 dni" value={notesStats.notes_last_30_days} icon={CalendarClock} color="text-teal-500" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatCard({ label, value, icon: Icon, color }: { label: string; value: number | string; icon: React.ElementType; color: string }) {
+  return (
+    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
+      <div className={`p-3 rounded-lg ${color.replace('text', 'bg').replace('-500', '-100')}`}>
+         <Icon className={`w-6 h-6 ${color}`} />
+      </div>
+      <div>
+        <p className="text-sm font-medium text-gray-500">{label}</p>
+        <p className="text-2xl font-bold text-gray-800">{value}</p>
+      </div>
+    </div>
+  );
+}

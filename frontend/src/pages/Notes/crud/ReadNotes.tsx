@@ -42,7 +42,7 @@ export default function NotesList() {
     const [order, setOrder] = useState<'asc' | 'desc'>('desc');
 
     const fetchNotes = async () => {
-       if (notes.length === 0) setLoading(true);
+        if (notes.length === 0) setLoading(true);
         setError('');
 
         try {
@@ -81,10 +81,10 @@ export default function NotesList() {
     };
 
     useEffect(() => {
-       
-            setPage(1);
-            fetchNotes();
-   
+
+        setPage(1);
+        fetchNotes();
+
     }, [search, subject, hasFile, sortBy, order, pageSize]);
 
 
@@ -114,7 +114,7 @@ export default function NotesList() {
                     <Search size={18} className="absolute left-3 top-3 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Szukaj..."
+                        placeholder="Szukaj po tytule lub treści..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
                         className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -122,116 +122,123 @@ export default function NotesList() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="relative flex items-center">
+                    <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
                     <input
                         type="text"
-                        placeholder="Przedmiot"
+                        placeholder="Szukaj po przedmiocie..."
                         value={subject}
                         onChange={(e) => setSubject(e.target.value)}
-                        className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                        className="pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                     />
-
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as any)}
-                        className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    >
-                        <option value="created_at">Najnowsze</option>
-                        <option value="updated_at">Ostatnio zmienione</option>
-                        <option value="title">Tytuł</option>
-                        <option value="average_rating">Ocena</option>
-                        <option value="rating_count">Liczba ocen</option>
-                    </select>
-
-                    <select
-                        value={order}
-                        onChange={(e) => setOrder(e.target.value as any)}
-                        className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    >
-                        <option value="desc">Malejąco</option>
-                        <option value="asc">Rosnąco</option>
-                    </select>
-
-                    <select
-                        value={hasFile === null ? '' : hasFile.toString()}
-                        onChange={(e) => setHasFile(e.target.value === '' ? null : e.target.value === 'true')}
-                        className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
-                    >
-                        <option value="">Wszystkie</option>
-                        <option value="true">Z plikami</option>
-                        <option value="false">Bez plików</option>
-                    </select>
                 </div>
+
+                <select
+                    value={sortBy}
+                    onChange={(e) => setSortBy(e.target.value as any)}
+                    className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                    <option value="created_at">Najnowsze</option>
+                    <option value="updated_at">Ostatnio zmienione</option>
+                    <option value="title">Tytuł</option>
+                    <option value="average_rating">Ocena</option>
+                    <option value="rating_count">Liczba ocen</option>
+                </select>
+
+                <select
+                    value={order}
+                    onChange={(e) => setOrder(e.target.value as any)}
+                    className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                    <option value="desc">Malejąco</option>
+                    <option value="asc">Rosnąco</option>
+                </select>
+
+                <select
+                    value={hasFile === null ? '' : hasFile.toString()}
+                    onChange={(e) => setHasFile(e.target.value === '' ? null : e.target.value === 'true')}
+                    className="px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
+                >
+                    <option value="">Wszystkie</option>
+                    <option value="true">Z plikami</option>
+                    <option value="false">Bez plików</option>
+                </select>
             </div>
-
-            {loading ? (
-                null
-            ) : notes.length === 0 ? (
-                <div className="text-center py-12 text-gray-500">Brak notek</div>
-            ) : (
-                <div className="space-y-3 mb-6">
-                    {notes.map((note) => (
-                        <div
-                            key={note.note_id}
-                            onClick={() => navigate(`/note/${note.note_id}`)}
-                            className="bg-white rounded-lg shadow p-4 hover:shadow-md transition cursor-pointer"
-                        >
-                            <div className="flex items-start justify-between">
-                                <div className="flex-1 mr-4">
-                                    <h3 className="font-semibold text-lg text-gray-900 break-words">{note.title}</h3>
-                                    {note.subject && (
-                                        <p className="text-sm text-gray-600 mt-1">{note.subject}</p>
-                                    )}
-                                    <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                                        <span>{formatDate(note.created_at)}</span>
-                                        {note.rating_count > 0 && (
-                                            <div className="flex items-center gap-1">
-                                                <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                                                <span>{note.average_rating} ({note.rating_count})</span>
-                                            </div>
-                                        )}
-                                    </div>
-                                </div>
-
-                                {user?.is_admin && (
-                                    <button
-                                        onClick={(e) => handleDelete(note.note_id, e)}
-                                        className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
-                                        aria-label="Usuń notatkę"
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
-                                )}
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            )}
-
-            {totalPages > 1 && (
-                <div className="flex items-center justify-between">
-                    <button
-                        onClick={() => setPage((p) => Math.max(1, p - 1))}
-                        disabled={page === 1 || loading}
-                        className="flex items-center gap-2 px-3 py-2 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                    >
-                        <ChevronLeft size={18} />
-                        Poprzednia
-                    </button>
-
-                    <div className="text-sm text-gray-600">
-                        Strona {page} z {totalPages}
-                    </div>
-
-                    <button
-                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                        disabled={page === totalPages || loading}
-                        className="flex items-center gap-2 px-3 py-2 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                    >
-                        Następna
-                        <ChevronRight size={18} />
-                    </button>
-                </div>
-            )}
         </div>
+
+            {
+        loading ? (
+            null
+        ) : notes.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">Brak notek</div>
+        ) : (
+            <div className="space-y-3 mb-6">
+                {notes.map((note) => (
+                    <div
+                        key={note.note_id}
+                        onClick={() => navigate(`/notatki/${note.note_id}`)}
+                        className="bg-white rounded-lg shadow p-4 hover:shadow-md transition cursor-pointer"
+                    >
+                        <div className="flex items-start justify-between">
+                            <div className="flex-1 mr-4">
+                                <h3 className="font-semibold text-lg text-gray-900 break-words">{note.title}</h3>
+                                {note.subject && (
+                                    <p className="text-sm text-gray-600 mt-1">{note.subject}</p>
+                                )}
+                                <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                                    <span>{formatDate(note.created_at)}</span>
+                                    {note.rating_count > 0 && (
+                                        <div className="flex items-center gap-1">
+                                            <Star size={14} className="fill-yellow-400 text-yellow-400" />
+                                            <span>{note.average_rating} ({note.rating_count})</span>
+                                        </div>
+                                    )}
+                                </div>
+                            </div>
+
+                            {user?.is_admin && (
+                                <button
+                                    onClick={(e) => handleDelete(note.note_id, e)}
+                                    className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors"
+                                    aria-label="Usuń notatkę"
+                                >
+                                    <Trash2 size={18} />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        )
+    }
+
+    {
+        totalPages > 1 && (
+            <div className="flex items-center justify-between">
+                <button
+                    onClick={() => setPage((p) => Math.max(1, p - 1))}
+                    disabled={page === 1 || loading}
+                    className="flex items-center gap-2 px-3 py-2 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                    <ChevronLeft size={18} />
+                    Poprzednia
+                </button>
+
+                <div className="text-sm text-gray-600">
+                    Strona {page} z {totalPages}
+                </div>
+
+                <button
+                    onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+                    disabled={page === totalPages || loading}
+                    className="flex items-center gap-2 px-3 py-2 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
+                >
+                    Następna
+                    <ChevronRight size={18} />
+                </button>
+            </div>
+        )
+    }
+        </div >
     );
 }

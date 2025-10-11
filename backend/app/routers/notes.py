@@ -259,7 +259,7 @@ async def get_notes(
     query = db.query(Note)
 
     if subject:
-        query = query.filter(Note.subject == subject)
+        query = query.filter(Note.subject.ilike(f"%{subject}%"))
 
     if user_id:
         query = query.filter(Note.user_id == user_id)

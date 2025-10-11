@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import axiosInstance from '../../../api/axiosInstance';
 import { Upload, FileText, X } from 'lucide-react';
+import student from "../../../assets/image/student.svg"
 
-const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 export default function CreateNoteModal() {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -52,7 +52,7 @@ export default function CreateNoteModal() {
             if (subject) formData.append('subject', subject);
             if (file) formData.append('file', file);
 
-            await axiosInstance.post(API_BASE_URL + '/notes/', formData, {
+            await axiosInstance.post('/notes/', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
@@ -71,16 +71,16 @@ export default function CreateNoteModal() {
         <>
             <div
                 onClick={openModal}
-                className="flex items-center bg-white px-12 rounded-xl p-3 cursor-pointer transition-shadow duration-300 w-full"
+                className="flex items-center bg-white px-12 rounded-xl p-3 cursor-pointer transition-shadow duration-300 max-w-4xl mx-auto mt-2"
             >
-         
+
                 <img
-                    src="https://www.neptumar.pl/wp-content/uploads/facebook-profile-picture-no-pic-avatar.jpg"
+                    src={student}
                     alt="User avatar"
-                    className="w-10 h-10 rounded-full object-cover mr-3"
+                    className="w-10 h-10 rounded-full object-cover mr-3 border-1 p-1 border-gray-200 bg-gray-200"
                 />
 
- 
+
                 <input
                     type="text"
                     placeholder="Dodaj swoją notatkę..."
@@ -90,7 +90,7 @@ export default function CreateNoteModal() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 w-full h-full flex items-center justify-center z-50">
+                <div className="fixed inset-0 bg-black/50 w-full h-full flex items-center justify-center z-999">
                     <div
                         className="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl relative"
                         onClick={(e) => e.stopPropagation()}
@@ -103,7 +103,7 @@ export default function CreateNoteModal() {
                         </button>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <h1 className="text-2xl font-bold mb-6 text-center">Nowa notatka</h1>
+                            <h1 className="text-2xl font-bold mb-6 text-center text-black">Nowa notatka</h1>
 
                             {error && (
                                 <div className="bg-red-50 border border-red-200 text-sm text-red-700 px-4 py-3 rounded">

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import type { User } from "../../Types/User";
-import UserAdminModal from './UserAdminModal';
+import UserAdminModal from './components/UserAdminModal';
 import { Settings, UserRound, ShieldCheck, ShieldAlert, Ban, Hash, Mail, Trash2, AlertTriangle } from "lucide-react";
 
 interface UserListResponse {
