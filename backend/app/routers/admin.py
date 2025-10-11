@@ -1,13 +1,21 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
 from sqlalchemy.orm import Session
-from sqlalchemy import func, or_
+from sqlalchemy import func, or_, desc
 from datetime import datetime, timedelta
 from typing import Optional
+import math
+import os
 
 from ..schemas import user
+from ..schemas.admin import AdminNoteListResponse, AdminStatistics
 from ..db.base import get_db
 from ..core.dependencies import get_current_admin_user
 from ..models.user import User
+from ..core.dependencies import get_current_admin_user
+from ..models.user import User
+from ..models.note import Note
+from ..models.note_rating import NoteRating
+from ..models.saved_note import SavedNote
 
 router = APIRouter(prefix="/admin", tags=["admin"])
 
@@ -350,6 +358,11 @@ def get_admin_stats(
     users_without_comments = db.query(func.count(User.user_id)).filter(User.comment_permission == False).scalar()
     users_without_posts = db.query(func.count(User.user_id)).filter(User.post_permission == False).scalar()
 
+    # Dodaj statystyki notatek
+    total_notes = db.query(func.count(Note.note_id)).scalar()
+    total_ratings = db.query(func.count(NoteRating.note_id)).scalar()
+    total_saved_notes = db.query(func.count(SavedNote.user_id)).scalar()
+
     return {
         "total_users": total_users,
         "verified_users": verified_users,
@@ -359,5 +372,229 @@ def get_admin_stats(
             "without_chat": users_without_chat,
             "without_comments": users_without_comments,
             "without_posts": users_without_posts
+        },
+        "notes_stats": {
+            "total_notes": total_notes,
+            "total_ratings": total_ratings,
+            "total_saved_notes": total_saved_notes
         }
+    }
+
+
+@router.get("/notes/stats", response_model=AdminStatistics)
+def get_notes_statistics(
+        current_admin: User = Depends(get_current_admin_user),
+        db: Session = Depends(get_db)
+):
+    """
+    Pobierz statystyki notatek
+    """
+    total_notes = db.query(func.count(Note.note_id)).scalar()
+    notes_with_files = db.query(func.count(Note.note_id)).filter(Note.file_path.isnot(None)).scalar()
+    total_ratings = db.query(func.count(NoteRating.note_id)).scalar()
+    total_saved = db.query(func.count(SavedNote.user_id)).scalar()
+    avg_rating = db.query(func.avg(Note.average_rating)).scalar()
+
+    # Notatki z ostatnich 30 dni
+    thirty_days_ago = datetime.utcnow() - timedelta(days=30)
+    notes_last_30_days = db.query(func.count(Note.note_id)).filter(
+        Note.created_at >= thirty_days_ago
+    ).scalar()
+
+    return {
+        "total_notes": total_notes,
+        "notes_with_files": notes_with_files,
+        "notes_without_files": total_notes - notes_with_files,
+        "total_ratings": total_ratings,
+        "total_saved": total_saved,
+        "average_rating": float(avg_rating) if avg_rating else 0.0,
+        "notes_last_30_days": notes_last_30_days
+    }
+
+
+@router.get("/notes")
+def get_all_notes(
+        page: int = Query(1, ge=1, description="Numer strony"),
+        page_size: int = Query(20, ge=1, le=100, description="Rozmiar strony"),
+        search: Optional[str] = Query(None, description="Wyszukaj w tytule, treści lub po autorze"),
+        subject: Optional[str] = Query(None, description="Filtruj po przedmiocie"),
+        user_id: Optional[int] = Query(None, description="Filtruj po ID użytkownika"),
+        has_file: Optional[bool] = Query(None, description="Filtruj po obecności pliku"),
+        min_rating: Optional[float] = Query(None, ge=0, le=5, description="Minimalna średnia ocena"),
+        sort_by: str = Query("created_at", regex="^(created_at|updated_at|average_rating|rating_count|title)$"),
+        order: str = Query("desc", regex="^(asc|desc)$"),
+        current_admin: User = Depends(get_current_admin_user),
+        db: Session = Depends(get_db)
+):
+    """
+    Pobierz wszystkie notatki z paginacją i filtrowaniem
+    """
+    query = db.query(
+        Note.note_id,
+        Note.title,
+        Note.subject,
+        Note.created_at,
+        Note.updated_at,
+        Note.user_id,
+        Note.average_rating,
+        Note.rating_count,
+        Note.file_path,
+        User.email.label('user_email'),
+        User.first_name.label('user_first_name'),
+        User.last_name.label('user_last_name')
+    ).join(User, Note.user_id == User.user_id)
+
+    # Filtry
+    if search:
+        search_filter = f"%{search}%"
+        query = query.filter(
+            or_(
+                Note.title.ilike(search_filter),
+                Note.content.ilike(search_filter),
+                User.email.ilike(search_filter),
+                User.first_name.ilike(search_filter),
+                User.last_name.ilike(search_filter)
+            )
+        )
+
+    if subject:
+        query = query.filter(Note.subject == subject)
+
+    if user_id:
+        query = query.filter(Note.user_id == user_id)
+
+    if has_file is not None:
+        if has_file:
+            query = query.filter(Note.file_path.isnot(None))
+        else:
+            query = query.filter(Note.file_path.is_(None))
+
+    if min_rating is not None:
+        query = query.filter(Note.average_rating >= min_rating)
+
+    sort_column = getattr(Note, sort_by)
+    if order == "desc":
+        query = query.order_by(desc(sort_column))
+    else:
+        query = query.order_by(sort_column)
+
+    total = query.count()
+    total_pages = math.ceil(total / page_size)
+
+    skip = (page - 1) * page_size
+    results = query.offset(skip).limit(page_size).all()
+
+    notes = [
+        {
+            "note_id": row.note_id,
+            "title": row.title,
+            "subject": row.subject,
+            "created_at": row.created_at,
+            "updated_at": row.updated_at,
+            "user_id": row.user_id,
+            "average_rating": float(row.average_rating) if row.average_rating else None,
+            "rating_count": row.rating_count,
+            "has_file": row.file_path is not None,
+            "user_email": row.user_email,
+            "user_first_name": row.user_first_name,
+            "user_last_name": row.user_last_name
+        }
+        for row in results
+    ]
+
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": total_pages,
+        "notes": notes
+    }
+
+
+@router.get("/notes/{note_id}")
+def get_note_details(
+        note_id: int,
+        current_admin: User = Depends(get_current_admin_user),
+        db: Session = Depends(get_db)
+):
+    """
+    Pobierz szczegółowe informacje o notatce
+    """
+    result = db.query(
+        Note,
+        User.email.label('user_email'),
+        User.first_name.label('user_first_name'),
+        User.last_name.label('user_last_name')
+    ).join(User, Note.user_id == User.user_id).filter(
+        Note.note_id == note_id
+    ).first()
+
+    if not result:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Notatka nie znaleziona"
+        )
+
+    note = result.Note
+
+    saves_count = db.query(func.count(SavedNote.user_id)).filter(
+        SavedNote.note_id == note_id
+    ).scalar()
+
+    return {
+        "note_id": note.note_id,
+        "title": note.title,
+        "content": note.content,
+        "subject": note.subject,
+        "file_path": note.file_path,
+        "created_at": note.created_at,
+        "updated_at": note.updated_at,
+        "user_id": note.user_id,
+        "group_id": note.group_id,
+        "average_rating": float(note.average_rating) if note.average_rating else None,
+        "rating_count": note.rating_count,
+        "saves_count": saves_count,
+        "user": {
+            "email": result.user_email,
+            "first_name": result.user_first_name,
+            "last_name": result.user_last_name
+        }
+    }
+
+
+@router.delete("/notes/{note_id}")
+def delete_note(
+        note_id: int,
+        reason: Optional[str] = Query(None, max_length=500, description="Powód usunięcia"),
+        current_admin: User = Depends(get_current_admin_user),
+        db: Session = Depends(get_db)
+):
+    """
+    """
+    note = db.query(Note).filter(Note.note_id == note_id).first()
+
+    if not note:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Notatka nie znaleziona"
+        )
+
+    print(
+        f"[ADMIN DELETE] Admin {current_admin.email} (ID: {current_admin.user_id}) usunął notatkę {note_id}. Powód: {reason or 'Brak powodu'}")
+
+    if note.file_path and os.path.exists(note.file_path):
+        try:
+            os.remove(note.file_path)
+            print(f"[ADMIN DELETE] Plik usunięty: {note.file_path}")
+        except Exception as e:
+            print(f"[ADMIN DELETE] Błąd usuwania pliku: {e}")
+
+    note_title = note.title
+    db.delete(note)
+    db.commit()
+
+    return {
+        "message": f"Notatka '{note_title}' została usunięta",
+        "note_id": note_id,
+        "reason": reason
     }

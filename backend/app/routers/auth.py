@@ -1,14 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from datetime import datetime
-import pytz
 from ..schemas import user
 from ..db.base import get_db
 from ..models.user import User
 from ..core.security import create_access_token, verify_password, get_password_hash
 
 router = APIRouter(prefix="/auth", tags=["authentication"])
-utc=pytz.UTC
 
 @router.post("/register", response_model=user.UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_data: user.UserRegister, db: Session = Depends(get_db)):
@@ -85,5 +83,3 @@ def login(credentials: user.UserLogin, db: Session = Depends(get_db)):
         "token_type": "bearer",
         "user": user
     }
-if __name__=='__main__':
-    print(datetime.now())

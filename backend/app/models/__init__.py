@@ -1,8 +1,12 @@
 from ..models.user import User
+from ..models.note import Note
+from ..models.note_rating import  NoteRating
+from ..models.saved_note import SavedNote
 
-
-# To pozwoli na import: from app.models import User, Role, etc.
 __all__ = [
     "User",
+    "Note",
+    "NoteRating",
+    "SavedNote",
 
 ]

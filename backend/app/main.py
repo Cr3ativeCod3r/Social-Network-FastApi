@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
-from .routers import auth, users,admin
+from .routers import auth, users,admin,notes,saved_notes
 from .db.init_db import init_db
 from .db.base import SessionLocal
 
@@ -29,6 +29,8 @@ app = FastAPI(title="FastAPI Auth",
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(admin.router)
+app.include_router(notes.router)
+app.include_router(saved_notes.router)
 @app.get("/")
 def root():
     return {
