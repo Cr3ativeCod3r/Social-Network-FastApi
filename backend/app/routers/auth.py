@@ -6,8 +6,7 @@ from ..db.base import get_db
 from ..models.user import User
 from ..core.security import create_access_token, verify_password, get_password_hash
 
-router = APIRouter(prefix="/auth", tags=["authentication"])
-
+router = APIRouter()
 @router.post("/register", response_model=user.UserResponse, status_code=status.HTTP_201_CREATED)
 def register(user_data: user.UserRegister, db: Session = Depends(get_db)):
     """

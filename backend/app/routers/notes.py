@@ -26,7 +26,7 @@ from ..schemas import (
     PaginatedResponse
 )
 
-router = APIRouter(prefix="/notes", tags=["notes"])
+router = APIRouter()
 
 UPLOAD_DIR = "uploads/notes"
 ALLOWED_EXTENSIONS = {'.pdf', '.doc', '.docx', '.txt', '.md', '.ppt', '.pptx'}
@@ -73,7 +73,6 @@ async def create_note(
         title: str = Form(..., max_length=255),
         content: str = Form(...),
         subject: Optional[str] = Form(None, max_length=255),
-        group_id: Optional[int] = Form(None),
         file: Optional[UploadFile] = File(None),
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
@@ -92,7 +91,6 @@ async def create_note(
         title=title,
         content=content,
         subject=subject,
-        group_id=group_id,
         user_id=current_user.user_id
     )
 
@@ -322,7 +320,6 @@ async def update_note(
         title: Optional[str] = Form(None, max_length=255),
         content: Optional[str] = Form(None),
         subject: Optional[str] = Form(None, max_length=255),
-        group_id: Optional[int] = Form(None),
         file: Optional[UploadFile] = File(None),
         remove_file: bool = Form(False),
         db: Session = Depends(get_db),
@@ -334,7 +331,6 @@ async def update_note(
     - **title**: Nowy tytuł (opcjonalne)
     - **content**: Nowa treść (opcjonalne)
     - **subject**: Nowy przedmiot (opcjonalne)
-    - **group_id**: Nowe ID grupy (opcjonalne)
     - **file**: Nowy plik (opcjonalne)
     - **remove_file**: Usuń istniejący plik (opcjonalne)
     """
@@ -363,9 +359,6 @@ async def update_note(
         note.content = content
     if subject is not None:
         note.subject = subject
-    if group_id is not None:
-        note.group_id = group_id
-
     if remove_file and note.file_path:
         if os.path.exists(note.file_path):
             os.remove(note.file_path)

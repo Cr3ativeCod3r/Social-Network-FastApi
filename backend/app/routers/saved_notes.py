@@ -15,8 +15,8 @@ from ..schemas import (
     PaginatedResponse,
 )
 
-router = APIRouter(prefix="/saved-notes", tags=["saved-notes"])
 
+router = APIRouter()
 
 @router.post("/", response_model=SavedNoteResponse, status_code=status.HTTP_201_CREATED)
 async def save_note(
