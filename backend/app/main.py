@@ -1,9 +1,10 @@
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
-from .routers import auth, users,admin,notes,saved_notes,note_ratings,note_comments
+from .routers import api
 from .db.init_db import init_db
 from .db.base import SessionLocal
+from .core.config import settings
 from fastapi.middleware.cors import CORSMiddleware
 
 logging.basicConfig(level=logging.INFO)
@@ -31,18 +32,6 @@ origins = [
     "http://127.0.0.1:5173",  
 ]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=origins,         
-    allow_credentials=True,       
-    allow_methods=["*"],          
-    allow_headers=["*"], 
-)
-
-origins = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
 
 app.add_middleware(
     CORSMiddleware,
@@ -52,13 +41,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-app.include_router(auth.router)
-app.include_router(users.router)
-app.include_router(admin.router)
-app.include_router(notes.router)
-app.include_router(saved_notes.router)
-app.include_router(note_ratings.router)
-app.include_router(note_comments.router)
+app.include_router(api.api_router, prefix=settings.API_V1_STR)
 
 @app.get("/api")
 def root():

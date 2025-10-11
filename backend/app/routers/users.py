@@ -8,7 +8,7 @@ from ..db.base import get_db
 from ..core.dependencies import get_current_user, get_current_active_user
 from ..models.user import User
 from ..core.security import get_password_hash, verify_password
-router = APIRouter(prefix="/users", tags=["users"])
+router = APIRouter()
 
 
 @router.get("/me", response_model=user.UserResponse)
