@@ -15,7 +15,3 @@ class NoteRating(Base):
 
     user = relationship("User", back_populates="note_ratings")
     note = relationship("Note", back_populates="ratings")
-
-    __table_args__ = (
-        UniqueConstraint('note_id', 'user_id', name='uq_note_user_rating'),
-    )

@@ -35,6 +35,13 @@ from ..schemas.admin import (
     AdminStatistics,
     AdminNoteListResponse
 )
+from ..schemas.note_comment import (
+    NoteCommentBase,
+    NoteCommentCreate,
+    NoteCommentUpdate,
+    NoteCommentResponse,
+    CommentAuthor
+)
 from ..schemas.common import PaginatedResponse
 
 __all__ = [
@@ -68,6 +75,12 @@ __all__ = [
     # Admin
     "AdminStatistics",
     "AdminNoteListResponse",
+    # Note Comment
+    "NoteCommentBase",
+    "NoteCommentCreate",
+    "NoteCommentUpdate",
+    "NoteCommentResponse",
+    "CommentAuthor",
     #pagination
     "PaginatedResponse",
 ]

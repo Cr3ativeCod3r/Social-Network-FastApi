@@ -79,6 +79,11 @@ async def create_note(
         current_user: User = Depends(get_current_user)
 ):
 
+    if not current_user.post_permission:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User does not have permission to create notes"
+        )
     file_path = None
     if file and file.filename:
         validate_file(file)
@@ -124,6 +129,11 @@ async def upload_or_replace_note_file(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to upload file to this note"
+        )
+    if not current_user.post_permission:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User does not have permission to update notes"
         )
 
     validate_file(file)
@@ -340,6 +350,11 @@ async def update_note(
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to update this note"
+        )
+    if not current_user.post_permission:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="User does not have permission to update notes"
         )
 
     if title is not None:

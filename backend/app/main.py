@@ -1,7 +1,7 @@
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
-from .routers import auth, users,admin,notes,saved_notes,note_ratings
+from .routers import auth, users,admin,notes,saved_notes,note_ratings,note_comments
 from .db.init_db import init_db
 from .db.base import SessionLocal
 
@@ -32,6 +32,7 @@ app.include_router(admin.router)
 app.include_router(notes.router)
 app.include_router(saved_notes.router)
 app.include_router(note_ratings.router)
+app.include_router(note_comments.router)
 @app.get("/")
 def root():
     return {

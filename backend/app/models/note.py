@@ -23,3 +23,4 @@ class Note(Base):
     user = relationship("User", back_populates="notes")
     ratings = relationship("NoteRating", back_populates="note", cascade="all, delete-orphan")
     saved_by_users = relationship("SavedNote", back_populates="note", cascade="all, delete-orphan")
+    comments = relationship("NoteComment", back_populates="note", cascade="all, delete-orphan")
