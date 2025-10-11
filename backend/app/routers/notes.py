@@ -26,7 +26,6 @@ from ..schemas import (
     PaginatedResponse
 )
 
-# router = APIRouter(prefix="/notes", tags=["notes"])
 router = APIRouter()
 
 UPLOAD_DIR = "uploads/notes"
