@@ -8,7 +8,8 @@ import Posts from "./pages/Notes/Posty";
 import UsersList from "./pages/Admin/Admin";
 import NoteDetail from "./pages/Notes/crud/ReadNote";
 import Layout from "./layout/layout";
-
+import AdminLayout from "./pages/Admin/layout/AdminLayout";
+import NotesList from "./pages/Notes/crud/ReadNotes";
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -53,7 +54,20 @@ const App: React.FC = () => {
           path="/Admin"
           element={
             <Layout>
-              <UsersList />
+              <AdminLayout>
+                <UsersList />
+              </AdminLayout>
+            </Layout>
+          }
+        />
+
+           <Route
+          path="/Notes"
+          element={
+            <Layout>
+              <AdminLayout>
+                <NotesList />
+              </AdminLayout>
             </Layout>
           }
         />

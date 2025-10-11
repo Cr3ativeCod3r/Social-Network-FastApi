@@ -7,7 +7,6 @@ interface NoteDetail {
     title: string;
     content: string;
     subject: string;
-    group_id: number;
     note_id: number;
     file_path: string | null;
     created_at: string;
@@ -151,10 +150,10 @@ export default function NoteDetail() {
                     {note.file_path && (
                         <button
                             onClick={handleDownload}
-                            className="ml-4 p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition flex-shrink-0"
+                            className="ml-4 flex items-center p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition flex-shrink-0"
                             title="Pobierz plik"
                         >
-                            <Download size={24} />
+                            <Download size={24} className='mr-2' />Pobierz zasoby
                         </button>
                     )}
                 </div>
