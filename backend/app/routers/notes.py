@@ -76,7 +76,7 @@ async def create_note(
         group_id: Optional[int] = Form(None),
         file: Optional[UploadFile] = File(None),
         db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_active_user)
+        current_user: User = Depends(get_current_user)
 ):
 
     file_path = None
@@ -144,7 +144,8 @@ async def upload_or_replace_note_file(
 @router.get("/{note_id}/download")
 async def download_note_file(
         note_id: int,
-        db: Session = Depends(get_db)
+        db: Session = Depends(get_db),
+        current_user: User = Depends(get_current_user)
 ):
     """
     Pobierz plik notatki
