@@ -15,13 +15,11 @@ const Navbar: React.FC = () => {
 
   return (
     <nav className="w-56 h-screen bg-white border-r border-gray-200 shadow-sm flex flex-col">
-      {/* Nagłówek */}
       <div className="flex items-center gap-2 p-4 text-lg font-semibold border-b border-gray-100 text-gray-800">
         <Shield className="w-5 h-5 text-green-500" />
         <span>User Panel</span>
       </div>
 
-      {/* Linki */}
       <ul className="flex-1 flex flex-col space-y-1 p-3">
         {links.map(({ name, path, icon: Icon }) => (
           <li key={path}>
@@ -39,9 +37,8 @@ const Navbar: React.FC = () => {
               {({ isActive }) => (
                 <>
                   <Icon
-                    className={`w-4 h-4 transition-colors ${
-                      isActive ? "text-white" : "text-gray-500"
-                    }`}
+                    className={`w-4 h-4 transition-colors ${isActive ? "text-white" : "text-gray-500"
+                      }`}
                   />
                   <span>{name}</span>
                 </>
@@ -49,7 +46,7 @@ const Navbar: React.FC = () => {
             </NavLink>
           </li>
         ))}
-              <Demo />
+        <Demo />
       </ul>
     </nav>
   );

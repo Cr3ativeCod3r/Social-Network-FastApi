@@ -4,6 +4,9 @@ import axiosInstance from '../../../api/axiosInstance';
 import { Download, ArrowLeft, Edit2, Trash2, X, Check } from 'lucide-react';
 import student from "../../../assets/image/student.svg"
 import NoteRating from '../components/RateNote';
+import SaveNoteButton from '../components/SaveNote';
+import NoteStatistics from '../components/NoteStatistics';
+import NoteComments from '../components/Comments';
 
 interface NoteResponseData {
     note: NoteDetail;
@@ -335,6 +338,10 @@ export default function NoteDetail() {
                                     <p className="text-gray-600 text-lg mt-2">{note.subject}</p>
                                 )}
                             </div>
+                                <NoteStatistics noteId={note.note_id} />
+                                <span className='ml-2'>     <SaveNoteButton noteId={note.note_id} /></span>
+                             
+                              
                             <div className="ml-4 flex gap-2 flex-shrink-0">
                                 {note.file_path && (
                                     <button
@@ -376,12 +383,7 @@ export default function NoteDetail() {
                                 <span className="font-semibold text-gray-700">Zmienione:</span>
                                 <p>{formatDate(note.updated_at)}</p>
                             </div>
-                            {note.rating_count > 0 && (
-                                <div>
-                                    <span className="font-semibold text-gray-700">Ocena:</span>
-                                    <p>{note.average_rating} ({note.rating_count} ocen)</p>
-                                </div>
-                            )}
+                    
                         </div>
 
                         <div className="prose prose-sm max-w-none">
@@ -392,8 +394,12 @@ export default function NoteDetail() {
 
                 )}
             </div>
+          
             <div className='mt-4'>
                 <NoteRating noteId={note.note_id} />
+            </div>
+              <div className='mt-4'>
+                <NoteComments noteId={note.note_id} />
             </div>
         </div>
     );

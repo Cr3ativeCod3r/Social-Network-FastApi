@@ -49,5 +49,7 @@ class NoteStatistics(BaseModel):
     total_ratings: int
     average_rating: Optional[Decimal]
     total_saves: int
+    total_comments: int
+
 
     model_config = ConfigDict(from_attributes=True)

@@ -12,7 +12,6 @@ const Posts: React.FC = () => {
         <CreateNote />
         <div className=" text-black flex flex-col items-center justify-center mx-auto mt-2 animate-fade-in">
           <NotesList />
-
         </div>
       </div>
     </div>

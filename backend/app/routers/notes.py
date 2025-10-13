@@ -16,6 +16,8 @@ from ..models.user import User
 from ..models.note import Note
 from ..models.note_rating import NoteRating
 from ..models.saved_note import SavedNote
+from ..models.note_comment import NoteComment
+
 from ..schemas import (
     NoteCreate,
     NoteUpdate,
@@ -24,7 +26,8 @@ from ..schemas import (
     NoteStatistics,
     UserPublicProfile,
     PaginatedResponse,
-    NoteResponseWithOwner
+    NoteResponseWithOwner,
+    
 )
 
 router = APIRouter()
@@ -398,11 +401,16 @@ async def get_note_statistics(
         SavedNote.note_id == note_id
     ).scalar()
 
+    total_comments = db.query(func.count(NoteComment.comment_id)).filter(
+        NoteComment.note_id == note_id
+    ).scalar()
+
     return {
         "note_id": note.note_id,
         "total_ratings": note.rating_count,
         "average_rating": note.average_rating,
-        "total_saves": total_saves
+        "total_saves": total_saves,
+        "total_comments": total_comments
     }
 
 

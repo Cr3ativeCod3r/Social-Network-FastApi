@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, Eye, EyeOff, Lock } from 'lucide-react';
-import { toast, Toaster } from 'sonner';
+import { toast } from 'sonner';
 
 interface ChangePasswordModalProps {
     isOpen: boolean;
@@ -64,7 +64,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
 
     return (
         <>
-            <Toaster richColors position="top-right" />
+      
             <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 w-screen h-screen">
 
                 <div className="bg-white rounded-lg shadow-2xl w-full max-w-md transform transition-all">
@@ -108,7 +108,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                             </div>
                         </div>
 
-                        {/* New Password */}
+                  
                         <div>
                             <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                 Nowe hasło
@@ -134,7 +134,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                             </div>
                         </div>
 
-                        {/* Confirm Password */}
+           ]
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                 Potwierdź nowe hasło
@@ -159,8 +159,6 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                                 </button>
                             </div>
                         </div>
-
-                        {/* Buttons */}
                         <div className="flex gap-3 pt-4">
                             <button
                                 type="button"
@@ -206,8 +204,6 @@ function Demo() {
         } catch (error: any) {
             const errorMessage =
                 error.response?.data?.detail ||
-                error.response?.data?.message ||
-                error.message ||
                 'Błąd podczas zmiany hasła';
 
             toast.error(errorMessage);

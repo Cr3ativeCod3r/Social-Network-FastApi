@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../api/axiosInstance';
-import { Search, Star, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
 import { useAuthStore } from "../../../store/authStore";
 import { Book } from "lucide-react";
+import SaveNoteButton from '../components/SaveNote';
+import NoteStatistics from '../components/NoteStatistics';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
@@ -159,46 +161,49 @@ export default function NotesList() {
             {loading ? null : notes.length === 0 ? (
                 <div className="text-center py-12 text-gray-500">Brak notek</div>
             ) : (
-                <div className="space-y-6 mb-6">
+                <div className="space-y-4 mb-6">
                     {notes.map((note) => (
-                        <div key={note.note_id} className="bg-white rounded-lg border-1 border-gray-300 p-6">
-                            <div className="flex justify-between items-start">
+                        <div key={note.note_id} className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                            {/* Górna część - tytuł i akcje */}
+                            <div className="flex items-start justify-between gap-4 mb-3">
                                 <div
                                     onClick={() => navigate(`/notatki/${note.note_id}`)}
-                                    className="cursor-pointer hover:text-blue-600 transition mb-2 flex-1"
+                                    className="cursor-pointer hover:text-blue-600 transition flex-1 min-w-0"
                                 >
-                                    <h3 className="font-semibold text-lg text-gray-900 break-words flex items-center gap-2">
+                                    <h3 className="font-semibold text-lg text-gray-900 break-words">
                                         {note.title}
                                     </h3>
-                                    {note.subject && (
-                                        <p className="text-sm text-gray-600 mt-1 flex items-center gap-1">
-                                            <Book size={14} className="text-gray-500" />
-                                            {note.subject}
-                                        </p>
-                                    )}
                                 </div>
 
-                                <div className="text-right text-md text-gray-500 ml-4">
-                                    <span className="block">{formatDate(note.created_at)}</span>
-                                    {note.rating_count > 0 && (
-                                        <div className="flex items-center justify-end gap-1 mt-1">
-                                            <Star size={14} className="fill-yellow-400 text-yellow-400" />
-                                            <span>
-                                                {note.average_rating} ({note.rating_count})
-                                            </span>
-                                        </div>
+                                {/* Przyciski akcji */}
+                                <div className="flex items-center gap-2 flex-shrink-0">
+                                    <SaveNoteButton noteId={note.note_id} />
+
+                                    {user?.is_admin && (
+                                        <button
+                                            onClick={(e) => handleDelete(note.note_id, e)}
+                                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition"
+                                            aria-label="Usuń notatkę"
+                                        >
+                                            <Trash2 size={18} />
+                                        </button>
                                     )}
                                 </div>
+                            </div>
 
-                                {user?.is_admin && (
-                                    <button
-                                        onClick={(e) => handleDelete(note.note_id, e)}
-                                        className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition ml-2"
-                                        aria-label="Usuń notatkę"
-                                    >
-                                        <Trash2 size={18} />
-                                    </button>
-                                )}
+                            {/* Przedmiot */}
+                            {note.subject && (
+                                <div className="text-sm text-gray-600 mb-3 flex items-center gap-1">
+                                    <Book size={14} className="text-gray-500 flex-shrink-0" />
+                                    {note.subject}
+                                </div>
+                            )}
+
+                            <div className="flex items-center justify-between">
+                                <div />
+                                <div className="ml-auto">
+                                    <NoteStatistics noteId={note.note_id} />
+                                </div>
                             </div>
                         </div>
                     ))}

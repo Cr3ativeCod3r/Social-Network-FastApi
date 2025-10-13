@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Settings } from 'lucide-react';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
+import {FileText} from "lucide-react";
 
 interface Note {
   note_id: number;
@@ -38,9 +39,7 @@ export default function UserNotes() {
         setNotes(response.data.items);
       } catch (error) {
         console.error('Error fetching notes:', error);
-      } finally {
-        setLoading(false);
-      }
+      } 
     };
 
     fetchNotes();
@@ -56,7 +55,10 @@ export default function UserNotes() {
 
   return (
     <div className="p-6  max-w-4xl mx-auto animate-fade-in">
-      <h1 className="text-2xl font-bold mb-6">Moje notatki</h1>
+      <div className="flex items-center justify-center mb-6">
+        <FileText className="mr-2" size={32} />
+        <h1 className="text-2xl font-bold">Moje notatki</h1>
+      </div>
 
       {notes.length === 0 ? (
         <p className="text-gray-500">Brak notatek</p>
@@ -87,8 +89,6 @@ export default function UserNotes() {
                   </a>
                 </div>
               </div>
-
-
             </div>
           ))}
         </div>
