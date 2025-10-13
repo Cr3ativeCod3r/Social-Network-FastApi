@@ -7,7 +7,7 @@ interface LayoutProps {
 
 const UserLayout: React.FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="flex  bg-gray-50 text-gray-900">
+    <div className="flex lg:flex-row sm: min-h-screen flex-col bg-gray-50 text-gray-900">
       <Navbar />
       <main className="flex-1">{children}</main>
     </div>

@@ -76,7 +76,6 @@ const isActive = (path: string) => {
   return (
     <nav className="bg-nav text-white shadow-md top-0 sticky z-1">
       <div className="mx-auto flex items-center justify-between px-6 py-4">
-        {/* Logo */}
         <a
           href="/notatki"
           className="flex items-center gap-2 text-2xl font-semibold"
@@ -84,13 +83,9 @@ const isActive = (path: string) => {
          <img src={image} className="h-12 "/>
           <span className="hidden sm:inline">Study Share</span>
         </a>
-
-        {/* Desktop Navigation */}
         <ul className="hidden lg:flex gap-8 text-lg font-medium items-center">
           {navItems}
         </ul>
-
-        {/* Avatar + menu */}
         <div className="flex items-center gap-3 relative" ref={menuRef}>
           <p className="hidden sm:inline font-medium text-white">
             {user?.first_name} {user?.last_name}
@@ -101,8 +96,6 @@ const isActive = (path: string) => {
             alt="Avatar"
             src={student}
           />
-
-          {/* Profile Menu */}
           {menuOpen && (
             <div className="absolute right-0 top-14 bg-white text-black rounded-xl shadow-lg w-44 py-2 z-50">
               <button
@@ -124,8 +117,6 @@ const isActive = (path: string) => {
               </button>
             </div>
           )}
-
-          {/* Hamburger Menu */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden ml-4"
@@ -139,7 +130,6 @@ const isActive = (path: string) => {
         </div>
       </div>
 
-      {/* Mobile Navigation */}
       {mobileMenuOpen && (
         <div className="lg:hidden bg-nav border-t border-white/20">
           <ul className="flex flex-col gap-2 px-6 py-4">

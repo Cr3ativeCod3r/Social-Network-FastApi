@@ -1,24 +1,39 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Shield, Users, FileText, BarChart3 } from "lucide-react";
+import { Shield, Users, BarChart3 } from "lucide-react";
 
 const Navbar: React.FC = () => {
   const links = [
-    { name: "Uzytkownicy", path: "/admin/users", icon: Users },
-    // { name: "Notatki", path: "/admin/notes", icon: FileText },
+    { name: "Użytkownicy", path: "/admin/users", icon: Users },
     { name: "Statystyki", path: "/admin/stats", icon: BarChart3 },
   ];
 
   return (
-    <nav className="w-56 h-screen bg-white border-r border-gray-200 shadow-sm flex flex-col">
+    <nav
+      className="
+        bg-white border-gray-200 shadow-sm
+        flex flex-col md:flex-col
+        w-full md:w-56
+        h-auto md:h-screen
+        border-b md:border-b-0 md:border-r
+      "
+    >
       {/* Nagłówek */}
-      <div className="flex items-center gap-2 p-4 text-lg font-semibold border-b border-gray-100 text-gray-800">
+      <div className="flex items-center justify-center md:justify-start gap-2 p-3 text-lg font-semibold border-b border-gray-100 text-gray-800">
         <Shield className="w-5 h-5 text-green-500" />
         <span>Admin Panel</span>
       </div>
 
       {/* Linki */}
-      <ul className="flex-1 flex flex-col space-y-1 p-3">
+      <ul
+        className="
+          flex md:flex-col flex-row
+          justify-center md:justify-start
+          items-center md:items-stretch
+          gap-1 md:space-y-1
+          p-2 md:p-3
+        "
+      >
         {links.map(({ name, path, icon: Icon }) => (
           <li key={path}>
             <NavLink
@@ -39,7 +54,7 @@ const Navbar: React.FC = () => {
                       isActive ? "text-white" : "text-gray-500"
                     }`}
                   />
-                  <span>{name}</span>
+                  <span className="hidden sm:inline">{name}</span>
                 </>
               )}
             </NavLink>
