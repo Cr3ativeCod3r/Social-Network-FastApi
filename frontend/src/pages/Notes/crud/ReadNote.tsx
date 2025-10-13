@@ -197,7 +197,7 @@ export default function NoteDetail() {
     if (!note) {
         return (
             <div className="max-w-3xl mx-auto p-6 min-h-screen">
-            
+
             </div>
         );
     }
@@ -283,8 +283,8 @@ export default function NoteDetail() {
                                         type="button"
                                         onClick={() => setEditData({ ...editData, removeFile: !editData.removeFile })}
                                         className={`px-3 py-1 rounded text-sm transition ${editData.removeFile
-                                                ? 'bg-red-500 text-white hover:bg-red-600'
-                                                : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
+                                            ? 'bg-red-500 text-white hover:bg-red-600'
+                                            : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
                                             }`}
                                     >
                                         {editData.removeFile ? 'Anuluj usunięcie' : 'Usuń plik'}
@@ -331,50 +331,52 @@ export default function NoteDetail() {
                     </div>
                 ) : (
                     <>
-                        <div className="flex items-start justify-between mb-6">
-                            <div className="flex-1">
-                                <h1 className="text-3xl font-bold text-gray-900 break-words">{note.title}</h1>
-                                {note.subject && (
-                                    <p className="text-gray-600 text-lg mt-2">{note.subject}</p>
-                                )}
-                            </div>
+                        <div className="flex items-center justify-between mb-12">
+                            <div className="flex items-center gap-4 ">
                                 <NoteStatistics noteId={note.note_id} />
-                                <span className='ml-2'>     <SaveNoteButton noteId={note.note_id} /></span>
-                             
-                              
-                            <div className="ml-4 flex gap-2 flex-shrink-0">
+                                <SaveNoteButton noteId={note.note_id} />
+                            </div>
+
+                            <div className="flex items-center gap-2">
                                 {note.file_path && (
                                     <button
                                         onClick={handleDownload}
-                                        className="flex items-center p-2 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded transition"
-                                        title="Pobierz plik"
+                                        className="flex items-center justify-center p-2 w-10 h-10 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition"
+                                        title="Pobierz zasoby"
                                     >
-                                        <Download size={24} className='mr-2' />Pobierz zasoby
+                                        <Download size={20} />
                                     </button>
                                 )}
                                 {isOwner && (
                                     <>
                                         <button
                                             onClick={() => setIsEditing(true)}
-                                            className="flex items-center p-2 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded transition"
+                                            className="flex items-center justify-center p-2 w-10 h-10 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-full transition"
                                             title="Edytuj notatkę"
                                         >
-                                            <Edit2 size={24} />
+                                            <Edit2 size={20} />
                                         </button>
                                         <button
                                             onClick={handleDelete}
                                             disabled={isDeleting}
-                                            className="flex items-center p-2 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded transition disabled:opacity-50"
+                                            className="flex items-center justify-center p-2 w-10 h-10 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-full transition disabled:opacity-50"
                                             title="Usuń notatkę"
                                         >
-                                            <Trash2 size={24} />
+                                            <Trash2 size={20} />
                                         </button>
                                     </>
                                 )}
                             </div>
                         </div>
 
-                        <div className="flex flex-wrap gap-6 mb-8 text-sm text-gray-500 border-b pb-6">
+                        <div className="mb-6 border-b pb-6">
+                            <h1 className="text-3xl font-bold text-gray-900 break-words">{note.title}</h1>
+                            {note.subject && (
+                                <p className="text-gray-600 text-lg mt-2">{note.subject}</p>
+                            )}
+                        </div>
+
+                        <div className="flex flex-wrap gap-6 mb-8 text-sm text-gray-500">
                             <div>
                                 <span className="font-semibold text-gray-700">Utworzone:</span>
                                 <p>{formatDate(note.created_at)}</p>
@@ -383,22 +385,20 @@ export default function NoteDetail() {
                                 <span className="font-semibold text-gray-700">Zmienione:</span>
                                 <p>{formatDate(note.updated_at)}</p>
                             </div>
-                    
                         </div>
 
                         <div className="prose prose-sm max-w-none">
                             <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{note.content}</p>
                         </div>
-
                     </>
 
                 )}
             </div>
-          
+
             <div className='mt-4'>
                 <NoteRating noteId={note.note_id} />
             </div>
-              <div className='mt-4'>
+            <div className='mt-4'>
                 <NoteComments noteId={note.note_id} />
             </div>
         </div>
