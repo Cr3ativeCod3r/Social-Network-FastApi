@@ -1,36 +1,39 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Shield, Users, BarChart3 } from "lucide-react";
+import { Shield, Users, FileText, BarChart3 } from "lucide-react";
+import Demo from "../components/ChangePasswordModal";
+import { useAuthStore } from "../../../store/authStore";
 
 const Navbar: React.FC = () => {
+  const { user } = useAuthStore();
+
   const links = [
-    { name: "Użytkownicy", path: "/admin/users", icon: Users },
-    { name: "Statystyki", path: "/admin/stats", icon: BarChart3 },
+    { name: "Zapisane notatki", path: "/user/savednotes", icon: Users },
+    { name: "Moje notatki", path: `/user/notes/${user?.user_id}`, icon: FileText },
+    { name: "Moje konto", path: "/user/me", icon: BarChart3 },
   ];
 
   return (
     <nav
       className="
-        bg-white border-gray-200 shadow-sm
-        flex flex-col md:flex-col
-        w-full md:w-56
-        h-auto md:h-screen
-        border-b md:border-b-0 md:border-r
+        bg-white border-gray-200 shadow-sm 
+        flex flex-col md:flex-col md:w-56 md:h-screen
+        w-full md:border-r border-b md:border-b-0
       "
     >
-      {/* Nagłówek */}
+      {/* Logo / Tytuł */}
       <div className="flex items-center justify-center md:justify-start gap-2 p-3 text-lg font-semibold border-b border-gray-100 text-gray-800">
         <Shield className="w-5 h-5 text-green-500" />
-        <span>Admin Panel</span>
+        <span>User Panel</span>
       </div>
 
       {/* Linki */}
       <ul
         className="
-          flex md:flex-col flex-row
-          justify-center md:justify-start
-          items-center md:items-stretch
-          gap-1 md:space-y-1
+          flex md:flex-col flex-row 
+          justify-center md:justify-start 
+          items-center md:items-stretch 
+          gap-1 md:space-y-1 
           p-2 md:p-3
         "
       >
@@ -60,6 +63,7 @@ const Navbar: React.FC = () => {
             </NavLink>
           </li>
         ))}
+        <Demo />
       </ul>
     </nav>
   );

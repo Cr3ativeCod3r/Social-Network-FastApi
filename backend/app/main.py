@@ -35,10 +35,11 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_credentials=True,
+    allow_origins=origins, 
+    allow_credentials=True,  
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["Set-Cookie"],  
 )
 
 app.include_router(api.api_router, prefix=settings.API_V1_STR)

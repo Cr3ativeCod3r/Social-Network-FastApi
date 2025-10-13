@@ -71,20 +71,20 @@ export default function CreateNoteModal() {
         <>
             <div
                 onClick={openModal}
-                className="flex items-center bg-white px-12 rounded-xl p-3 cursor-pointer transition-shadow duration-300 max-w-4xl mx-auto mt-2"
+                className="flex items-center bg-emerald-50 border border-emerald-300 hover:shadow-md 
+             px-6 py-3 rounded-xl cursor-pointer transition-shadow duration-300 w-full mt-2"
             >
-
                 <img
                     src={student}
                     alt="User avatar"
-                    className="w-10 h-10 rounded-full object-cover mr-3 border-1 p-1 border-gray-200 bg-gray-200"
+                    className="w-10 h-10 rounded-full object-cover mr-3 border border-emerald-200 bg-white p-1"
                 />
-
 
                 <input
                     type="text"
                     placeholder="Dodaj swoją notatkę..."
-                    className="flex-1 bg-gray-100 rounded-full px-4 py-2 text-gray-700 focus:outline-none cursor-pointer"
+                    className="flex-1 bg-white text-gray-700 placeholder-gray-400 
+               rounded-full px-4 py-2 focus:outline-none cursor-pointer"
                     readOnly
                 />
             </div>

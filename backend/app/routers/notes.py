@@ -16,6 +16,8 @@ from ..models.user import User
 from ..models.note import Note
 from ..models.note_rating import NoteRating
 from ..models.saved_note import SavedNote
+from ..models.note_comment import NoteComment
+
 from ..schemas import (
     NoteCreate,
     NoteUpdate,
@@ -23,7 +25,9 @@ from ..schemas import (
     NoteListResponse,
     NoteStatistics,
     UserPublicProfile,
-    PaginatedResponse
+    PaginatedResponse,
+    NoteResponseWithOwner,
+    
 )
 
 router = APIRouter()
@@ -193,44 +197,6 @@ async def download_note_file(
         media_type='application/octet-stream'
     )
 
-@router.delete("/{note_id}/file", response_model=NoteResponse)
-async def delete_note_file(
-        note_id: int,
-        db: Session = Depends(get_db),
-        current_user: User = Depends(get_current_user)
-):
-    """Usuń plik z notatki (notatka zostaje)"""
-    note = db.query(Note).filter(Note.note_id == note_id).first()
-
-    if not note:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Note not found"
-        )
-
-    if note.user_id != current_user.user_id:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Not authorized to delete file from this note"
-        )
-
-    if not note.file_path:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Note has no file attached"
-        )
-
-    if os.path.exists(note.file_path):
-        os.remove(note.file_path)
-
-    note.file_path = None
-    note.updated_at = datetime.now()
-
-    db.commit()
-    db.refresh(note)
-
-    return note
-
 
 @router.get("/", response_model=PaginatedResponse[NoteListResponse])
 async def get_notes(
@@ -297,21 +263,27 @@ async def get_notes(
     }
 
 
-@router.get("/{note_id}", response_model=NoteResponse)
+@router.get("/{note_id}", response_model=NoteResponseWithOwner)
 async def get_note(
-        note_id: int,
-        db: Session = Depends(get_db)
+    note_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
 ):
-    """Pobierz szczegóły notatki"""
     note = db.query(Note).filter(Note.note_id == note_id).first()
-
+    
     if not note:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Note not found"
         )
 
-    return note
+    is_owner = note.user_id == current_user.user_id
+    note_response = NoteResponse.from_orm(note)
+
+    return NoteResponseWithOwner(
+        note=note_response,
+        is_owner=is_owner
+    )
 
 
 @router.put("/{note_id}", response_model=NoteResponse)
@@ -429,11 +401,16 @@ async def get_note_statistics(
         SavedNote.note_id == note_id
     ).scalar()
 
+    total_comments = db.query(func.count(NoteComment.comment_id)).filter(
+        NoteComment.note_id == note_id
+    ).scalar()
+
     return {
         "note_id": note.note_id,
         "total_ratings": note.rating_count,
         "average_rating": note.average_rating,
-        "total_saves": total_saves
+        "total_saves": total_saves,
+        "total_comments": total_comments
     }
 
 

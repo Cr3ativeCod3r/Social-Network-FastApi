@@ -3,7 +3,7 @@ import {
   User as Building, BookOpen, ShieldCheck, Info, CalendarDays,
   MessageSquare, Edit, CheckCircle, XCircle, Save, X
 } from 'lucide-react';
-import Demo from "./ChangePasswordModal"
+
 import student from "../../../assets/image/student.svg"
 
 const PermissionBadge: React.FC<{ granted: boolean }> = ({ granted }) => (
@@ -95,7 +95,7 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
   return (
     <>
 
-      <div className="min-h-screen flex items-center justify-center  p-4">
+      <div className="min-h-screen flex items-center justify-center ">
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl w-full animate-fade-in">
 
           <div className="flex flex-col items-center text-center mb-8">
@@ -217,7 +217,7 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
 
         </div>
       </div>
-      <Demo />
+
     </>
   );
 };

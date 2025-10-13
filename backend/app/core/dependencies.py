@@ -1,7 +1,9 @@
-from fastapi import Depends, HTTPException, status
+from fastapi import Depends, HTTPException, status, Cookie
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from jose import JWTError, jwt
 from sqlalchemy.orm import Session
+from typing import Optional
+from datetime import datetime
 
 from .config import settings
 from ..db.base import get_db
@@ -12,12 +14,25 @@ security = HTTPBearer()
 ALGORITHM = "HS256"
 
 
+def get_token_from_cookie(token: Optional[str] = Cookie(None)) -> str:
+    """
+    Pobierz token JWT z HttpOnly cookie
+    """
+    if not token:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Nie znaleziono tokena",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    return token
+
+
 def get_current_user(
-        credentials: HTTPAuthorizationCredentials = Depends(security),
+        token: str = Depends(get_token_from_cookie),
         db: Session = Depends(get_db)
 ) -> User:
     """
-    Pobierz aktualnie zalogowanego użytkownika z tokena JWT
+    Pobierz aktualnie zalogowanego użytkownika z tokena JWT w cookie
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -26,7 +41,6 @@ def get_current_user(
     )
 
     try:
-        token = credentials.credentials
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         user_id: str = payload.get("sub")
         if user_id is None:
@@ -38,11 +52,8 @@ def get_current_user(
     if user is None:
         raise credentials_exception
 
-
     if user.is_banned:
-        from datetime import datetime
         if user.ban_expires_at and user.ban_expires_at < datetime.now():
-
             user.is_banned = False
             user.ban_expires_at = None
             db.commit()

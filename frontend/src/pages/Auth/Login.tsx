@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import Input from '../components/Input';
+import Input from './components/Input';
 import { Mail, Lock } from 'lucide-react';
-import PortalCard from '../components/PortalCard';
+import PortalCard from './components/PortalCard';
 
 const loginSchema = Yup.object({
   email: Yup.string()
@@ -29,7 +29,7 @@ const Login: React.FC = () => {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-        navigate('/profile');
+        navigate('/notatki');
       } catch (err) {
         console.log(err)
       }

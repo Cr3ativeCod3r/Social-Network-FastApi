@@ -1,17 +1,14 @@
 import React, { useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Profile from "./pages/Profile/Profile";
-import Chat from "./pages/Chat";
-import Posts from "./pages/Notes/Posty";
-import UsersList from "./pages/Admin/AdminUsers";
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
+import Login from "./pages/Auth/Login";
+import Register from "./pages/Auth/Register";
+import Chat from "./pages/Chat/Chat";
+import Posts from "./pages/Notes/page";
 import NoteDetail from "./pages/Notes/crud/ReadNote";
 import Layout from "./layout/layout";
-import NotesList from "./pages/Notes/crud/ReadNotes";
-
-import AdminLayout from "./pages/Admin/layout/AdminLayout";
-import AdminStats from "./pages/Admin/AdminStats";
+import Admin from "./pages/Admin/AdminRouting"; 
+import User from "./pages/User/UserRouting";
+import { useAuthStore } from "./store/authStore";
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -23,87 +20,94 @@ const ScrollToTop: React.FC = () => {
   return null;
 };
 
+const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const user = useAuthStore((state) => state.user);
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+  return <>{children}</>;
+};
+
+const RedirectIfAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const user = useAuthStore((state) => state.user);
+  if (user) {
+    return <Navigate to="/notatki" replace />;
+  }
+  return <>{children}</>;
+};
+
 const App: React.FC = () => {
   return (
     <Router>
-
       <ScrollToTop />
-
       <Routes>
-
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+        <Route
+          path="/"
+          element={
+            <RedirectIfAuth>
+              <Login />
+            </RedirectIfAuth>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <RedirectIfAuth>
+              <Register />
+            </RedirectIfAuth>
+          }
+        />
 
         <Route
-          path="/profile"
+          path="/user/*"
           element={
-            <Layout>
-              <Profile />
-            </Layout>
+            <RequireAuth>
+              <User />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/Admin/*"
+          element={
+            <RequireAuth>
+              <Admin />
+            </RequireAuth>
           }
         />
 
         <Route
           path="/chat"
           element={
-            <Layout>
-              <Chat />
-            </Layout>
-          }
-        />
-
-        <Route
-          path="/Admin/users"
-          element={
-            <Layout>
-              <AdminLayout>
-                <UsersList />
-              </AdminLayout>
-            </Layout>
-          }
-        />
-
-        <Route
-          path="/Admin/Notes"
-          element={
-            <Layout>
-              <AdminLayout>
-                <NotesList />
-              </AdminLayout>
-            </Layout>
-          }
-        />
-
-        <Route
-          path="/Admin/stats"
-          element={
-            <Layout>
-              <AdminLayout>
-                <AdminStats />
-              </AdminLayout>
-            </Layout>
+            <RequireAuth>
+              <Layout>
+                <Chat />
+              </Layout>
+            </RequireAuth>
           }
         />
 
         <Route
           path="/notatki"
           element={
-            <Layout>
-              <Posts />
-            </Layout>
+            <RequireAuth>
+              <Layout>
+                <Posts />
+              </Layout>
+            </RequireAuth>
           }
         />
 
         <Route
           path="/notatki/:id"
           element={
-            <Layout>
-              <NoteDetail />
-            </Layout>
+            <RequireAuth>
+              <Layout>
+                <NoteDetail />
+              </Layout>
+            </RequireAuth>
           }
         />
 
-        {/* 404 */}
         <Route
           path="*"
           element={
