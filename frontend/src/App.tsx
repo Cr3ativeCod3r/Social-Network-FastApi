@@ -2,9 +2,9 @@ import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import Profile from "./pages/Profile/Profile";
+import Profile from "./pages/User/Profile";
 import Chat from "./pages/Chat";
-import Posts from "./pages/Notes/Posty";
+import Posts from "./pages/Notes/page";
 import UsersList from "./pages/Admin/AdminUsers";
 import NoteDetail from "./pages/Notes/crud/ReadNote";
 import Layout from "./layout/layout";
@@ -12,6 +12,9 @@ import NotesList from "./pages/Notes/crud/ReadNotes";
 
 import AdminLayout from "./pages/Admin/layout/AdminLayout";
 import AdminStats from "./pages/Admin/AdminStats";
+
+import UserLayout from "./pages/User/Layout/UserLayout";
+import UserNotes from "./pages/User/components/UserNotes";
 
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
@@ -35,13 +38,35 @@ const App: React.FC = () => {
         <Route path="/register" element={<Register />} />
 
         <Route
-          path="/profile"
+          path="/user/me"
           element={
             <Layout>
-              <Profile />
+              <UserLayout>
+                <Profile />
+              </UserLayout>
             </Layout>
           }
         />
+         <Route
+          path="/user/notes/:id"
+          element={
+            <Layout>
+              <UserLayout>
+                <UserNotes />
+              </UserLayout>
+            </Layout>
+          }
+        />
+         {/* <Route
+          path="/user/savednotes"
+          element={
+            <Layout>
+              <UserLayout>
+                <Profile />
+              </UserLayout>
+            </Layout>
+          }
+        /> */}
 
         <Route
           path="/chat"

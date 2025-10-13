@@ -20,6 +20,7 @@ from ..schemas.note import (
     NoteResponse,
     NoteListResponse,
     NoteStatistics,
+    NoteResponseWithOwner
 )
 from ..schemas.note_rating import (
     NoteRatingCreate,
@@ -64,6 +65,7 @@ __all__ = [
     "NoteResponse",
     "NoteListResponse",
     "NoteStatistics",
+    "NoteResponseWithOwner",
     # Note Rating
     "NoteRatingCreate",
     "NoteRatingResponse",

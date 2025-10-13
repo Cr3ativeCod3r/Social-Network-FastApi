@@ -5,6 +5,8 @@ from ..schemas import user
 from ..db.base import get_db
 from ..models.user import User
 from ..core.security import create_access_token, verify_password, get_password_hash
+from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 
 router = APIRouter()
 @router.post("/register", response_model=user.UserResponse, status_code=status.HTTP_201_CREATED)
@@ -43,42 +45,49 @@ def login(credentials: user.UserLogin, db: Session = Depends(get_db)):
     """
     Logowanie użytkownika
     """
-
-    user = db.query(User).filter(User.email == credentials.email).first()
-
-    if not user:
+    user_obj = db.query(User).filter(User.email == credentials.email).first()
+    
+    if not user_obj:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Nieprawidłowy email lub hasło",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
-
-    if not verify_password(credentials.password, user.password):
+    
+    if not verify_password(credentials.password, user_obj.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Nieprawidłowy email lub hasło",
             headers={"WWW-Authenticate": "Bearer"},
         )
-
-
-    if user.is_banned:
-        if user.ban_expires_at and user.ban_expires_at.astimezone() < datetime.now().astimezone():
-
-            user.is_banned = False
-            user.ban_expires_at = None
+    
+    if user_obj.is_banned:
+        if user_obj.ban_expires_at and user_obj.ban_expires_at.astimezone() < datetime.now().astimezone():
+            user_obj.is_banned = False
+            user_obj.ban_expires_at = None
             db.commit()
         else:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,
                 detail="Twoje konto zostało zablokowane"
             )
-
-
-    access_token = create_access_token(subject=user.user_id)
-
-    return {
-        "access_token": access_token,
-        "token_type": "bearer",
-        "user": user
-    }
+    
+    access_token = create_access_token(subject=user_obj.user_id)
+    
+    response = JSONResponse(
+        content={
+            "token_type": "bearer",
+            "user": jsonable_encoder(user_obj) 
+        }
+    )
+    
+    response.set_cookie(
+        key="token",
+        value=access_token,
+        httponly=True,
+        secure=True,  
+        samesite="lax",
+        max_age=3600 * 24 * 7
+    )
+    
+    return response

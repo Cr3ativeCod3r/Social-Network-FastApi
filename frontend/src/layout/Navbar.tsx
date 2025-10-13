@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import image from "../assets/image/ico.svg"
 import student from "../assets/image/student.svg"
 
+
 const Navbar: React.FC = () => {
   const { user, logout } = useAuthStore();
   const navigate = useNavigate();
@@ -77,7 +78,7 @@ const isActive = (path: string) => {
       <div className="mx-auto flex items-center justify-between px-6 py-4">
         {/* Logo */}
         <a
-          href="/posty"
+          href="/notatki"
           className="flex items-center gap-2 text-2xl font-semibold"
         >
          <img src={image} className="h-12 "/>
@@ -106,7 +107,7 @@ const isActive = (path: string) => {
             <div className="absolute right-0 top-14 bg-white text-black rounded-xl shadow-lg w-44 py-2 z-50">
               <button
                 onClick={() => {
-                  navigate("/profile");
+                  navigate("/user/me");
                   setMenuOpen(false);
                 }}
                 className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100"

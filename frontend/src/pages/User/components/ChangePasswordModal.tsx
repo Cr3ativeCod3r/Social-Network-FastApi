@@ -219,12 +219,12 @@ function Demo() {
 
     return (
         <div>
-            <div className="max-w-sm mx-auto p-4">
+            <div className="mx-auto ml-4 mt-2 text-sm flex items-center">
                 <button
                     onClick={() => setIsModalOpen(true)}
-                    className="w-full py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 font-medium transition-colors flex items-center justify-center gap-2"
+                    className="flex items-center text-gray-700 hover:text-blue-600 transition"
                 >
-                    <Lock className="w-5 h-5" />
+                    <Lock className="mr-2 h-4 w-4" />
                     Zmień hasło
                 </button>
             </div>

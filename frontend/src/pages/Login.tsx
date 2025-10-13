@@ -29,7 +29,7 @@ const Login: React.FC = () => {
     onSubmit: async (values) => {
       try {
         await login(values.email, values.password);
-        navigate('/profile');
+        navigate('/notatki');
       } catch (err) {
         console.log(err)
       }

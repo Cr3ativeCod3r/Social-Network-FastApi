@@ -4,6 +4,9 @@ import Cookies from 'js-cookie';
 import type { UserData } from "../../Types/User"
 import ProfileTable from "./components/ProfileTable"
 import axiosInstance from '../../api/axiosInstance';
+import UserNotes from './components/UserNotes';
+import { useAuthStore } from "../../store/authStore";
+
 
 const Profile: React.FC = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
@@ -11,7 +14,7 @@ const Profile: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [editMode, setEditMode] = useState<{ [key: string]: boolean }>({});
   const [editValues, setEditValues] = useState<{ [key: string]: string | null }>({});
-
+  const { user } = useAuthStore();
   const fetchUserData = async () => {
     try {
       const response = await axiosInstance.get(`/users/me`,);
@@ -87,6 +90,7 @@ const Profile: React.FC = () => {
   if (!userData) return <div className="min-h-screen flex items-center justify-center bg-white"><p>Nie znaleziono danych użytkownika.</p></div>;
 
   return (
+    <>
     <ProfileTable
       userData={userData}
       editMode={editMode}
@@ -96,6 +100,7 @@ const Profile: React.FC = () => {
       onSave={handleSave}
       onEditValueChange={handleEditValueChange}
     />
+    </>
   );
 };
 

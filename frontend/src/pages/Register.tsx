@@ -52,7 +52,7 @@ const Register: React.FC = () => {
                     university: values.university,
                     department: values.department,
                 });
-                navigate('/login', { 
+                navigate('/', { 
                     state: { message: 'Rejestracja zakończona pomyślnie! Możesz się teraz zalogować.' }
                 });
             } catch (err) {
