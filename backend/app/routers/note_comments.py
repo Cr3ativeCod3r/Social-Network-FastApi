@@ -4,7 +4,7 @@ from sqlalchemy import desc
 from typing import Optional
 import math
 
-from ..core.dependencies import get_current_user, get_current_active_user
+from ..core.dependencies import get_current_user
 from ..db.base import get_db
 from ..models.user import User
 from ..models.note import Note

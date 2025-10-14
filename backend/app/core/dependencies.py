@@ -88,3 +88,7 @@ def get_current_admin_user(current_user: User = Depends(get_current_user)) -> Us
             detail="Nie masz uprawnień administratora"
         )
     return current_user
+
+
+def verify_ws_token(token: str, db: Session) -> User:
+    return token

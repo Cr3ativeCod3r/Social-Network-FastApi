@@ -1,3 +1,5 @@
+# app/routers/api.py
+
 from fastapi import APIRouter
 
 from ..routers import(
@@ -8,10 +10,11 @@ from ..routers import(
     saved_notes,
     note_ratings,
     note_comments,
-    chat
+    chat,  
 )
 
 api_router = APIRouter()
+
 api_router.include_router(auth.router, prefix="/auth", tags=["authentication"])
 api_router.include_router(users.router, prefix="/users", tags=["users"])
 api_router.include_router(admin.router, prefix="/admin", tags=["admin"])

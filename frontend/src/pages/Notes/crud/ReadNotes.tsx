@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../../api/axiosInstance';
-import { Search, ChevronLeft, ChevronRight, Trash2 } from 'lucide-react';
+import { Search, ChevronLeft, ChevronRight, Trash2,Funnel } from 'lucide-react';
 import { useAuthStore } from "../../../store/authStore";
 import { Book } from "lucide-react";
 import SaveNoteButton from '../components/SaveNote';
@@ -123,37 +123,45 @@ export default function NotesList() {
                             className="w-full pl-10 pr-3 py-2 border-2 border-green-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm"
                         />
                     </div>
+                    <div className="flex items-center gap-2">
+                        <Funnel size={20} className="text-gray-400" />
+                        <select
+                            value={sortBy}
+                            onChange={(e) => setSortBy(e.target.value as any)}
+                            className="select select-success bg-white w-full"
+                        >
+                            <option value="created_at">Najnowsze</option>
+                            <option value="updated_at">Ostatnio zmienione</option>
+                            <option value="title">Tytuł</option>
+                            <option value="average_rating">Ocena</option>
+                            <option value="rating_count">Liczba ocen</option>
+                        </select>
+                    </div>
 
-                    <select
-                        value={sortBy}
-                        onChange={(e) => setSortBy(e.target.value as any)}
-                        className="select select-success bg-white w-full"
-                    >
-                        <option value="created_at">Najnowsze</option>
-                        <option value="updated_at">Ostatnio zmienione</option>
-                        <option value="title">Tytuł</option>
-                        <option value="average_rating">Ocena</option>
-                        <option value="rating_count">Liczba ocen</option>
-                    </select>
+                    <div className="flex items-center gap-2">
+                        <Funnel size={20} className="text-gray-400" />
+                        <select
+                            value={order}
+                            onChange={(e) => setOrder(e.target.value as any)}
+                            className="select select-success bg-white w-full"
+                        >
+                            <option value="desc">Malejąco</option>
+                            <option value="asc">Rosnąco</option>
+                        </select>
+                    </div>
 
-                    <select
-                        value={order}
-                        onChange={(e) => setOrder(e.target.value as any)}
-                        className="select select-success bg-white w-full"
-                    >
-                        <option value="desc">Malejąco</option>
-                        <option value="asc">Rosnąco</option>
-                    </select>
-
-                    <select
-                        value={hasFile === null ? '' : hasFile.toString()}
-                        onChange={(e) => setHasFile(e.target.value === '' ? null : e.target.value === 'true')}
-                        className="select select-success bg-white w-full"
-                    >
-                        <option value="">Wszystkie</option>
-                        <option value="true">Z plikami</option>
-                        <option value="false">Bez plików</option>
-                    </select>
+                    <div className="flex items-center gap-2">
+                        <Funnel size={20} className="text-gray-400" />
+                        <select
+                            value={hasFile === null ? '' : hasFile.toString()}
+                            onChange={(e) => setHasFile(e.target.value === '' ? null : e.target.value === 'true')}
+                            className="select select-success bg-white w-full"
+                        >
+                            <option value="">Wszystkie</option>
+                            <option value="true">Z plikami</option>
+                            <option value="false">Bez plików</option>
+                        </select>
+                    </div>
                 </div>
 
             </div>

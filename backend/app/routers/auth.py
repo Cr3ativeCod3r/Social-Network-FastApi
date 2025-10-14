@@ -86,7 +86,7 @@ def login(credentials: user.UserLogin, db: Session = Depends(get_db)):
         value=access_token,
         httponly=True,
         secure=True,  
-        samesite="lax",
+        samesite="None",
         max_age=3600 * 24 * 7
     )
     

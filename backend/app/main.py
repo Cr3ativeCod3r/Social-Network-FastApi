@@ -1,3 +1,5 @@
+# app/main.py
+
 from contextlib import asynccontextmanager
 import logging
 from fastapi import FastAPI
@@ -6,9 +8,12 @@ from .db.init_db import init_db
 from .db.base import SessionLocal
 from .core.config import settings
 from fastapi.middleware.cors import CORSMiddleware
+from .routers import websocket
+
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
@@ -28,21 +33,23 @@ async def lifespan(app: FastAPI):
 app = FastAPI(title="FastAPI Auth",
               lifespan=lifespan)
 origins = [
-    "http://localhost:5173", 
-    "http://127.0.0.1:5173",  
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
 ]
 
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins, 
-    allow_credentials=True,  
+    allow_origins=origins,
+    allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
-    expose_headers=["Set-Cookie"],  
+    expose_headers=["Set-Cookie"],
 )
 
 app.include_router(api.api_router, prefix=settings.API_V1_STR)
+app.include_router(websocket.router, tags=["websocket"])
+
 
 @app.get("/api")
 def root():

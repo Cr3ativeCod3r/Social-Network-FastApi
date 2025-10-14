@@ -89,23 +89,35 @@ export default function NoteDetail() {
 
     const handleDownload = async () => {
         if (!id || !note?.file_path) return;
+
         try {
             const response = await axiosInstance.get(`/notes/${id}/download`, {
                 responseType: 'blob',
             });
+
+            // Pobranie nazwy pliku z nagłówka Content-Disposition
+            const disposition = response.headers['content-disposition'];
+            let filename = `note-${id}`; // fallback, jeśli nagłówek nie będzie dostępny
+
+            if (disposition && disposition.includes('filename=')) {
+                const match = disposition.match(/filename="?([^"]+)"?/);
+                if (match && match[1]) {
+                    filename = match[1];
+                }
+            }
+
             const url = window.URL.createObjectURL(response.data);
             const link = document.createElement('a');
             link.href = url;
-            link.download = `note-${id}`;
+            link.download = filename; // używamy nazwy z backendu
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
             window.URL.revokeObjectURL(url);
         } catch (err) {
-            console.error('Błąd przy pobieraniu pliku');
+            console.error('Błąd przy pobieraniu pliku', err);
         }
     };
-
     const handleSaveEdit = async () => {
         if (!id || !note) return;
         setIsSaving(true);
