@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Cookies from 'js-cookie';
-import type { UserData } from "../../Types/User"
-import ProfileTable from "./components/ProfileTable"
-import axiosInstance from '../../api/axiosInstance';
+import type { UserData } from "../Types/User"
+import ProfileTable from "../modules/User/components/ProfileTable"
+import axiosInstance from '../api/axiosInstance';
 import { toast } from 'sonner';
 
 const Profile: React.FC = () => {

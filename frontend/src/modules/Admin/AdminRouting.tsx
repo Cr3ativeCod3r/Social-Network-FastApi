@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "../../layout/layout";
 import AdminLayout from "./layout/AdminLayout";
-import UsersList from "./AdminUsers";
-import NotesList from "../Notes/crud/ReadNotes";
-import AdminStats from "./AdminStats";
+import UsersList from "../../views/AdminUsers";
+import NotesList from "../Notes/ReadNotes";
+import AdminStats from "../../views/AdminStats";
 
 const Admin = () => {
   return (

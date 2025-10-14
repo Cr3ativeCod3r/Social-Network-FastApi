@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../api/axiosInstance';
 import { Download, ArrowLeft, Edit2, Trash2, X, Check } from 'lucide-react';
-import student from "../../../assets/image/student.svg"
-import NoteRating from '../components/RateNote';
-import SaveNoteButton from '../components/SaveNote';
-import NoteStatistics from '../components/NoteStatistics';
-import NoteComments from '../components/Comments';
+import student from "../assets/image/student.svg"
+import NoteRating from '../modules/Notes/RateNote';
+import SaveNoteButton from '../modules/Notes/components/SaveNote';
+import NoteStatistics from '../modules/Notes/components/NoteStatistics';
+import NoteComments from '../modules/Notes/components/Comments';
 
 interface NoteResponseData {
     note: NoteDetail;
@@ -95,9 +95,9 @@ export default function NoteDetail() {
                 responseType: 'blob',
             });
 
-            // Pobranie nazwy pliku z nagłówka Content-Disposition
+        
             const disposition = response.headers['content-disposition'];
-            let filename = `note-${id}`; // fallback, jeśli nagłówek nie będzie dostępny
+            let filename = `note-${id}`; 
 
             if (disposition && disposition.includes('filename=')) {
                 const match = disposition.match(/filename="?([^"]+)"?/);
@@ -109,7 +109,7 @@ export default function NoteDetail() {
             const url = window.URL.createObjectURL(response.data);
             const link = document.createElement('a');
             link.href = url;
-            link.download = filename; // używamy nazwy z backendu
+            link.download = filename; 
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);

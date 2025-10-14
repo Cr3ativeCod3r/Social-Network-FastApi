@@ -18,13 +18,10 @@ const Navbar: React.FC = () => {
         border-b md:border-b-0 md:border-r
       "
     >
-      {/* Nagłówek */}
       <div className="flex items-center justify-center md:justify-start gap-2 p-3 text-lg font-semibold border-b border-gray-100 text-gray-800">
         <Shield className="w-5 h-5 text-green-500" />
         <span>Admin Panel</span>
       </div>
-
-      {/* Linki */}
       <ul
         className="
           flex md:flex-col flex-row
@@ -50,9 +47,8 @@ const Navbar: React.FC = () => {
               {({ isActive }) => (
                 <>
                   <Icon
-                    className={`w-4 h-4 transition-colors ${
-                      isActive ? "text-white" : "text-gray-500"
-                    }`}
+                    className={`w-4 h-4 transition-colors ${isActive ? "text-white" : "text-gray-500"
+                      }`}
                   />
                   <span className="hidden sm:inline">{name}</span>
                 </>

@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
-import Login from "./pages/Auth/Login";
-import Register from "./pages/Auth/Register";
-import Chat from "./pages/Chat/Chat";
-import Posts from "./pages/Notes/page";
-import NoteDetail from "./pages/Notes/crud/ReadNote";
+import Login from "./views/Login";
+import Register from "./views/Register";
+import Chat from "./views/Chat";
+import Posts from "./views/NotesList";
+import NoteDetail from "./views/Note";
 import Layout from "./layout/layout";
-import Admin from "./pages/Admin/AdminRouting"; 
-import User from "./pages/User/UserRouting";
+import Admin from "./modules/Admin/AdminRouting"; 
+import User from "./modules/User/UserRouting";
 import { useAuthStore } from "./store/authStore";
 
 const ScrollToTop: React.FC = () => {

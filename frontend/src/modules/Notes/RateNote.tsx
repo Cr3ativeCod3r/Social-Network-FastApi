@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 import { Trash2 } from 'lucide-react';
 
 interface RatingResponse {

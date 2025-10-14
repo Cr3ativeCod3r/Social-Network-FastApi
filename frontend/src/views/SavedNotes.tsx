@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Book, Loader } from 'lucide-react';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../api/axiosInstance';
 import { FileText } from "lucide-react";
 
 interface SavedNote {

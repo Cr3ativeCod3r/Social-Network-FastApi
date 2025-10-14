@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Settings } from 'lucide-react';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../api/axiosInstance';
 import {FileText} from "lucide-react";
 
 interface Note {

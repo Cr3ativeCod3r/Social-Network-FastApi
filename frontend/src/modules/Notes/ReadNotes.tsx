@@ -1,13 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 import { Search, ChevronLeft, ChevronRight, Trash2,Funnel } from 'lucide-react';
-import { useAuthStore } from "../../../store/authStore";
+import { useAuthStore } from "../../store/authStore";
 import { Book } from "lucide-react";
-import SaveNoteButton from '../components/SaveNote';
-import NoteStatistics from '../components/NoteStatistics';
-
-const API_BASE_URL = import.meta.env.VITE_API_URL;
+import SaveNoteButton from './components/SaveNote';
+import NoteStatistics from './components/NoteStatistics';
 
 interface Note {
     note_id: number;
@@ -55,7 +53,7 @@ export default function NotesList() {
             if (search) params.append('search', search);
             if (subject) params.append('subject', subject);
             if (hasFile !== null) params.append('has_file', hasFile.toString());
-            const response = await axiosInstance.get<ApiResponse>(`${API_BASE_URL}/notes/?${params}`);
+            const response = await axiosInstance.get<ApiResponse>(`/notes/?${params}`);
             setNotes(response.data.items);
             setTotalPages(response.data.total_pages);
         } catch (err: any) {
@@ -69,7 +67,7 @@ export default function NotesList() {
         e.stopPropagation();
         if (!confirm("Jesteś pewien, że chcesz usunąć tę notatkę?")) return;
         try {
-            await axiosInstance.delete(`${API_BASE_URL}/notes/${noteId}`);
+            await axiosInstance.delete(`/notes/${noteId}`);
             setNotes(prevNotes => prevNotes.filter(note => note.note_id !== noteId));
         } catch {
             setError("Nie udało się usunąć notatki.");
@@ -172,7 +170,6 @@ export default function NotesList() {
                 <div className="space-y-4 mb-6">
                     {notes.map((note) => (
                         <div key={note.note_id} className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow">
-                            {/* Górna część - tytuł i akcje */}
                             <div className="flex items-start justify-between gap-4 mb-3">
                                 <div
                                     onClick={() => navigate(`/notatki/${note.note_id}`)}
@@ -182,8 +179,6 @@ export default function NotesList() {
                                         {note.title}
                                     </h3>
                                 </div>
-
-                                {/* Przyciski akcji */}
                                 <div className="flex items-center gap-2 flex-shrink-0">
                                     <SaveNoteButton noteId={note.note_id} />
 
@@ -198,8 +193,6 @@ export default function NotesList() {
                                     )}
                                 </div>
                             </div>
-
-                            {/* Przedmiot */}
                             {note.subject && (
                                 <div className="text-sm text-gray-600 mb-3 flex items-center gap-1">
                                     <Book size={14} className="text-gray-500 flex-shrink-0" />

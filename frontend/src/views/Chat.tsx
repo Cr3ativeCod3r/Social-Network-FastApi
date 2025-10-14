@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { Send, Edit2, Trash2, X,MessageSquareDot,User } from 'lucide-react';
-import axiosInstance from '../../api/axiosInstance';
+import axiosInstance from '../api/axiosInstance';
+import { toast } from 'sonner';
 
 interface ChatMessage {
   message_id: number;
@@ -75,8 +76,8 @@ const ChatComponent: React.FC = () => {
       });
       pendingMessagesRef.current.add(response.data.message_id);
       setInputValue('');
-    } catch (error) {
-      console.error('Failed to send message:', error);
+    } catch (error: any) {
+          toast.error(error.response?.data?.detail)
     }
   };
 
@@ -109,7 +110,6 @@ const ChatComponent: React.FC = () => {
     loadStats();
   }, [getCurrentUserId, loadMessages, loadStats]);
 
-  // Osobny effect dla WebSocket - uruchamia się tylko raz
   useEffect(() => {
     if (!currentUserId) return;
 

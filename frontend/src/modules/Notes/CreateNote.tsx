@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import axiosInstance from '../../../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 import { Upload, FileText, X } from 'lucide-react';
-import student from "../../../assets/image/student.svg"
+import student from "../../assets/image/student.svg"
 
 
 export default function CreateNoteModal() {

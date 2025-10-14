@@ -1,9 +1,9 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "../../layout/layout";
 import UserLayout from "./Layout/UserLayout";
-import Profile from "./Profile";
-import UserNotes from "./UserNotes";
-import SavedNotes from "./SavedNotes";
+import Profile from "../../views/Profile";
+import UserNotes from "../../views/UserNotes";
+import SavedNotes from "../../views/SavedNotes";
 
 const User = () => {
   return (
