@@ -1,6 +1,6 @@
 import React from 'react';
 import Navbar from './Navbar';
-import Footer from './Footer';
+// import Footer from './Footer';
 import { Toaster } from 'sonner';
 interface LayoutProps {
   children: React.ReactNode;
@@ -14,7 +14,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
         <Toaster richColors position="top-right" />
         {children}
       </main>
-      <Footer />
+      {/* <Footer /> */}
     </div>
   );
 };
