@@ -1,43 +1,18 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import axiosInstance from '../api/axiosInstance';
-import { Download, ArrowLeft, Edit2, Trash2, X, Check } from 'lucide-react';
-import student from "../assets/image/student.svg"
+import { ArrowLeft } from 'lucide-react';
 import NoteRating from '../modules/Notes/RateNote';
-import SaveNoteButton from '../modules/Notes/components/SaveNote';
-import NoteStatistics from '../modules/Notes/components/NoteStatistics';
 import NoteComments from '../modules/Notes/components/Comments';
-
-interface NoteResponseData {
-    note: NoteDetail;
-    is_owner: boolean;
-}
-
-interface NoteDetail {
-    title: string;
-    content: string;
-    subject: string;
-    note_id: number;
-    file_path: string | null;
-    created_at: string;
-    updated_at: string;
-    user_id: number;
-    average_rating: string;
-    rating_count: number;
-}
-
-interface UserProfile {
-    first_name: string;
-    last_name: string;
-    profile_picture: string;
-    university: string;
-    department: string;
-}
+import UserProfileCard from '../modules/Notes/components/UserProfileCard';
+import NoteContent from '../modules/Notes/components/NoteContect';
+import NoteEditForm from '../modules/Notes/components/NoteEditForm';
+import type { NoteDetail as NoteDetailType, NoteResponseData, UserProfile, EditData } from '../modules/Notes/types';
 
 export default function NoteDetail() {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
-    const [note, setNote] = useState<NoteDetail | null>(null);
+    const [note, setNote] = useState<NoteDetailType | null>(null);
     const [user, setUser] = useState<UserProfile | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState('');
@@ -45,11 +20,11 @@ export default function NoteDetail() {
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
-    const [editData, setEditData] = useState({
+    const [editData, setEditData] = useState<EditData>({
         title: '',
         content: '',
         subject: '',
-        file: null as File | null,
+        file: null,
         removeFile: false,
     });
 
@@ -95,7 +70,6 @@ export default function NoteDetail() {
                 responseType: 'blob',
             });
 
-
             const disposition = response.headers['content-disposition'];
             let filename = `note-${id}`;
 
@@ -118,6 +92,7 @@ export default function NoteDetail() {
             console.error('Błąd przy pobieraniu pliku', err);
         }
     };
+
     const handleSaveEdit = async () => {
         if (!id || !note) return;
         setIsSaving(true);
@@ -144,7 +119,7 @@ export default function NoteDetail() {
                 formData.append('remove_file', 'true');
             }
 
-            const response = await axiosInstance.put<NoteDetail>(`/notes/${id}`, formData, {
+            const response = await axiosInstance.put<NoteDetailType>(`/notes/${id}`, formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
@@ -178,16 +153,17 @@ export default function NoteDetail() {
         }
     };
 
-    const formatDate = (date: string) => {
-        return new Date(date).toLocaleDateString('pl-PL', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
+    const handleCancelEdit = () => {
+        if (!note) return;
+        setIsEditing(false);
+        setEditData({
+            title: note.title,
+            content: note.content,
+            subject: note.subject,
+            file: null,
+            removeFile: false,
         });
     };
-
 
     if (error && !note) {
         return (
@@ -207,11 +183,7 @@ export default function NoteDetail() {
     }
 
     if (!note) {
-        return (
-            <div className="max-w-3xl mx-auto p-6 min-h-screen">
-
-            </div>
-        );
+        return <div className="max-w-3xl mx-auto p-6 min-h-screen" />;
     }
 
     return (
@@ -224,30 +196,7 @@ export default function NoteDetail() {
                 Wróć
             </button>
 
-            {user && (
-                <div className="bg-gray-200 rounded-lg p-4 mb-6 border border-gray-200">
-                    <div className="flex items-start gap-4">
-                        <div className="flex-1 flex items-center gap-2">
-                            <img
-                                src={user.profile_picture || student}
-                                alt="Zdjęcie profilowe"
-                                className="w-16 h-16 rounded-full object-cover border-2 border-green-500 p-2 bg-gray-50"
-                            />
-                            <div>
-                                <h2 className="text-xl font-semibold text-gray-900">
-                                    {user.first_name} {user.last_name}
-                                </h2>
-                                {user.department && (
-                                    <p className="text-gray-600">{user.department}</p>
-                                )}
-                                {user.university && (
-                                    <p className="text-gray-600 text-sm">{user.university}</p>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            )}
+            {user && <UserProfileCard user={user} />}
 
             <div className="bg-white rounded-lg shadow-lg p-8 animate-fade-in">
                 {error && (
@@ -257,153 +206,23 @@ export default function NoteDetail() {
                 )}
 
                 {isEditing ? (
-                    <div className="space-y-4 mb-6">
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Tytuł</label>
-                            <input
-                                type="text"
-                                value={editData.title}
-                                onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Przedmiot</label>
-                            <input
-                                type="text"
-                                value={editData.subject}
-                                onChange={(e) => setEditData({ ...editData, subject: e.target.value })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Treść</label>
-                            <textarea
-                                value={editData.content}
-                                onChange={(e) => setEditData({ ...editData, content: e.target.value })}
-                                rows={10}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                            />
-                        </div>
-
-                        <div>
-                            <label className="block text-sm font-medium text-gray-700 mb-2">Plik</label>
-                            {note.file_path && (
-                                <div className="mb-3 p-3 bg-blue-50 border border-blue-200 rounded-lg flex items-center justify-between">
-                                    <span className="text-sm text-blue-700">Plik już istnieje</span>
-                                    <button
-                                        type="button"
-                                        onClick={() => setEditData({ ...editData, removeFile: !editData.removeFile })}
-                                        className={`px-3 py-1 rounded text-sm transition ${editData.removeFile
-                                            ? 'bg-red-500 text-white hover:bg-red-600'
-                                            : 'bg-gray-300 text-gray-700 hover:bg-gray-400'
-                                            }`}
-                                    >
-                                        {editData.removeFile ? 'Anuluj usunięcie' : 'Usuń plik'}
-                                    </button>
-                                </div>
-                            )}
-                            <input
-                                type="file"
-                                onChange={(e) => setEditData({ ...editData, file: e.target.files?.[0] || null })}
-                                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                            />
-                            {editData.file && (
-                                <p className="text-sm text-gray-600 mt-2">Wybrany plik: {editData.file.name}</p>
-                            )}
-                        </div>
-
-                        <div className="flex gap-3">
-                            <button
-                                onClick={handleSaveEdit}
-                                disabled={isSaving}
-                                className="flex items-center gap-2 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50"
-                            >
-                                <Check size={18} />
-                                {isSaving ? 'Zapisywanie...' : 'Zapisz'}
-                            </button>
-                            <button
-                                onClick={() => {
-                                    setIsEditing(false);
-                                    setEditData({
-                                        title: note.title,
-                                        content: note.content,
-                                        subject: note.subject,
-                                        file: null,
-                                        removeFile: false,
-                                    });
-                                }}
-                                disabled={isSaving}
-                                className="flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded-lg hover:bg-gray-500 transition disabled:opacity-50"
-                            >
-                                <X size={18} />
-                                Anuluj
-                            </button>
-                        </div>
-                    </div>
+                    <NoteEditForm
+                        editData={editData}
+                        setEditData={setEditData}
+                        note={note}
+                        onSave={handleSaveEdit}
+                        onCancel={handleCancelEdit}
+                        isSaving={isSaving}
+                    />
                 ) : (
-                    <>
-                        <div className="flex items-center justify-between mb-12">
-                            <div className="flex items-center gap-4 ">
-                                <NoteStatistics noteId={note.note_id} />
-                                <SaveNoteButton noteId={note.note_id} />
-                            </div>
-
-                            <div className="flex items-center gap-2">
-                                {note.file_path && (
-                                    <button
-                                        onClick={handleDownload}
-                                        className="flex items-center justify-center p-2 w-10 h-10 text-gray-600 hover:text-blue-600 hover:bg-blue-50 rounded-full transition"
-                                        title="Pobierz zasoby"
-                                    >
-                                        <Download size={20} />
-                                    </button>
-                                )}
-                                {isOwner && (
-                                    <>
-                                        <button
-                                            onClick={() => setIsEditing(true)}
-                                            className="flex items-center justify-center p-2 w-10 h-10 text-gray-600 hover:text-green-600 hover:bg-green-50 rounded-full transition"
-                                            title="Edytuj notatkę"
-                                        >
-                                            <Edit2 size={20} />
-                                        </button>
-                                        <button
-                                            onClick={handleDelete}
-                                            disabled={isDeleting}
-                                            className="flex items-center justify-center p-2 w-10 h-10 text-gray-600 hover:text-red-600 hover:bg-red-50 rounded-full transition disabled:opacity-50"
-                                            title="Usuń notatkę"
-                                        >
-                                            <Trash2 size={20} />
-                                        </button>
-                                    </>
-                                )}
-                            </div>
-                        </div>
-
-                        <div className="mb-6 border-b pb-6">
-                            <h1 className="text-3xl font-bold text-gray-900 break-words">{note.title}</h1>
-                            {note.subject && (
-                                <p className="text-gray-600 text-lg mt-2">{note.subject}</p>
-                            )}
-                        </div>
-
-                        <div className="flex flex-wrap gap-6 mb-8 text-sm text-gray-500">
-                            <div>
-                                <span className="font-semibold text-gray-700">Utworzone:</span>
-                                <p>{formatDate(note.created_at)}</p>
-                            </div>
-                            <div>
-                                <span className="font-semibold text-gray-700">Zmienione:</span>
-                                <p>{formatDate(note.updated_at)}</p>
-                            </div>
-                        </div>
-
-                        <div className="prose prose-sm max-w-none">
-                            <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">{note.content}</p>
-                        </div>
-                    </>
-
+                    <NoteContent
+                        note={note}
+                        isOwner={isOwner}
+                        isDeleting={isDeleting}
+                        onEdit={() => setIsEditing(true)}
+                        onDelete={handleDelete}
+                        onDownload={handleDownload}
+                    />
                 )}
             </div>
 

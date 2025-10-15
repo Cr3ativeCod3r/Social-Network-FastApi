@@ -1,14 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Book, Star, Users, ArrowRight, Calendar } from 'lucide-react';
+import type { Note as UserNoteTableProps} from "../types"
 
-interface UserNoteTableProps {
-    note_id: number;
-    title: string;
-    subject: string;
-    average_rating: string;
-    rating_count: number;
-    created_at: string;
-}
 
 export default function UserNoteTable({ note_id, title, subject, average_rating, rating_count, created_at }: UserNoteTableProps) {
     const navigate = useNavigate();

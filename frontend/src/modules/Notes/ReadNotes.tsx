@@ -7,25 +7,10 @@ import { Book } from "lucide-react";
 import SaveNoteButton from './components/SaveNote';
 import NoteStatistics from './components/NoteStatistics';
 import Pagination from './components/Pagination';
+import type { Note, NotesResponse as ApiResponse} from './types';
+
 const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES;
 
-interface Note {
-    note_id: number;
-    title: string;
-    subject: string;
-    created_at: string;
-    user_id: number;
-    average_rating: string;
-    rating_count: number;
-}
-
-interface ApiResponse {
-    total: number;
-    page: number;
-    page_size: number;
-    total_pages: number;
-    items: Note[];
-}
 
 export default function NotesList() {
     const navigate = useNavigate();

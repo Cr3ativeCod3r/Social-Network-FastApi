@@ -19,35 +19,7 @@ import {
 } from 'lucide-react';
 
 import StatCard from '../modules/Admin/components/StatCard';
-
-interface AdminStats {
-  total_users: number;
-  verified_users: number;
-  banned_users: number;
-  admin_users: number;
-  users_with_restrictions: {
-    without_chat: number;
-    without_comments: number;
-    without_posts: number;
-  };
-  notes_stats: {
-    total_notes: number;
-    total_ratings: number;
-    total_saved_notes: number;
-  };
-}
-
-interface NotesStats {
-  total_notes: number;
-  notes_with_files: number;
-  notes_without_files: number;
-  total_ratings: number;
-  total_saved: number;
-  average_rating: number;
-  notes_last_30_days: number;
-}
-
-
+import type { AdminStats, NotesStats } from '../modules/Admin/types';
 
 export default function AdminStats() {
   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
@@ -92,15 +64,15 @@ export default function AdminStats() {
 
   return (
     <div className=" bg-gray-50 animate-fade-in">
-    <div className="bg-white p-6 rounded-lg shadow-md mb-8">
-      <h2 className="text-xl font-semibold text-gray-700 mb-4">Użytkownicy</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <StatCard label="Użytkownicy" value={adminStats.total_users} icon={Users} color="text-blue-500" />
-        <StatCard label="Zweryfikowani" value={adminStats.verified_users} icon={UserCheck} color="text-green-500" />
-        <StatCard label="Zbanowani" value={adminStats.banned_users} icon={UserX} color="text-red-500" />
-        <StatCard label="Admini" value={adminStats.admin_users} icon={UserCog} color="text-purple-500" />
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">Użytkownicy</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard label="Użytkownicy" value={adminStats.total_users} icon={Users} color="text-blue-500" />
+          <StatCard label="Zweryfikowani" value={adminStats.verified_users} icon={UserCheck} color="text-green-500" />
+          <StatCard label="Zbanowani" value={adminStats.banned_users} icon={UserX} color="text-red-500" />
+          <StatCard label="Admini" value={adminStats.admin_users} icon={UserCog} color="text-purple-500" />
+        </div>
       </div>
-    </div>
 
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Ograniczenia użytkowników</h2>

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import axiosInstance from '../../../api/axiosInstance';
 
 interface SaveNoteButtonProps {
-  noteId: string;
+  noteId: number;
 }
 
 export default function SaveNoteButton({ noteId }: SaveNoteButtonProps) {

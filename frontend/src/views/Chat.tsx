@@ -6,26 +6,8 @@ import ChatHeader from '../modules/Chat/components/ChatHeader';
 import ChatMessagesList from '../modules/Chat/components/ChatMessagesList';
 import ChatInput from '../modules/Chat/components/ChatInput';
 
-interface ChatMessage {
-  message_id: number;
-  user_id: number;
-  content: string;
-  created_at: string;
-  is_edited: boolean;
-  author: {
-    user_id: number;
-    first_name: string;
-    last_name: string;
-    profile_picture: string | null;
-    is_admin: boolean;
-  };
-  is_author: boolean;
-}
+import type {ChatMessage, ChatStats} from '../modules/Chat/types';
 
-interface ChatStats {
-  active_users: number;
-  messages_today: number;
-}
 
 const ChatComponent: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -50,6 +32,16 @@ const ChatComponent: React.FC = () => {
       setLoading(false);
     }
   }, []);
+
+  const sendLike = async () => {
+  try {
+    await axiosInstance.post('/chat/messages', {
+      content: '👍',
+    });
+  } catch (error: any) {
+    toast.error(error.response?.data?.detail);
+  }
+};
 
   const loadStats = useCallback(async () => {
     try {
@@ -212,8 +204,8 @@ const ChatComponent: React.FC = () => {
   }, [currentUserId]);
 
   return (
-    <div className="flex items-center justify-center animate-fade-in h-screen">
-      <div className="flex flex-col h-[85vh] mt-20 lg:w-[60vw] sm: w-[98vw] bg-green-50 rounded-lg shadow-lg">
+    <div className="flex items-center justify-center animate-fade-in h-screen ">
+      <div className="flex flex-col h-[85vh] mt-20 lg:w-[65vw] sm: w-[98vw] bg-white rounded-lg">
         <ChatHeader stats={stats} />
         
         <ChatMessagesList
@@ -232,6 +224,7 @@ const ChatComponent: React.FC = () => {
           value={inputValue}
           onChange={setInputValue}
           onSend={sendMessage}
+          onLike={sendLike} 
         />
       </div>
     </div>

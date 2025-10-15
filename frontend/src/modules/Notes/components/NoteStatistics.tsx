@@ -7,7 +7,7 @@ interface Statistics {
   total_ratings: number;
   average_rating: string;
   total_saves: number;
-  total_comments: number; // ✅ dodane pole
+  total_comments: number; 
 }
 
 interface NoteStatisticsProps {

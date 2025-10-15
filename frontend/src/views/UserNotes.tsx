@@ -4,26 +4,9 @@ import { FileText } from 'lucide-react';
 import axiosInstance from '../api/axiosInstance';
 import UserNoteTable from '../modules/Notes/components/UserNoteTable';
 import Pagination from '../modules/Notes/components/Pagination';
+import type {Note,NotesResponse } from '../modules/Notes/types';
 
 const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES;
-
-interface Note {
-  note_id: number;
-  title: string;
-  subject: string;
-  created_at: string;
-  user_id: number;
-  average_rating: string;
-  rating_count: number;
-}
-
-interface NotesResponse {
-  total: number;
-  page: number;
-  page_size: number;
-  total_pages: number;
-  items: Note[];
-}
 
 export default function UserNotes() {
   const { id } = useParams<{ id: string }>();

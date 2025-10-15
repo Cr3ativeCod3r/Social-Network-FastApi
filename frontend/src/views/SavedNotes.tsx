@@ -3,27 +3,9 @@ import { Loader, FileText } from 'lucide-react';
 import axiosInstance from '../api/axiosInstance';
 import UserNoteTable from '../modules/Notes/components/UserNoteTable';
 import Pagination from '../modules/Notes/components/Pagination';
+import type {SavedNote,SavedNotesResponse } from '../modules/Notes/types';
 
 const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES;
-
-interface SavedNote {
-    user_id: number;
-    note_id: number;
-    saved_at: string;
-    title: string;
-    subject: string;
-    created_at: string;
-    average_rating: string;
-    rating_count: number;
-}
-
-interface SavedNotesResponse {
-    total: number;
-    page: number;
-    page_size: number;
-    total_pages: number;
-    items: SavedNote[];
-}
 
 export default function SavedNotes() {
     const [notes, setNotes] = useState<SavedNote[]>([]);

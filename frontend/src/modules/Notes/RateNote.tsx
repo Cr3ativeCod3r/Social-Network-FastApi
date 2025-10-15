@@ -1,31 +1,7 @@
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { Trash2 } from 'lucide-react';
-
-interface RatingResponse {
-    note_id: number;
-    user_id: number;
-    rating: number;
-    rated_at: string;
-}
-
-interface RatingStats {
-    note_id: number;
-    average_rating: number | null;
-    total_ratings: number;
-    rating_distribution: Record<string, number>;
-    rating_percentages: Record<string, number>;
-}
-
-interface MyRating {
-    rating: number | null;
-    rated_at?: string;
-}
-
-interface NoteRatingProps {
-    noteId: number;
-    onRatingChange?: (rating: number) => void;
-}
+import type { NoteRatingProps, MyRating, RatingStats, RatingResponse } from './types';
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 

@@ -2,35 +2,9 @@ import { useEffect, useState } from 'react';
 import { Edit2, Trash2, Loader } from 'lucide-react';
 import axiosInstance from '../../../api/axiosInstance';
 import { toast } from 'sonner';
+import type { Comment, CommentsResponse, NoteCommentsProps } from "../types.ts"
 
-interface Author {
-  user_id: number;
-  first_name: string;
-  last_name: string;
-  profile_picture: string;
-}
 
-interface Comment {
-  content: string;
-  comment_id: number;
-  note_id: number;
-  user_id: number;
-  created_at: string;
-  author: Author;
-  is_author: boolean;
-}
-
-interface CommentsResponse {
-  total: number;
-  page: number;
-  page_size: number;
-  total_pages: number;
-  items: Comment[];
-}
-
-interface NoteCommentsProps {
-  noteId: number;
-}
 
 export default function NoteComments({ noteId }: NoteCommentsProps) {
   const [comments, setComments] = useState<Comment[]>([]);

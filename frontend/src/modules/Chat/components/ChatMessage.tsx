@@ -156,7 +156,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
 
           {isEditing ? (
             <div className="flex gap-2 mt-2">
-              <input
+              <textarea
                 type="text"
                 value={editValue}
                 onChange={(e) => onEditChange(e.target.value)}
@@ -164,12 +164,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
                 className="flex-1 px-2 py-1 text-sm rounded bg-white text-gray-800"
                 autoFocus
               />
-              <button
-                onClick={onEditSave}
-                className="px-2 py-1 bg-green-500 text-white text-sm rounded hover:bg-green-600"
-              >
-                Zapisz
-              </button>
+           
               <button
                 onClick={onEditCancel}
                 className="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
