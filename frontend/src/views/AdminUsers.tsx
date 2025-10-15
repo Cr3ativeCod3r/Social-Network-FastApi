@@ -3,6 +3,7 @@ import axiosInstance from '../api/axiosInstance';
 import type { User } from "../Types/User";
 import UserAdminModal from '../modules/Admin/components/UserAdminModal';
 import { Settings, UserRound, ShieldCheck, ShieldAlert, Ban, Hash, Mail, Trash2, AlertTriangle } from "lucide-react";
+import Pagination from '../modules/Notes/components/Pagination';
 
 interface UserListResponse {
   total: number;
@@ -148,8 +149,7 @@ export default function UsersList() {
         <div className="bg-white rounded-lg shadow overflow-hidden">
           {loading ? (
             <div className="text-center p-12">
-              <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-blue-600 mx-auto"></div>
-              <p className="mt-3 text-gray-600">Ładowanie użytkowników...</p>
+
             </div>
           ) : error ? (
             <div className="text-center p-12 bg-red-50">
@@ -159,7 +159,7 @@ export default function UsersList() {
             </div>
           ) : data && data.users.length > 0 ? (
             <>
-              <div className="overflow-x-auto">
+              <div className="overflow-x-auto animate-fade-in">
                 <table className="w-full text-sm text-left text-gray-600">
                   <thead className="text-xs text-gray-700 uppercase bg-gray-100 hidden md:table-header-group">
                     <tr>
@@ -178,11 +178,11 @@ export default function UsersList() {
                           <span className="break-all">{user.user_id}</span>
                         </td>
                         <td className="flex justify-between items-center py-2 md:table-cell md:px-6 md:py-4 font-medium text-gray-900">
-                           <span className="font-bold md:hidden mr-2">Email:</span>
+                          <span className="font-bold md:hidden mr-2">Email:</span>
                           <span className="break-all text-right">{user.email}</span>
                         </td>
                         <td className="flex justify-between items-center py-2 md:table-cell md:px-6 md:py-4">
-                           <span className="font-bold md:hidden mr-2">Imię i Nazwisko:</span>
+                          <span className="font-bold md:hidden mr-2">Imię i Nazwisko:</span>
                           <span className="text-right">{user.first_name || '-'} {user.last_name || ''}</span>
                         </td>
                         <td className="flex justify-between items-center py-2 md:table-cell md:px-6 md:py-4 md:text-center">
@@ -199,7 +199,7 @@ export default function UsersList() {
                           </div>
                         </td>
                         <td className="flex justify-between items-center py-2 md:table-cell md:px-6 md:py-4 md:text-right">
-                           <span className="font-bold md:hidden mr-2">Akcje:</span>
+                          <span className="font-bold md:hidden mr-2">Akcje:</span>
                           <div className="flex items-center justify-end gap-1">
                             <button
                               onClick={() => handleAdminClick(user.user_id, user.email)}
@@ -222,19 +222,14 @@ export default function UsersList() {
                   </tbody>
                 </table>
               </div>
-              <div className="flex flex-col sm:flex-row items-center justify-between gap-4 p-4 border-t">
-                <span className="text-sm text-gray-700">
-                  Strona <span className="font-semibold">{data.page}</span> z <span className="font-semibold">{totalPages}</span> (Razem: {data.total})
-                </span>
-                <div className="flex gap-2">
-                  <button onClick={() => setPage(page - 1)} disabled={page <= 1} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed  text-white">
-                    Poprzednia
-                  </button>
-                  <button onClick={() => setPage(page + 1)} disabled={page >= totalPages} className="px-4 py-2 text-sm bg-green-400 rounded-lg hover:bg-green-300 disabled:opacity-50 disabled:cursor-not-allowed text-white">
-                    Następna
-                  </button>
-                </div>
+              <div className="mb-2">
+              <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+              />
               </div>
+      
             </>
           ) : (
             <div className="text-center p-12">

@@ -1,11 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
-import { Search, ChevronLeft, ChevronRight, Trash2,Funnel } from 'lucide-react';
+import { Search, Trash2,Funnel } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
 import { Book } from "lucide-react";
 import SaveNoteButton from './components/SaveNote';
 import NoteStatistics from './components/NoteStatistics';
+import Pagination from './components/Pagination';
+const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES;
 
 interface Note {
     note_id: number;
@@ -46,7 +48,7 @@ export default function NotesList() {
         try {
             const params = new URLSearchParams({
                 page: page.toString(),
-                page_size: pageSize.toString(),
+                page_size: page_size,
                 sort_by: sortBy,
                 order,
             });
@@ -83,12 +85,6 @@ export default function NotesList() {
         fetchNotes();
     }, [page]);
 
-    const formatDate = (date: string) =>
-        new Date(date).toLocaleDateString('pl-PL', {
-            year: 'numeric',
-            month: 'short',
-            day: 'numeric',
-        });
 
     return (
         <div className="max-w-4xl mx-auto animate-fade-in">
@@ -211,31 +207,12 @@ export default function NotesList() {
                 </div>
             )}
 
-            {totalPages > 1 && (
-                <div className="flex items-center justify-between">
-                    <button
-                        onClick={() => setPage((p) => Math.max(1, p - 1))}
-                        disabled={page === 1 || loading}
-                        className="flex items-center gap-2 px-3 py-2 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                    >
-                        <ChevronLeft size={18} />
-                        Poprzednia
-                    </button>
+            <Pagination
+                currentPage={page}
+                totalPages={totalPages}
+                onPageChange={setPage}
+            />
 
-                    <div className="text-sm text-gray-600">
-                        Strona {page} z {totalPages}
-                    </div>
-
-                    <button
-                        onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                        disabled={page === totalPages || loading}
-                        className="flex items-center gap-2 px-3 py-2 rounded border border-gray-300 hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed transition"
-                    >
-                        Następna
-                        <ChevronRight size={18} />
-                    </button>
-                </div>
-            )}
         </div>
     );
 }

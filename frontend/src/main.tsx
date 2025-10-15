@@ -1,4 +1,3 @@
-import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import './assets/style/anim.css'
 import './assets/style/index.css'

@@ -70,20 +70,19 @@ const Profile: React.FC = () => {
     setEditValues(prev => ({ ...prev, [field]: value }));
   };
 
-  if (loading) return <div className="min-h-screen flex items-center justify-center bg-white"><p>Ładowanie profilu...</p></div>;
   if (!userData) return <div className="min-h-screen flex items-center justify-center bg-white"><p>Nie znaleziono danych użytkownika.</p></div>;
 
   return (
     <>
-    <ProfileTable
-      userData={userData}
-      editMode={editMode}
-      editValues={editValues}
-      onEdit={handleEdit}
-      onCancel={handleCancel}
-      onSave={handleSave}
-      onEditValueChange={handleEditValueChange}
-    />
+      <ProfileTable
+        userData={userData}
+        editMode={editMode}
+        editValues={editValues}
+        onEdit={handleEdit}
+        onCancel={handleCancel}
+        onSave={handleSave}
+        onEditValueChange={handleEditValueChange}
+      />
     </>
   );
 };

@@ -64,7 +64,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
 
     return (
         <>
-      
+
             <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 w-screen h-screen">
 
                 <div className="bg-white rounded-lg shadow-2xl w-full max-w-md transform transition-all">
@@ -108,7 +108,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                             </div>
                         </div>
 
-                  
+
                         <div>
                             <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                 Nowe hasło
@@ -134,7 +134,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
                             </div>
                         </div>
 
-           ]
+                        ]
                         <div>
                             <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-2">
                                 Potwierdź nowe hasło

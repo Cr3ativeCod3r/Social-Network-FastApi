@@ -38,7 +38,7 @@ background-color: var(--color-second1);
 .animate-fade-in {
   opacity: 0;
   transform: translateY(-16px);
-  animation: fadeInTranslate 0.5s forwards;
+  animation: fadeInTranslate 1s forwards;
 }
 
 @keyframes fadeInTranslate {

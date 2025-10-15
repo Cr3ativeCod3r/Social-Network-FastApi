@@ -74,8 +74,6 @@ export default function NoteRating({ noteId, onRatingChange }: NoteRatingProps) 
             onRatingChange?.(newRating);
 
             setTimeout(() => setSuccess(''), 2000);
-
-            // Przeładuj statystyki
             fetchRatingData();
         } catch (err: any) {
             setError(err.response?.data?.detail || 'Błąd przy zapisywaniu oceny');

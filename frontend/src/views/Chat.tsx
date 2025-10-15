@@ -24,6 +24,8 @@ interface ChatStats {
   messages_today: number;
 }
 
+
+
 const ChatComponent: React.FC = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [inputValue, setInputValue] = useState('');
@@ -210,8 +212,9 @@ const ChatComponent: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center justify-center my-2">
-      <div className="flex flex-col h-[80vh] w-[80vw] bg-green-50 rounded-lg overflow-hidden shadow-lg">
+    <div className="flex items-center justify-center my-2 animate-fade-in">
+          
+      <div className="flex flex-col h-[80vh] w-[60vw] bg-green-50 rounded-lg overflow-hidden shadow-lg z-1">
         {/* Header */}
         <div className="bg-white shadow-md p-4 border-b">
 

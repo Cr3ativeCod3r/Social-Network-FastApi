@@ -95,9 +95,9 @@ export default function NoteDetail() {
                 responseType: 'blob',
             });
 
-        
+
             const disposition = response.headers['content-disposition'];
-            let filename = `note-${id}`; 
+            let filename = `note-${id}`;
 
             if (disposition && disposition.includes('filename=')) {
                 const match = disposition.match(/filename="?([^"]+)"?/);
@@ -109,7 +109,7 @@ export default function NoteDetail() {
             const url = window.URL.createObjectURL(response.data);
             const link = document.createElement('a');
             link.href = url;
-            link.download = filename; 
+            link.download = filename;
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
