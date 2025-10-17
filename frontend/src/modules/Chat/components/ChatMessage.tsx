@@ -9,6 +9,18 @@ interface ChatMessageAuthor {
   is_admin: boolean;
 }
 
+interface NoteData {
+  note_id: number;
+  title: string;
+  subject: string;
+}
+
+interface NoteData {
+  note_id: number;
+  title: string;
+  subject: string;
+}
+
 interface ChatMessageProps {
   message_id: number;
   content: string;
@@ -83,6 +95,18 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
     onDelete();
   };
 
+  const noteMatch = content.match(/^\/notes\/(\d+)\/(.+?)\/(.+)$/);
+  const isNoteLink = noteMatch !== null;
+  const noteId = noteMatch ? noteMatch[1] : null;
+  const noteTitle = noteMatch ? decodeURIComponent(noteMatch[2]) : null;
+  const noteSubject = noteMatch ? decodeURIComponent(noteMatch[3]) : null;
+
+  const handleNoteClick = () => {
+    if (noteId) {
+      window.location.href = `/notatki/${noteId}`;
+    }
+  };
+
   return (
     <div 
       className={`flex animate-fade-in ${is_author ? 'justify-end' : 'justify-start'} relative z-10`}
@@ -90,7 +114,7 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
       onMouseLeave={() => setIsHovered(false)}
     >
       <div className="flex items-center gap-2">
-        {is_author && !isEditing && (
+        {is_author && !isEditing && !isNoteLink && (
           <div className={`flex items-center relative transition-opacity duration-200 ${isHovered || showMenu ? 'opacity-100' : 'opacity-0'}`}>
             <button
               ref={buttonRef}
@@ -128,54 +152,80 @@ const ChatMessage: React.FC<ChatMessageProps> = ({
           </div>
         )}
 
-        <div
-          className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow ${
-            is_author
-              ? 'bg-blue-500 text-white'
-              : 'bg-white text-gray-800 border border-gray-200'
-          }`}
-        >
-          <div className="flex justify-between items-start mb-1">
-            <div className="font-semibold text-sm">
-              {author.first_name} {author.last_name}
-              {author.is_admin && (
-                <span className="ml-2 text-xs bg-yellow-400 px-2 py-0.5 rounded">
-                  Admin
-                </span>
-              )}
+        {isNoteLink ? (
+          <div className="bg-white border border-gray-200 rounded-2xl shadow-md px-4 py-3 max-w-xs lg:max-w-md">
+            <div className="flex justify-between items-start mb-2">
+              <div className="font-semibold text-sm text-gray-800">
+                {author.first_name} {author.last_name}
+                {author.is_admin && (
+                  <span className="ml-2 text-xs bg-yellow-400 px-2 py-0.5 rounded">
+                    Admin
+                  </span>
+                )}
+              </div>
+              <span className="text-xs text-gray-500 ml-2">
+                {formatDate(created_at)}
+              </span>
             </div>
-            <span
-              className={`text-xs ml-2 ${
-                is_author ? 'text-blue-100' : 'text-gray-500'
-              }`}
+            <p className="text-gray-800 text-sm font-medium mb-1">Zobacz moją notatkę!</p>
+            <p className="text-gray-600 text-xs mb-1">{noteSubject}</p>
+            <p className="text-gray-800 text-sm font-semibold mb-3">{noteTitle}</p>
+            <button
+              onClick={handleNoteClick}
+              className="w-full bg-blue-500 hover:bg-blue-600 text-white font-medium py-2 px-4 rounded-lg transition"
             >
-              {formatDate(created_at)}
-              {is_edited && ' (edytowana)'}
-            </span>
+              Otwórz notatkę
+            </button>
           </div>
-
-          {isEditing ? (
-            <div className="flex gap-2 mt-2">
-              <textarea
-                type="text"
-                value={editValue}
-                onChange={(e) => onEditChange(e.target.value)}
-                onKeyDown={(e) => e.key === 'Enter' && onEditSave()}
-                className="flex-1 px-2 py-1 text-sm rounded bg-white text-gray-800"
-                autoFocus
-              />
-           
-              <button
-                onClick={onEditCancel}
-                className="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
+        ) : (
+          <div
+            className={`max-w-xs lg:max-w-md px-4 py-3 rounded-3xl shadow ${
+              is_author
+                ? 'bg-blue-500 text-white'
+                : 'bg-white text-gray-800 border border-gray-200'
+            }`}
+          >
+            <div className="flex justify-between items-start mb-1">
+              <div className="font-semibold text-sm">
+                {author.first_name} {author.last_name}
+                {author.is_admin && (
+                  <span className="ml-2 text-xs bg-yellow-400 px-2 py-0.5 rounded">
+                    Admin
+                  </span>
+                )}
+              </div>
+              <span
+                className={`text-xs ml-2 ${
+                  is_author ? 'text-blue-100' : 'text-gray-500'
+                }`}
               >
-                <X size={14} />
-              </button>
+                {formatDate(created_at)}
+                {is_edited && ' (edytowana)'}
+              </span>
             </div>
-          ) : (
-            <p className="text-sm break-words">{content}</p>
-          )}
-        </div>
+
+            {isEditing ? (
+              <div className="flex gap-2 mt-2">
+                <textarea
+                  value={editValue}
+                  onChange={(e) => onEditChange(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && onEditSave()}
+                  className="flex-1 px-2 py-1 text-sm rounded bg-white text-gray-800"
+                  autoFocus
+                />
+             
+                <button
+                  onClick={onEditCancel}
+                  className="px-2 py-1 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
+                >
+                  <X size={14} />
+                </button>
+              </div>
+            ) : (
+              <p className="text-sm break-words">{content}</p>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

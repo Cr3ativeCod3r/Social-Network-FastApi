@@ -33,6 +33,7 @@ export function PermissionsSection({
     toast.success('Uprawnienia zapisane pomyślnie ');
   } catch (err) {
     toast.error('Wystąpił błąd podczas zapisu ');
+    console.log(err)
   }
 };
 

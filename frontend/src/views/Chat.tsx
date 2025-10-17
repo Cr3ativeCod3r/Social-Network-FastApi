@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 import ChatHeader from '../modules/Chat/components/ChatHeader';
 import ChatMessagesList from '../modules/Chat/components/ChatMessagesList';
 import ChatInput from '../modules/Chat/components/ChatInput';
-
+import { useAuthStore } from "../store/authStore";
 import type {ChatMessage, ChatStats} from '../modules/Chat/types';
 
 
@@ -20,6 +20,7 @@ const ChatComponent: React.FC = () => {
   const wsRef = useRef<WebSocket | null>(null);
   const pendingMessagesRef = useRef<Set<number>>(new Set());
   const wsConnectedRef = useRef(false);
+  const { user } = useAuthStore()
 
   const loadMessages = useCallback(async () => {
     try {
@@ -42,6 +43,19 @@ const ChatComponent: React.FC = () => {
     toast.error(error.response?.data?.detail);
   }
 };
+
+  const sendNoteMessage = async (noteContent: string) => {
+    if (!noteContent.trim()) return;
+
+    try {
+      const response = await axiosInstance.post('/chat/messages', {
+        content: noteContent,
+      });
+      pendingMessagesRef.current.add(response.data.message_id);
+    } catch (error: any) {
+      toast.error(error.response?.data?.detail);
+    }
+  };
 
   const loadStats = useCallback(async () => {
     try {
@@ -225,6 +239,8 @@ const ChatComponent: React.FC = () => {
           onChange={setInputValue}
           onSend={sendMessage}
           onLike={sendLike} 
+          onSendNote={sendNoteMessage}
+          userId={user?.user_id}
         />
       </div>
     </div>

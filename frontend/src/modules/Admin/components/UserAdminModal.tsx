@@ -45,7 +45,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       setData(response.data);
       setFormData(response.data);
     } catch (err) {
-      setError('Błąd podczas ładowania danych użytkownika');
+        console.log(err)
     } finally {
       setLoading(false);
     }
@@ -62,7 +62,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       setFormData(prev => ({ ...prev, is_banned: true, ban_reason: banReasonInput }));
       onUpdate?.();
     } catch (err) {
-      setError('Błąd podczas banowania użytkownika');
+         console.log(err)
     } finally {
       setSaving(false);
     }
@@ -77,7 +77,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       setBanReasonInput('');
       onUpdate?.();
     } catch (err) {
-      setError('Błąd podczas odbanowania użytkownika');
+             console.log(err)
     } finally {
       setSaving(false);
     }
@@ -91,7 +91,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       setFormData(prev => ({ ...prev, is_verified: true }));
       onUpdate?.();
     } catch (err) {
-      setError('Błąd podczas weryfikacji użytkownika');
+          console.log(err)
     } finally {
       setSaving(false);
     }
@@ -105,7 +105,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       setFormData(prev => ({ ...prev, is_admin: true }));
       onUpdate?.();
     } catch (err) {
-      setError('Błąd podczas nadawania uprawnień admin');
+            console.log(err)
     } finally {
       setSaving(false);
     }
@@ -119,7 +119,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
       setFormData(prev => ({ ...prev, is_admin: false }));
       onUpdate?.();
     } catch (err) {
-      setError('Błąd podczas odbierania uprawnień admin');
+        console.log(err)
     } finally {
       setSaving(false);
     }
@@ -142,7 +142,7 @@ export default function UserAdminModal({ userId, userEmail, onClose, onUpdate }:
     }
   };
 
-  const handleToggle = (field) => {
+  const handleToggle = (field: keyof typeof formData) => {
     setFormData(prev => ({
       ...prev,
       [field]: !prev[field]
