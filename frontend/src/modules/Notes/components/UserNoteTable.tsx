@@ -18,7 +18,7 @@ export default function UserNoteTable({ note_id, title, subject, average_rating,
     };
 
     return (
-        <div className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow flex items-center justify-between">
+        <div className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow flex items-center justify-between ">
             <div className="flex-1 min-w-0">
                 <h3 className="font-semibold text-lg text-gray-900 break-words mb-3">
                     {title}

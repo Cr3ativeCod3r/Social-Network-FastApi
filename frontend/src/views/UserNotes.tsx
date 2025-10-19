@@ -34,7 +34,7 @@ export default function UserNotes() {
   }, [id, page]);
 
   return (
-    <div className="p-6 max-w-4xl mx-auto animate-fade-in">
+    <div className="p-6 max-w-4xl mx-auto animate-fade-in ">
       <div className="flex items-center justify-center mb-6">
         <FileText className="mr-2" size={32} />
         <h1 className="text-2xl font-bold">Moje notatki</h1>

@@ -81,7 +81,7 @@ export default function UserProfile() {
     }
 
     return (
-        <div className="p-6 max-w-4xl mx-auto animate-fade-in miin-h-screen animate-fade-in">
+        <div className="p-6 max-w-4xl mx-auto animate-fade-in min-h-screen animate-fade-in">
             <div className="bg-white rounded-lg shadow-md p-6">
                 <div className="flex items-start gap-6">
                     <div className="flex-shrink-0">
