@@ -196,7 +196,7 @@ export default function NoteDetail() {
                 Wróć
             </button>
 
-            {user && <UserProfileCard user={user} />}
+            {user && <UserProfileCard user={user} user_id={note.user_id} />}
 
             <div className="bg-white rounded-lg shadow-lg p-8 animate-fade-in">
                 {error && (

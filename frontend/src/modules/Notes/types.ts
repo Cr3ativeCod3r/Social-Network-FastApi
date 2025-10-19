@@ -29,6 +29,7 @@ export interface UserProfile {
     profile_picture: string;
     university: string;
     department: string;
+    user_id: Number;
 }
 
 export interface EditData {

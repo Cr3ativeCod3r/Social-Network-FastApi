@@ -10,6 +10,7 @@ import Admin from "./modules/Admin/AdminRouting";
 import User from "./modules/User/UserRouting";
 import { useAuthStore } from "./store/authStore";
 
+
 const ScrollToTop: React.FC = () => {
   const { pathname } = useLocation();
 

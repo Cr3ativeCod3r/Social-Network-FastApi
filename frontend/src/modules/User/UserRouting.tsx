@@ -4,6 +4,7 @@ import UserLayout from "./Layout/UserLayout";
 import Profile from "../../views/Profile";
 import UserNotes from "../../views/UserNotes";
 import SavedNotes from "../../views/SavedNotes";
+import UserProfile from "../../views/UserProfile";
 
 const User = () => {
   return (
@@ -38,6 +39,16 @@ const User = () => {
           </Layout>
         }
       />
+      
+      <Route
+        path="/:id"
+        element={
+          <Layout>
+            <UserProfile />
+          </Layout>
+        }
+      />
+
     </Routes>
   );
 };

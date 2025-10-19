@@ -3,11 +3,24 @@ import type { UserProfile } from '../types';
 
 interface UserProfileCardProps {
     user: UserProfile;
+    user_id: number;
 }
 
-export default function UserProfileCard({ user }: UserProfileCardProps) {
+export default function UserProfileCard({ user, user_id }: UserProfileCardProps) {
+    const handleClick = () => {
+        window.location.href = `/user/${user_id}`;
+    };
+
     return (
-        <div className="bg-gray-200 rounded-lg p-4 mb-6 border border-gray-200">
+        <div
+            className="bg-gray-200 rounded-lg p-4 mb-6 border border-gray-200 cursor-pointer"
+            onClick={handleClick}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') handleClick();
+            }}
+        >
             <div className="flex items-start gap-4">
                 <div className="flex-1 flex items-center gap-2">
                     <img
