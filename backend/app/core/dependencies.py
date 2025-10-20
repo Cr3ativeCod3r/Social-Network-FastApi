@@ -14,7 +14,7 @@ security = HTTPBearer()
 ALGORITHM = "HS256"
 
 
-def get_token_from_cookie(token: Optional[str] = Cookie(None)) -> str:
+def get_token_from_cookie(token: str = Cookie(...)) -> str:
     """
     Pobierz token JWT z HttpOnly cookie
     """
