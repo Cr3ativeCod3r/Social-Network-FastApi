@@ -1,6 +1,6 @@
 function StatCard({ label, value, icon: Icon, color }: { label: string; value: number | string; icon: React.ElementType; color: string }) {
   return (
-    <div className="bg-white p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
+    <div className=" p-4 rounded-xl border border-gray-100 shadow-sm flex items-center gap-4">
       <div className={`p-3 rounded-lg ${color.replace('text', 'bg').replace('-500', '-100')}`}>
          <Icon className={`w-6 h-6 ${color}`} />
       </div>

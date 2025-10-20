@@ -1,11 +1,11 @@
 import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import { useAuthStore } from '../store/authStore';
+import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import Input from '../modules/Auth/components/Input';
+import Input from '../../modules/Auth/components/Input';
 import { Mail, Lock } from 'lucide-react';
-import PortalCard from '../modules/Auth/components/PortalCard';
+import PortalCard from '../../modules/Auth/components/PortalCard';
 
 const loginSchema = Yup.object({
   email: Yup.string()

@@ -1,7 +1,7 @@
 import React from "react";
 
-import CreateNote from "../modules/Notes/CreateNote";
-import NotesList from "../modules/Notes/ReadNotes";
+import CreateNote from "../../modules/Notes/CreateNote";
+import NotesList from "../../modules/Notes/ReadNotes";
 
 const Posts: React.FC = () => {
   return (

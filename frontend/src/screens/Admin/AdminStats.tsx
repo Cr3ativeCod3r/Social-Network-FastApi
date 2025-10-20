@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 import {
   Users,
   UserCheck,
@@ -18,8 +18,8 @@ import {
   AlertTriangle,
 } from 'lucide-react';
 
-import StatCard from '../modules/Admin/components/StatCard';
-import type { AdminStats, NotesStats } from '../modules/Admin/types';
+import StatCard from '../../modules/Admin/components/StatCard';
+import type { AdminStats, NotesStats } from '../../modules/Admin/types';
 
 export default function AdminStats() {
   const [adminStats, setAdminStats] = useState<AdminStats | null>(null);
@@ -87,8 +87,8 @@ export default function AdminStats() {
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Statystyki notatek</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <StatCard label="Notatki" value={notesStats.total_notes} icon={FileText} color="text-blue-500" />
-          <StatCard label="Z plikami" value={notesStats.notes_with_files} icon={Paperclip} color="text-gray-600" />
-          <StatCard label="Oceny" value={notesStats.total_ratings} icon={Star} color="text-yellow-400" />
+          <StatCard label="Z plikami" value={notesStats.notes_with_files} icon={Paperclip} color="text-gray-500" />
+          <StatCard label="Oceny" value={notesStats.total_ratings} icon={Star} color="text-yellow-500" />
           <StatCard label="Zapisane" value={notesStats.total_saved} icon={Bookmark} color="text-green-500" />
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">

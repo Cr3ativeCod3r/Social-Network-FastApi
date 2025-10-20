@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from "react-router-dom";
-import Login from "./views/Login";
-import Register from "./views/Register";
-import Chat from "./views/Chat";
-import Posts from "./views/NotesList";
-import NoteDetail from "./views/Note";
+import Login from "./screens/User/Login";
+import Register from "./screens/User/Register";
+import Chat from "./screens/User/Chat";
+import Posts from "./screens/User/NotesList";
+import NoteDetail from "./screens/User/Note";
 import Layout from "./layout/layout";
 import Admin from "./modules/Admin/AdminRouting"; 
 import User from "./modules/User/UserRouting";

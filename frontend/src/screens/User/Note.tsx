@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 import { ArrowLeft } from 'lucide-react';
-import NoteRating from '../modules/Notes/RateNote';
-import NoteComments from '../modules/Notes/components/Comments';
-import UserProfileCard from '../modules/Notes/components/UserProfileCard';
-import NoteContent from '../modules/Notes/components/NoteContect';
-import NoteEditForm from '../modules/Notes/components/NoteEditForm';
+import NoteRating from '../../modules/Notes/RateNote';
+import NoteComments from '../../modules/Notes/components/Comments';
+import UserProfileCard from '../../modules/Notes/components/UserProfileCard';
+import NoteContent from '../../modules/Notes/components/NoteContect';
+import NoteEditForm from '../../modules/Notes/components/NoteEditForm';
 import type { NoteDetail as NoteDetailType, NoteResponseData, UserProfile, EditData } from '../modules/Notes/types';
 
 export default function NoteDetail() {

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import axiosInstance from '../api/axiosInstance';
+import axiosInstance from '../../api/axiosInstance';
 import { toast } from 'sonner';
 
-import ChatHeader from '../modules/Chat/components/ChatHeader';
-import ChatMessagesList from '../modules/Chat/components/ChatMessagesList';
-import ChatInput from '../modules/Chat/components/ChatInput';
-import { useAuthStore } from "../store/authStore";
-import type {ChatMessage, ChatStats} from '../modules/Chat/types';
+import ChatHeader from '../../modules/Chat/components/ChatHeader';
+import ChatMessagesList from '../../modules/Chat/components/ChatMessagesList';
+import ChatInput from '../../modules/Chat/components/ChatInput';
+import { useAuthStore } from "../../store/authStore";
+import type {ChatMessage, ChatStats} from '../../modules/Chat/types';
 
 
 const ChatComponent: React.FC = () => {

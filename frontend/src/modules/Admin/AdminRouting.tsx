@@ -1,9 +1,10 @@
 import { Routes, Route } from "react-router-dom";
 import Layout from "../../layout/layout";
 import AdminLayout from "./layout/AdminLayout";
-import UsersList from "../../views/AdminUsers";
+import UsersList from "../../screens/Admin/AdminUsers";
 import NotesList from "../Notes/ReadNotes";
-import AdminStats from "../../views/AdminStats";
+import AdminStats from "../../screens/Admin/AdminStats";
+import SubjectsCrud from "../../screens/Admin/SubjectsCrud";
 
 const Admin = () => {
   return (
@@ -38,6 +39,18 @@ const Admin = () => {
           </Layout>
         }
       />
+      <Route
+        path="/subjects"
+        element={
+          <Layout>
+            <AdminLayout>
+              <SubjectsCrud />
+            </AdminLayout>
+          </Layout>
+        }
+      />
+
+      
     </Routes>
   );
 };

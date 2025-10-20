@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
-import axiosInstance from '../api/axiosInstance';
-import type { User } from "../Types/User";
-import UserAdminModal from '../modules/Admin/components/UserAdminModal';
+import axiosInstance from '../../api/axiosInstance';
+import type { User } from "../../Types/User";
+import UserAdminModal from '../../modules/Admin/components/UserAdminModal';
 import { Settings, UserRound, ShieldCheck, ShieldAlert, Ban, Hash, Mail, Trash2, AlertTriangle } from "lucide-react";
-import Pagination from '../modules/Notes/components/Pagination';
-import type {UserListResponse} from '../modules/Admin/types';
+import Pagination from '../../modules/Notes/components/Pagination';
+import type {UserListResponse} from '../../modules/Admin/types';
 
 export default function UsersList() {
   const [data, setData] = useState<UserListResponse | null>(null);

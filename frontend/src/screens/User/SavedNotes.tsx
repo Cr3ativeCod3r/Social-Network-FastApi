@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react';
 import { Loader, FileText } from 'lucide-react';
-import axiosInstance from '../api/axiosInstance';
-import UserNoteTable from '../modules/Notes/components/UserNoteTable';
-import Pagination from '../modules/Notes/components/Pagination';
-import type {SavedNote,SavedNotesResponse } from '../modules/Notes/types';
+import axiosInstance from '../../api/axiosInstance';
+import UserNoteTable from '../../modules/Notes/components/UserNoteTable';
+import Pagination from '../../modules/Notes/components/Pagination';
+import type {SavedNote,SavedNotesResponse } from '../../modules/Notes/types';
 
 const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES;
 

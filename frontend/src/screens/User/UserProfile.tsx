@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { FileText } from 'lucide-react';
-import axiosInstance from '../api/axiosInstance';
-import UserNoteTable from '../modules/Notes/components/UserNoteTable';
-import Pagination from '../modules/Notes/components/Pagination';
-import type { Note, NotesResponse } from '../modules/Notes/types';
-import student from "../assets/image/student.svg"
+import axiosInstance from '../../api/axiosInstance';
+import UserNoteTable from '../../modules/Notes/components/UserNoteTable';
+import Pagination from '../../modules/Notes/components/Pagination';
+import type { Note, NotesResponse } from '../../modules/Notes/types';
+import student from "../../assets/image/student.svg"
 
 interface UserProfile {
     first_name: string;

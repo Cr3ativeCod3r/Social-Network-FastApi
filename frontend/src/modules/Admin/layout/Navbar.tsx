@@ -1,11 +1,13 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { Shield, Users, BarChart3 } from "lucide-react";
+import { Shield, Users, BarChart3, Book, MailWarning} from "lucide-react";
 
 const Navbar: React.FC = () => {
   const links = [
     { name: "Użytkownicy", path: "/admin/users", icon: Users },
     { name: "Statystyki", path: "/admin/stats", icon: BarChart3 },
+    { name: "Przedmioty", path: "/admin/subjects", icon: Book },
+    { name: "Zgłoszenia", path: "/admin/reports", icon: MailWarning },
   ];
 
   return (
