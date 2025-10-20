@@ -53,6 +53,11 @@ from ..schemas.chat_message import (
 
 
 )
+from ..schemas.subject import (
+    Subject,
+    SubjectResponse,
+    SubjectList
+)
 from ..schemas.common import PaginatedResponse
 
 __all__ = [
@@ -100,6 +105,11 @@ __all__ = [
     "MessageAuthor",
     "ChatMessageResponse",
     "ChatStats",
+    #subject
+    "Subject",
+    "SubjectResponse",
+    "SubjectList",
+
     #pagination
     "PaginatedResponse",
 ]

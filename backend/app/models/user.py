@@ -12,8 +12,6 @@ class User(Base):
     password = Column(String(255), nullable=False)
     first_name = Column(String(100), nullable=False)
     last_name = Column(String(100), nullable=False)
-    university = Column(String(255))
-    department = Column(String(255))
     profile_picture = Column(String(255))
     bio = Column(Text)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

@@ -1,4 +1,3 @@
-# app/routers/api.py
 
 from fastapi import APIRouter
 
@@ -10,7 +9,8 @@ from ..routers import(
     saved_notes,
     note_ratings,
     note_comments,
-    chat,  
+    chat,
+    subjects
 )
 
 api_router = APIRouter()
@@ -23,3 +23,4 @@ api_router.include_router(saved_notes.router, prefix="/saved-notes", tags=["save
 api_router.include_router(note_ratings.router, prefix="/note-ratings", tags=["note-ratings"])
 api_router.include_router(note_comments.router, prefix="/note-comments", tags=["note-comments"])
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
+api_router.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
