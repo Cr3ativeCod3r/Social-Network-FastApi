@@ -8,8 +8,6 @@ class UserRegister(BaseModel):
     password: str = Field(..., min_length=8, max_length=100)
     first_name: str = Field(..., min_length=1, max_length=100)
     last_name: str = Field(..., min_length=1, max_length=100)
-    university: Optional[str] = Field(None, max_length=255)
-    department: Optional[str] = Field(None, max_length=255)
 
     @field_validator('password')
     @classmethod
@@ -44,8 +42,6 @@ class UserResponse(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-    university: Optional[str] = None
-    department: Optional[str] = None
     profile_picture: Optional[str] = None
     bio: Optional[str] = None
     created_at: datetime
@@ -60,8 +56,6 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 class UserUpdate(BaseModel):
-    university: Optional[str] = Field(None, max_length=255)
-    department: Optional[str] = Field(None, max_length=255)
     profile_picture: Optional[str] = Field(None, max_length=255)
     bio: Optional[str] = None
 
@@ -69,8 +63,6 @@ class UserUpdate(BaseModel):
 class UserPublicProfile(BaseModel):
     first_name: str
     last_name: str
-    profile_picture: Optional[str] = None
-    bio: Optional[str] = None
     university: Optional[str] = None
     department: Optional[str] = None
 

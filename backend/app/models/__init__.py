@@ -4,6 +4,7 @@ from ..models.note_rating import  NoteRating
 from ..models.saved_note import SavedNote
 from ..models.note_comment import  NoteComment
 from ..models.chat_message import ChatMessage
+from ..models.subject import Subject
 
 __all__ = [
     "User",
@@ -12,5 +13,6 @@ __all__ = [
     "SavedNote",
     "NoteComment",
     "ChatMessage",
+    "Subject"
 
 ]

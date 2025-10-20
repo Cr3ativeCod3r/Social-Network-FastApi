@@ -6,7 +6,7 @@ from decimal import Decimal
 class NoteBase(BaseModel):
     title: str = Field(..., max_length=255)
     content: str
-    subject: Optional[str] = Field(None, max_length=255)
+    subject: int
 
 class NoteCreate(NoteBase):
     pass
@@ -14,7 +14,7 @@ class NoteCreate(NoteBase):
 class NoteUpdate(BaseModel):
     title: Optional[str] = Field(None, max_length=255)
     content: Optional[str] = None
-    subject: Optional[str] = Field(None, max_length=255)
+    subject: Optional[int] = Field(None, description='ID przedmiotu')
 
 class NoteResponse(NoteBase):
     note_id: int
@@ -36,7 +36,7 @@ class NoteResponseWithOwner(BaseModel):
 class NoteListResponse(BaseModel):
     note_id: int
     title: str
-    subject: Optional[str]
+    subject: int
     created_at: datetime
     user_id: int
     average_rating: Optional[Decimal]

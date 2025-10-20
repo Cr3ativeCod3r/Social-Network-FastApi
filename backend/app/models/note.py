@@ -12,7 +12,7 @@ class Note(Base):
     title = Column(String(255), nullable=False)
     content = Column(Text, nullable=False)
     file_path = Column(String(255))
-    subject = Column(String(255))
+    subject_id = Column(Integer, ForeignKey('subjects.subject_id', ondelete='SET NULL'), nullable=True,index=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), server_default=func.now(), onupdate=func.now())
     user_id = Column(Integer, ForeignKey('users.user_id', ondelete='CASCADE'), nullable=False, index=True)
@@ -20,6 +20,7 @@ class Note(Base):
     rating_count = Column(Integer, default=0)
 
     user = relationship("User", back_populates="notes")
+    subject = relationship("Subject", back_populates="notes")
     ratings = relationship("NoteRating", back_populates="note", cascade="all, delete-orphan")
     saved_by_users = relationship("SavedNote", back_populates="note", cascade="all, delete-orphan")
     comments = relationship("NoteComment", back_populates="note", cascade="all, delete-orphan")

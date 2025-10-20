@@ -63,8 +63,7 @@ def validate_file(file: UploadFile) -> None:
 def save_upload_file(file: UploadFile, note_id: int) -> str:
     """Zapisz plik i zwróć ścieżkę"""
     file_extension = os.path.splitext(file.filename)[1].lower()
-    unique_filename = f"{note_id}_{uuid.uuid4()}{file_extension}"
-    file_path = os.path.join(UPLOAD_DIR, unique_filename)
+    file_path = os.path.join(UPLOAD_DIR, file.filename)
 
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -76,7 +75,7 @@ def save_upload_file(file: UploadFile, note_id: int) -> str:
 async def create_note(
         title: str = Form(..., max_length=255),
         content: str = Form(...),
-        subject: Optional[str] = Form(None, max_length=255),
+        subject_id: Optional[int] = Form(None),
         file: Optional[UploadFile] = File(None),
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
@@ -94,7 +93,7 @@ async def create_note(
     db_note = Note(
         title=title,
         content=content,
-        subject=subject,
+        subject_id=subject_id,
         user_id=current_user.user_id
     )
 
@@ -184,13 +183,7 @@ async def download_note_file(
             detail="File not found on server"
         )
 
-    original_filename = Path(note.file_path).name
-    file_extension = Path(note.file_path).suffix
-
-    safe_title = "".join(c for c in note.title if c.isalnum() or c in (' ', '-', '_')).strip()
-    safe_title = safe_title[:50]  # Ogranicz długość
-    download_filename = f"{safe_title}{file_extension}" if safe_title else original_filename
-
+    download_filename = Path(note.file_path).name
     return FileResponse(
         path=note.file_path,
         filename=download_filename,
@@ -202,7 +195,7 @@ async def download_note_file(
 async def get_notes(
         page: int = Query(1, ge=1),
         page_size: int = Query(20, ge=1, le=100),
-        subject: Optional[str] = None,
+        subject_id: Optional[int] = Form(None),
         user_id: Optional[int] = None,
         search: Optional[str] = None,
         has_file: Optional[bool] = None,
@@ -224,8 +217,8 @@ async def get_notes(
     """
     query = db.query(Note)
 
-    if subject:
-        query = query.filter(Note.subject.ilike(f"%{subject}%"))
+    if subject_id:
+        query = query.filter(Note.subject_id == subject_id)
 
     if user_id:
         query = query.filter(Note.user_id == user_id)
@@ -291,7 +284,7 @@ async def update_note(
         note_id: int,
         title: Optional[str] = Form(None, max_length=255),
         content: Optional[str] = Form(None),
-        subject: Optional[str] = Form(None, max_length=255),
+        subject_id: Optional[int] = Form(None),
         file: Optional[UploadFile] = File(None),
         remove_file: bool = Form(False),
         db: Session = Depends(get_db),
@@ -329,8 +322,8 @@ async def update_note(
         note.title = title
     if content is not None:
         note.content = content
-    if subject is not None:
-        note.subject = subject
+    if subject_id is not None:
+        note.subject = subject_id
     if remove_file and note.file_path:
         if os.path.exists(note.file_path):
             os.remove(note.file_path)
@@ -438,14 +431,4 @@ async def get_user_notes(
     }
 
 
-@router.get("/subjects/list", response_model=list[str])
-async def get_subjects(
-        db: Session = Depends(get_db)
-):
-    """Pobierz listę wszystkich unikalnych przedmiotów"""
-    subjects = db.query(Note.subject).filter(
-        Note.subject.isnot(None)
-    ).distinct().all()
-
-    return [subject[0] for subject in subjects if subject[0]]
 
