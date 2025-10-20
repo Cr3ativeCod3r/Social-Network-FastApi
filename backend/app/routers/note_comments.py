@@ -34,7 +34,7 @@ async def create_comment(
     if not current_user.comment_permission:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have permission to comment"
+            detail="Nie masz uprawnień do komentowania"
         )
 
     note = db.query(Note).filter(Note.note_id == note_id).first()

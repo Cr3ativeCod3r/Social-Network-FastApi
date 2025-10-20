@@ -38,7 +38,7 @@ async def rate_note(
     if note.user_id == current_user.user_id:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Cannot rate your own note"
+            detail="Nie możesz ocenić własnej notatki"
         )
 
     existing_rating = db.query(NoteRating).filter(

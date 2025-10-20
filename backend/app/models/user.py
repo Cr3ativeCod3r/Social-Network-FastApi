@@ -30,3 +30,4 @@ class User(Base):
     saved_notes = relationship("SavedNote", back_populates="user", cascade="all, delete-orphan")
     note_comments = relationship("NoteComment", back_populates="user", cascade="all, delete-orphan")
     chat_messages = relationship("ChatMessage", back_populates="user", cascade="all, delete-orphan")
+    reports = relationship("Report", back_populates="user", cascade="all, delete-orphan")

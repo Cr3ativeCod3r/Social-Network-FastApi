@@ -58,6 +58,12 @@ from ..schemas.subject import (
     SubjectResponse,
     SubjectList
 )
+from ..schemas.report import (
+    ReportCreate,
+    ReportResponse,
+    ReportListResponse,
+    ReportUpdateStatus
+)
 from ..schemas.common import PaginatedResponse
 
 __all__ = [
@@ -109,7 +115,11 @@ __all__ = [
     "Subject",
     "SubjectResponse",
     "SubjectList",
-
+    #reports
+    "ReportCreate",
+    "ReportResponse",
+    "ReportListResponse",
+    "ReportUpdateStatus",
     #pagination
     "PaginatedResponse",
 ]

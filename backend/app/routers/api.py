@@ -10,7 +10,8 @@ from ..routers import(
     note_ratings,
     note_comments,
     chat,
-    subjects
+    subjects,
+    reports,
 )
 
 api_router = APIRouter()
@@ -24,3 +25,4 @@ api_router.include_router(note_ratings.router, prefix="/note-ratings", tags=["no
 api_router.include_router(note_comments.router, prefix="/note-comments", tags=["note-comments"])
 api_router.include_router(chat.router, prefix="/chat", tags=["chat"])
 api_router.include_router(subjects.router, prefix="/subjects", tags=["subjects"])
+api_router.include_router(reports.router, prefix="/reports", tags=["reports"])
