@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query, UploadFile, File, Form
 from fastapi.responses import FileResponse
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from sqlalchemy import func, desc
 from typing import Optional
 import math
@@ -14,6 +14,7 @@ from ..core.dependencies import get_current_user, get_current_active_user
 from ..db.base import get_db
 from ..models.user import User
 from ..models.note import Note
+from ..models.subject import Subject as SubjectModel
 from ..models.note_rating import NoteRating
 from ..models.saved_note import SavedNote
 from ..models.note_comment import NoteComment
@@ -27,7 +28,6 @@ from ..schemas import (
     UserPublicProfile,
     PaginatedResponse,
     NoteResponseWithOwner,
-    
 )
 
 router = APIRouter()
@@ -41,7 +41,6 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 def validate_file(file: UploadFile) -> None:
     """Walidacja pliku"""
-
     file_extension = os.path.splitext(file.filename)[1].lower()
     if file_extension not in ALLOWED_EXTENSIONS:
         raise HTTPException(
@@ -63,7 +62,8 @@ def validate_file(file: UploadFile) -> None:
 def save_upload_file(file: UploadFile, note_id: int) -> str:
     """Zapisz plik i zwróć ścieżkę"""
     file_extension = os.path.splitext(file.filename)[1].lower()
-    file_path = os.path.join(UPLOAD_DIR, file.filename)
+    unique_filename = f"{note_id}_{uuid.uuid4()}{file_extension}"
+    file_path = os.path.join(UPLOAD_DIR, unique_filename)
 
     with open(file_path, "wb") as buffer:
         shutil.copyfileobj(file.file, buffer)
@@ -75,18 +75,25 @@ def save_upload_file(file: UploadFile, note_id: int) -> str:
 async def create_note(
         title: str = Form(..., max_length=255),
         content: str = Form(...),
-        subject_id: Optional[int] = Form(None),
+        subject_id: int = Form(...),  # Wymagane!
         file: Optional[UploadFile] = File(None),
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-
+    """Utwórz nową notatkę"""
     if not current_user.post_permission:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User does not have permission to create notes"
         )
-    file_path = None
+
+    subject = db.query(SubjectModel).filter(SubjectModel.subject_id == subject_id).first()
+    if not subject:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Subject not found"
+        )
+
     if file and file.filename:
         validate_file(file)
 
@@ -131,6 +138,7 @@ async def upload_or_replace_note_file(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to upload file to this note"
         )
+
     if not current_user.post_permission:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
@@ -158,11 +166,7 @@ async def download_note_file(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    """
-    Pobierz plik notatki
-
-    Zwraca plik do pobrania. Jeśli notatka nie ma pliku, zwraca 404.
-    """
+    """Pobierz plik notatki"""
     note = db.query(Note).filter(Note.note_id == note_id).first()
 
     if not note:
@@ -205,17 +209,8 @@ async def get_notes(
 ):
     """
     Pobierz listę notatek z filtrowaniem i paginacją
-
-    - **page**: Numer strony
-    - **page_size**: Rozmiar strony (max 100)
-    - **subject**: Filtruj po przedmiocie
-    - **user_id**: Filtruj po użytkowniku
-    - **search**: Szukaj w tytule i treści
-    - **has_file**: Filtruj notatki z/bez pliku
-    - **sort_by**: Sortuj po: created_at, updated_at, average_rating, rating_count, title
-    - **order**: asc lub desc
     """
-    query = db.query(Note)
+    query = db.query(Note).options(joinedload(Note.subject))
 
     if subject_id:
         query = query.filter(Note.subject_id == subject_id)
@@ -258,12 +253,15 @@ async def get_notes(
 
 @router.get("/{note_id}", response_model=NoteResponseWithOwner)
 async def get_note(
-    note_id: int,
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
+        note_id: int,
+        current_user: User = Depends(get_current_user),
+        db: Session = Depends(get_db)
 ):
-    note = db.query(Note).filter(Note.note_id == note_id).first()
-    
+    """Pobierz szczegóły notatki"""
+    note = db.query(Note).options(joinedload(Note.subject)).filter(
+        Note.note_id == note_id
+    ).first()
+
     if not note:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -271,10 +269,9 @@ async def get_note(
         )
 
     is_owner = note.user_id == current_user.user_id
-    note_response = NoteResponse.from_orm(note)
 
     return NoteResponseWithOwner(
-        note=note_response,
+        note=note,
         is_owner=is_owner
     )
 
@@ -290,15 +287,7 @@ async def update_note(
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)
 ):
-    """
-    Edytuj notatkę
-
-    - **title**: Nowy tytuł (opcjonalne)
-    - **content**: Nowa treść (opcjonalne)
-    - **subject**: Nowy przedmiot (opcjonalne)
-    - **file**: Nowy plik (opcjonalne)
-    - **remove_file**: Usuń istniejący plik (opcjonalne)
-    """
+    """Edytuj notatkę"""
     note = db.query(Note).filter(Note.note_id == note_id).first()
 
     if not note:
@@ -312,18 +301,28 @@ async def update_note(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Not authorized to update this note"
         )
+
     if not current_user.post_permission:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="User does not have permission to update notes"
         )
 
+    if subject_id is not None:
+        subject = db.query(SubjectModel).filter(SubjectModel.subject_id == subject_id).first()
+        if not subject:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail="Subject not found"
+            )
+
     if title is not None:
         note.title = title
     if content is not None:
         note.content = content
     if subject_id is not None:
-        note.subject = subject_id
+        note.subject_id = subject_id
+
     if remove_file and note.file_path:
         if os.path.exists(note.file_path):
             os.remove(note.file_path)
@@ -415,7 +414,9 @@ async def get_user_notes(
         db: Session = Depends(get_db)
 ):
     """Pobierz wszystkie notatki użytkownika"""
-    query = db.query(Note).filter(Note.user_id == user_id).order_by(desc(Note.created_at))
+    query = db.query(Note).options(joinedload(Note.subject)).filter(
+        Note.user_id == user_id
+    ).order_by(desc(Note.created_at))
 
     total = query.count()
     total_pages = math.ceil(total / page_size)
@@ -431,4 +432,34 @@ async def get_user_notes(
     }
 
 
+@router.get("/by-subject/{subject_id}", response_model=PaginatedResponse[NoteListResponse])
+async def get_notes_by_subject(
+        subject_id: int,
+        page: int = Query(1, ge=1),
+        page_size: int = Query(20, ge=1, le=100),
+        db: Session = Depends(get_db)
+):
+    """Pobierz wszystkie notatki dla danego przedmiotu"""
+    subject = db.query(SubjectModel).filter(SubjectModel.subject_id == subject_id).first()
+    if not subject:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Subject not found"
+        )
 
+    query = db.query(Note).options(joinedload(Note.subject)).filter(
+        Note.subject_id == subject_id
+    ).order_by(desc(Note.created_at))
+
+    total = query.count()
+    total_pages = math.ceil(total / page_size)
+
+    notes = query.offset((page - 1) * page_size).limit(page_size).all()
+
+    return {
+        "total": total,
+        "page": page,
+        "page_size": page_size,
+        "total_pages": total_pages,
+        "items": notes
+    }

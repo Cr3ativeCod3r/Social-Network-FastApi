@@ -3,10 +3,11 @@ from datetime import datetime
 from typing import Optional
 from decimal import Decimal
 
+from ..schemas.subject import SubjectResponse
 class NoteBase(BaseModel):
     title: str = Field(..., max_length=255)
     content: str
-    subject: int
+    subject_id: int
 
 class NoteCreate(NoteBase):
     pass
@@ -20,6 +21,7 @@ class NoteResponse(NoteBase):
     note_id: int
     file_path: Optional[str]
     created_at: datetime
+    subject: SubjectResponse
     updated_at: datetime
     user_id: int
     average_rating: Optional[Decimal]
@@ -36,7 +38,8 @@ class NoteResponseWithOwner(BaseModel):
 class NoteListResponse(BaseModel):
     note_id: int
     title: str
-    subject: int
+    subject_id: int
+    subject: SubjectResponse
     created_at: datetime
     user_id: int
     average_rating: Optional[Decimal]
