@@ -64,8 +64,8 @@ export default function NoteContent({
 
             <div className="mb-6 border-b pb-6">
                 <h1 className="text-3xl font-bold text-gray-900 break-words">{note.title}</h1>
-                {note.subject && (
-                    <p className="text-gray-600 text-lg mt-2">{note.subject}</p>
+                {note.subject.name && (
+                    <p className="text-gray-600 text-lg mt-2">{note.subject.name}</p>
                 )}
             </div>
 

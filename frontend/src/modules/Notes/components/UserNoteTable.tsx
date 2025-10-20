@@ -16,10 +16,10 @@ export default function UserNoteTable({ note_id, title, subject, average_rating,
                 </h3>
 
                 <div className="space-y-2">
-                    {subject && (
+                    {subject.name && (
                         <div className="flex items-center gap-2 text-sm text-gray-600">
                             <Book size={16} className="text-blue-500 flex-shrink-0" />
-                            <span>{subject}</span>
+                            <span>{subject.name}</span>
                         </div>
                     )}
 

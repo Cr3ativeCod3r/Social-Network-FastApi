@@ -1,18 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axiosInstance from '../../api/axiosInstance';
 import { Upload, FileText, X } from 'lucide-react';
-import student from "../../assets/image/student.svg"
+import { toast } from 'sonner';
+import student from "../../assets/image/student.svg";
 
+interface Subject {
+    subject_id: number;
+    name: string;
+}
 
-export default function CreateNoteModal() {
+type CreateNoteModalProps = {
+    fetchNotes: () => void;
+};
+
+export default function CreateNoteModal({ fetchNotes }: CreateNoteModalProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
-    const [subject, setSubject] = useState('');
+    const [subjectId, setSubjectId] = useState('');
+    const [subjects, setSubjects] = useState<Subject[]>([]);
     const [file, setFile] = useState<File | null>(null);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [success, setSuccess] = useState('');
+    const [loadingSubjects, setLoadingSubjects] = useState(false);
+
+    useEffect(() => {
+        if (isModalOpen) {
+            fetchSubjects();
+        }
+    }, [isModalOpen]);
+
+    const fetchSubjects = async () => {
+        try {
+            setLoadingSubjects(true);
+            const response = await axiosInstance.get('/subjects/');
+            const data = response.data.subjects || response.data;
+            setSubjects(Array.isArray(data) ? data : []);
+        } catch (err: any) {
+            toast.error('Błąd podczas pobierania przedmiotów');
+        } finally {
+            setLoadingSubjects(false);
+        }
+    };
 
     const openModal = () => {
         setIsModalOpen(true);
@@ -26,20 +54,16 @@ export default function CreateNoteModal() {
     const resetForm = () => {
         setTitle('');
         setContent('');
-        setSubject('');
+        setSubjectId('');
         setFile(null);
-        setError('');
-        setSuccess('');
         setLoading(false);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        setError('');
-        setSuccess('');
 
         if (!title.trim() || !content.trim()) {
-            setError('Tytuł i zawartość są wymagane');
+            toast.error('Tytuł i zawartość są wymagane');
             return;
         }
 
@@ -49,19 +73,25 @@ export default function CreateNoteModal() {
             const formData = new FormData();
             formData.append('title', title);
             formData.append('content', content);
-            if (subject) formData.append('subject', subject);
+            if (subjectId) formData.append('subject_id', subjectId);
             if (file) formData.append('file', file);
 
             await axiosInstance.post('/notes/', formData, {
                 headers: { 'Content-Type': 'multipart/form-data' },
             });
 
-            setSuccess('Notatka utworzona pomyślnie!');
+            toast.success('Notatka utworzona pomyślnie!');
             setTimeout(() => {
                 closeModal();
-            }, 1500);
+            }, 500);
         } catch (err: any) {
-            setError(err.response?.data?.detail || 'Błąd przy tworzeniu notatki');
+            const detail = err.response?.data?.detail;
+            const errorMsg = typeof detail === 'string'
+                ? detail
+                : Array.isArray(detail)
+                    ? detail.map((e: any) => e.msg).join(', ')
+                    : 'Błąd przy tworzeniu notatki';
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
@@ -90,7 +120,8 @@ export default function CreateNoteModal() {
             </div>
 
             {isModalOpen && (
-                <div className="fixed inset-0 bg-black/50 w-full h-full flex items-center justify-center z-999">
+                <div className="fixed inset-0 h-[85vh] flex mt-2 justify-center z-[9999] backdrop-blur-xs animate-fade-in ">
+
                     <div
                         className="bg-white p-8 rounded-lg shadow-xl w-full max-w-2xl relative"
                         onClick={(e) => e.stopPropagation()}
@@ -104,18 +135,6 @@ export default function CreateNoteModal() {
 
                         <form onSubmit={handleSubmit} className="space-y-4">
                             <h1 className="text-2xl font-bold mb-6 text-center text-black">Nowa notatka</h1>
-
-                            {error && (
-                                <div className="bg-red-50 border border-red-200 text-sm text-red-700 px-4 py-3 rounded">
-                                    {error}
-                                </div>
-                            )}
-
-                            {success && (
-                                <div className="bg-green-50 border border-green-200 text-sm text-green-700 px-4 py-3 rounded">
-                                    {success}
-                                </div>
-                            )}
 
                             <input
                                 type="text"
@@ -134,14 +153,19 @@ export default function CreateNoteModal() {
                                 className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
                             />
 
-                            <input
-                                type="text"
-                                placeholder="Przedmiot"
-                                value={subject}
-                                onChange={(e) => setSubject(e.target.value)}
-                                maxLength={255}
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            />
+                            <select
+                                value={subjectId}
+                                onChange={(e) => setSubjectId(e.target.value)}
+                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white text-black"
+                                disabled={loadingSubjects}
+                            >
+                                <option value="">Wybierz przedmiot (opcjonalnie)</option>
+                                {subjects.map((subject) => (
+                                    <option key={subject.subject_id} value={subject.subject_id}>
+                                        {subject.name}
+                                    </option>
+                                ))}
+                            </select>
 
                             <div className="relative">
                                 <input
@@ -173,9 +197,14 @@ export default function CreateNoteModal() {
                             <button
                                 type="submit"
                                 disabled={loading}
+                                onClick={() => {
+                                    setTimeout(() => {
+                                        fetchNotes();
+                                    }, 500);
+                                }}
                                 className="w-full bg-blue-600 text-white py-2 rounded font-medium hover:bg-blue-700 disabled:bg-gray-400 transition"
                             >
-                                {loading ? 'Tworzenie...' : 'Utwórz notkę'}
+                                {loading ? 'Tworzenie...' : 'Utwórz notatkę'}
                             </button>
                         </form>
                     </div>

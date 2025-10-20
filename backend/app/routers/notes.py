@@ -199,10 +199,10 @@ async def download_note_file(
 async def get_notes(
         page: int = Query(1, ge=1),
         page_size: int = Query(20, ge=1, le=100),
-        subject_id: Optional[int] = Form(None),
-        user_id: Optional[int] = None,
-        search: Optional[str] = None,
-        has_file: Optional[bool] = None,
+        subject_id: Optional[int] = Query(None), 
+        user_id: Optional[int] = Query(None),
+        search: Optional[str] = Query(None),
+        has_file: Optional[bool] = Query(None),
         sort_by: str = Query("created_at", regex="^(created_at|updated_at|average_rating|rating_count|title)$"),
         order: str = Query("desc", regex="^(asc|desc)$"),
         db: Session = Depends(get_db)
@@ -249,7 +249,6 @@ async def get_notes(
         "total_pages": total_pages,
         "items": notes
     }
-
 
 @router.get("/{note_id}", response_model=NoteResponseWithOwner)
 async def get_note(
