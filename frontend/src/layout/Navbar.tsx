@@ -83,7 +83,7 @@ const isActive = (path: string) => {
          <img src={image} className="h-12 "/>
           <span className="hidden sm:inline">Study Share</span>
         </a>
-        <ul className="hidden lg:flex gap-8 text-lg font-medium items-center">
+        <ul className="hidden lg:flex gap-8 text-md font-medium items-center">
           {navItems}
         </ul>
         <div className="flex items-center gap-3 relative" ref={menuRef}>

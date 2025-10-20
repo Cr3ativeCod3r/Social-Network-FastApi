@@ -2,6 +2,7 @@ import { Download, Edit2, Trash2 } from 'lucide-react';
 import SaveNoteButton from './SaveNote';
 import NoteStatistics from './NoteStatistics';
 import type { NoteDetail } from '../types';
+import formatDate from '../../../components/dateFormat';
 
 interface NoteContentProps {
     note: NoteDetail;
@@ -20,16 +21,7 @@ export default function NoteContent({
     onDelete, 
     onDownload 
 }: NoteContentProps) {
-    const formatDate = (date: string) => {
-        return new Date(date).toLocaleDateString('pl-PL', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-            hour: '2-digit',
-            minute: '2-digit',
-        });
-    };
-
+ 
     return (
         <>
             <div className="flex items-center justify-between mb-12">

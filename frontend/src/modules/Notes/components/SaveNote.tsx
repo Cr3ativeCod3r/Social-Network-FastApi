@@ -1,4 +1,4 @@
-import { Save } from 'lucide-react';
+import { Bookmark } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import axiosInstance from '../../../api/axiosInstance';
 
@@ -47,7 +47,7 @@ export default function SaveNoteButton({ noteId }: SaveNoteButtonProps) {
   if (isChecking) {
     return (
       <button disabled className="p-2 rounded hover:bg-gray-100 transition-colors">
-        <Save size={20} className="text-gray-300" />
+        <Bookmark size={20} className="text-gray-300" />
       </button>
     );
   }
@@ -59,7 +59,7 @@ export default function SaveNoteButton({ noteId }: SaveNoteButtonProps) {
       className="p-2 rounded hover:bg-gray-100 transition-colors disabled:opacity-50"
       title={isSaved ? 'Usuń z zapisanych' : 'Zapisz notatkę'}
     >
-      <Save
+      <Bookmark
         size={26}
         className={`transition-colors ${
           isSaved ? 'fill-green-500 text-black' : 'text-black'

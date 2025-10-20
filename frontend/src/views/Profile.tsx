@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import Cookies from 'js-cookie';
 import type { UserData } from "../Types/User"
 import ProfileTable from "../modules/User/components/ProfileTable"
 import axiosInstance from '../api/axiosInstance';
@@ -47,13 +45,9 @@ const Profile: React.FC = () => {
 
   const handleSave = async (field: string) => {
     try {
-      const token = JSON.parse(Cookies.get('token') || '{}')?.state?.token;
-      if (!token) throw new Error('Brak tokena autoryzacyjnego.');
-
       const payload = { [field]: editValues[field] === '' ? null : editValues[field] };
 
-      const response = await axios.patch(`/users/me`, payload, {
-        headers: { 'Authorization': `Bearer ${token}` }
+      const response = await axiosInstance.patch(`/users/me`, payload, {
       });
 
       setUserData(prev => prev ? { ...prev, ...response.data } : null);

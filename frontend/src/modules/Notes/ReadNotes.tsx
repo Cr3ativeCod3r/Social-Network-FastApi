@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axiosInstance from '../../api/axiosInstance';
-import { Search, Trash2,Funnel } from 'lucide-react';
 import { useAuthStore } from "../../store/authStore";
-import { Book } from "lucide-react";
+import {Book,Search, Trash2, Funnel } from "lucide-react";
 import SaveNoteButton from './components/SaveNote';
 import NoteStatistics from './components/NoteStatistics';
 import Pagination from './components/Pagination';
-import type { Note, NotesResponse as ApiResponse} from './types';
-
+import type { Note, NotesResponse as ApiResponse } from './types';
+import formatDate from '../../components/dateFormat';
 const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES;
 
 
@@ -150,23 +149,35 @@ export default function NotesList() {
             ) : (
                 <div className="space-y-4 mb-6">
                     {notes.map((note) => (
-                        <div key={note.note_id} className="bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow">
+                        <div
+                            key={note.note_id}
+                            onClick={() => navigate(`/notatki/${note.note_id}`)}
+                            className="relative bg-white rounded-lg border border-gray-200 p-5 hover:shadow-md transition-shadow cursor-pointer"
+                        >
                             <div className="flex items-start justify-between gap-4 mb-3">
-                                <div
-                                    onClick={() => navigate(`/notatki/${note.note_id}`)}
-                                    className="cursor-pointer hover:text-blue-600 transition flex-1 min-w-0"
-                                >
-                                    <h3 className="font-semibold text-lg text-gray-900 break-words">
+                                <div className="flex-1 min-w-0">
+
+                                    <h3 className="font-semibold text-lg text-gray-900 break-words hover:text-blue-600 transition">
                                         {note.title}
                                     </h3>
                                 </div>
-                                <div className="flex items-center gap-2 flex-shrink-0">
-                                    <SaveNoteButton noteId={note.note_id} />
+
+                                <div className="flex items-center gap-2 flex-shrink-0 z-10 relative">
+
+                                    <div
+                                        onClick={(e) => e.stopPropagation()}
+                                        className="relative z-20"
+                                    >
+                                        <SaveNoteButton noteId={note.note_id} />
+                                    </div>
 
                                     {user?.is_admin && (
                                         <button
-                                            onClick={(e) => handleDelete(note.note_id, e)}
-                                            className="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                handleDelete(note.note_id, e);
+                                            }}
+                                            className="relative z-20 p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-full transition"
                                             aria-label="Usuń notatkę"
                                         >
                                             <Trash2 size={18} />
@@ -174,6 +185,7 @@ export default function NotesList() {
                                     )}
                                 </div>
                             </div>
+
                             {note.subject && (
                                 <div className="text-sm text-gray-600 mb-3 flex items-center gap-1">
                                     <Book size={14} className="text-gray-500 flex-shrink-0" />
@@ -182,8 +194,15 @@ export default function NotesList() {
                             )}
 
                             <div className="flex items-center justify-between">
-                                <div />
+
+                                <p className="font-semibold text-gray-300 text-xs break-words hover:text-blue-600 transition flex items-center">
+                          
+                                    {formatDate(note.created_at)}
+                                       
+                                       
+                                </p>
                                 <div className="ml-auto">
+
                                     <NoteStatistics noteId={note.note_id} />
                                 </div>
                             </div>
@@ -196,8 +215,6 @@ export default function NotesList() {
                 currentPage={page}
                 totalPages={totalPages}
                 onPageChange={setPage}
-            />
-
-        </div>
+            /></div>
     );
 }

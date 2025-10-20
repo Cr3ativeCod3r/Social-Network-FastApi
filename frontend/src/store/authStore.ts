@@ -79,9 +79,9 @@ export const useAuthStore = create<AuthState>()(
           await axiosInstance.post("/auth/register", registerData);
 
           set({ isLoading: false, error: null });
-        } catch (error) {
+        } catch (error: any) {
           const errorMessage =
-            error instanceof Error ? error.message : "Wystąpił błąd";
+            error.response?.data?.detail || error.message || "Wystąpił błąd";
           set({
             isLoading: false,
             error: errorMessage,

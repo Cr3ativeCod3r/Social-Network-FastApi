@@ -4,7 +4,7 @@ import * as Yup from 'yup';
 import { useAuthStore } from '../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import Input from '../modules/Auth/components/Input';
-import { Mail, Lock, User, Building, BookOpen } from 'lucide-react';
+import { Mail, Lock, User } from 'lucide-react';
 import PortalCard from '../modules/Auth/components/PortalCard';
 
 const registerSchema = Yup.object({
@@ -20,12 +20,6 @@ const registerSchema = Yup.object({
     last_name: Yup.string()
         .min(2, 'Nazwisko musi mieć co najmniej 2 znaki')
         .required('Nazwisko jest wymagane'),
-    university: Yup.string()
-        .min(2, 'Nazwa uczelni musi mieć co najmniej 2 znaki')
-        .required('Uczelnia jest wymagana'),
-    department: Yup.string()
-        .min(2, 'Nazwa wydziału musi mieć co najmniej 2 znaki')
-        .required('Wydział jest wymagany'),
 });
 
 const Register: React.FC = () => {
@@ -52,11 +46,11 @@ const Register: React.FC = () => {
                     university: values.university,
                     department: values.department,
                 });
-                navigate('/', { 
+                navigate('/', {
                     state: { message: 'Rejestracja zakończona pomyślnie! Możesz się teraz zalogować.' }
                 });
             } catch (err) {
-                       console.log(err)
+                console.log(err)
             }
         },
     });
@@ -72,7 +66,7 @@ const Register: React.FC = () => {
             <div className="flex flex-col md:flex-row items-center md:items-start gap-8 w-full max-w-5xl animate-fade-in">
 
                 <div className="w-full md:w-1/2 my-auto">
-                    <PortalCard titleColor="text-second2"/>
+                    <PortalCard titleColor="text-second2" />
                 </div>
 
                 <div className="w-full md:w-1/2 bg-white rounded-lg shadow-lg p-8">
@@ -150,39 +144,6 @@ const Register: React.FC = () => {
                                 <p className="mt-1 text-sm text-red-600">{formik.errors.last_name}</p>
                             )}
                         </div>
-
-                        <div>
-                            <Input
-                                type="text"
-                                name="university"
-                                placeholder="Uczelnia"
-                                icon={<Building size={16} />}
-                                value={formik.values.university}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                textcolor="text-second2"
-                            />
-                            {formik.touched.university && formik.errors.university && (
-                                <p className="mt-1 text-sm text-red-600">{formik.errors.university}</p>
-                            )}
-                        </div>
-
-                        <div>
-                            <Input
-                                type="text"
-                                name="department"
-                                placeholder="Wydział"
-                                icon={<BookOpen size={16} />}
-                                value={formik.values.department}
-                                onChange={formik.handleChange}
-                                onBlur={formik.handleBlur}
-                                textcolor="text-second2"
-                            />
-                            {formik.touched.department && formik.errors.department && (
-                                <p className="mt-1 text-sm text-red-600">{formik.errors.department}</p>
-                            )}
-                        </div>
-
                         <button
                             type="submit"
                             disabled={isLoading}

@@ -1,6 +1,6 @@
 import type { UserData } from "../../../Types/User"
 import {
-  User as Building, BookOpen, ShieldCheck, Info, CalendarDays,
+  User as ShieldCheck, Info, CalendarDays,
   MessageSquare, Edit, CheckCircle, XCircle, Save, X
 } from 'lucide-react';
 
@@ -14,6 +14,20 @@ const PermissionBadge: React.FC<{ granted: boolean }> = ({ granted }) => (
     {granted ? <CheckCircle size={14} className="mr-1" /> : <XCircle size={14} className="mr-1" />}
     {granted ? 'Przyznane' : 'Odebrane'}
   </span>
+);
+
+const EditableTextarea: React.FC<{
+  field: string;
+  value: string;
+  onChange: (value: string) => void;
+}> = ({ field, value, onChange }) => (
+  <textarea
+    value={value}
+    onChange={(e) => onChange(e.target.value)}
+    className="border rounded px-2 py-1 w-full mt-1 resize-y"
+    style={field === 'bio' ? { height: 300 } : undefined}
+    rows={field === 'bio' ? undefined : 3}
+  />
 );
 
 interface ProfileTableProps {
@@ -55,22 +69,6 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
       editable: true,
       field: 'bio',
       type: 'textarea',
-    },
-    {
-      label: 'Uczelnia',
-      value: userData.university,
-      icon: Building,
-      condition: true,
-      editable: true,
-      field: 'university',
-    },
-    {
-      label: 'Wydział',
-      value: userData.department,
-      icon: BookOpen,
-      condition: true,
-      editable: true,
-      field: 'department',
     },
   ];
 
@@ -129,7 +127,11 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
               {profileDetails
                 .filter(detail => detail.condition)
                 .map(({ label, value, icon: Icon, editable, field, type }) => (
-                  <div key={field} className="flex items-start justify-between gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div
+                    key={field}
+                    className={`flex items-start justify-between gap-4 p-4 bg-gray-50 rounded-lg ${field === 'bio' ? 'h-[250px]' : ''
+                      }`}
+                  >
                     <div className="flex items-start gap-4 flex-grow">
                       <Icon size={20} className="text-gray-500 mt-1 flex-shrink-0" />
                       <div>
