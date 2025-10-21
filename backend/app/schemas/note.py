@@ -15,7 +15,7 @@ class NoteCreate(NoteBase):
 class NoteUpdate(BaseModel):
     title: Optional[str] = Field(None, max_length=255)
     content: Optional[str] = None
-    subject: Optional[int] = Field(None, description='ID przedmiotu')
+    subject: int = Field(None, description='ID przedmiotu')
 
 class NoteResponse(NoteBase):
     note_id: int

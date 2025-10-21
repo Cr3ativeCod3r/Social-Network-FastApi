@@ -1,11 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException, status, Query
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session,joinedload
 from sqlalchemy import desc
 import math
 
 from ..core.dependencies import get_current_user, get_current_active_user
 from ..db.base import get_db
 from ..models.user import User
+from ..models.subject import Subject as SubjectModel
 from ..models.note import Note
 from ..models.saved_note import SavedNote
 from ..schemas import (
@@ -43,7 +44,6 @@ async def save_note(
             detail="Note already saved"
         )
 
-    # Zapisz notatkę
     db_saved_note = SavedNote(
         user_id=current_user.user_id,
         note_id=saved_note.note_id
@@ -88,36 +88,30 @@ async def get_saved_notes(
         current_user: User = Depends(get_current_user)
 ):
     """Pobierz zapisane notatki użytkownika"""
-    query = db.query(
-        SavedNote.user_id,
-        SavedNote.note_id,
-        SavedNote.saved_at,
-        Note.title,
-        Note.subject,
-        Note.created_at,
-        Note.average_rating,
-        Note.rating_count
-    ).join(Note, SavedNote.note_id == Note.note_id).filter(
+    query = db.query(SavedNote).options(
+        joinedload(SavedNote.note).joinedload(Note.subject)
+    ).filter(
         SavedNote.user_id == current_user.user_id
     ).order_by(desc(SavedNote.saved_at))
 
     total = query.count()
     total_pages = math.ceil(total / page_size)
 
-    results = query.offset((page - 1) * page_size).limit(page_size).all()
+    saved_notes = query.offset((page - 1) * page_size).limit(page_size).all()
 
     items = [
         SavedNoteListResponse(
-            user_id=row.user_id,
-            note_id=row.note_id,
-            saved_at=row.saved_at,
-            title=row.title,
-            subject=row.subject,
-            created_at=row.created_at,
-            average_rating=row.average_rating,
-            rating_count=row.rating_count
+            user_id=sn.user_id,
+            note_id=sn.note_id,
+            saved_at=sn.saved_at,
+            title=sn.note.title,
+            subject_id=sn.note.subject_id,
+            subject=sn.note.subject,
+            created_at=sn.note.created_at,
+            average_rating=sn.note.average_rating,
+            rating_count=sn.note.rating_count
         )
-        for row in results
+        for sn in saved_notes
     ]
 
     return {
