@@ -20,7 +20,6 @@ class MessageAuthor(BaseModel):
     user_id: int
     first_name: str
     last_name: str
-    profile_picture: Optional[str] = None
     is_admin: bool = False
 
 

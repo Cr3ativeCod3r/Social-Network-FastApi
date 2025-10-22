@@ -42,7 +42,6 @@ class UserResponse(BaseModel):
     email: EmailStr
     first_name: str
     last_name: str
-    profile_picture: Optional[str] = None
     bio: Optional[str] = None
     created_at: datetime
     is_verified: bool
@@ -56,16 +55,13 @@ class UserResponse(BaseModel):
         from_attributes = True
 
 class UserUpdate(BaseModel):
-    profile_picture: Optional[str] = Field(None, max_length=255)
     bio: Optional[str] = None
 
 
 class UserPublicProfile(BaseModel):
     first_name: str
     last_name: str
-    university: Optional[str] = None
-    department: Optional[str] = None
-
+    bio: Optional[str] = None
 
 class UserPasswordChange(BaseModel):
     old_password: str = Field(..., min_length=1)
@@ -132,9 +128,6 @@ class UserAdminResponse(UserResponse):
     class Config:
         from_attributes = True
 
-class Token(BaseModel):
-    access_token: str
-    token_type: str = "bearer"
 
 class TokenResponse(BaseModel):
     access_token: str

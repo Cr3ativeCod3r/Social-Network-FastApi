@@ -64,7 +64,6 @@ async def create_comment(
             user_id=current_user.user_id,
             first_name=current_user.first_name,
             last_name=current_user.last_name,
-            profile_picture=current_user.profile_picture
         ),
         is_author=True
     )
@@ -99,7 +98,6 @@ async def get_note_comments(
         NoteComment.created_at,
         User.first_name,
         User.last_name,
-        User.profile_picture
     ).join(User, NoteComment.user_id == User.user_id).filter(
         NoteComment.note_id == note_id
     )
@@ -127,7 +125,6 @@ async def get_note_comments(
                 user_id=row.user_id,
                 first_name=row.first_name,
                 last_name=row.last_name,
-                profile_picture=row.profile_picture
             ),
             is_author=(row.user_id == current_user_id) if current_user_id else False
         )
