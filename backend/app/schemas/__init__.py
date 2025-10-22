@@ -32,8 +32,11 @@ from ..schemas.saved_note import (
     SavedNoteWithDetails,
 )
 from ..schemas.admin import (
-    AdminStatistics,
-    AdminNoteListResponse
+    AdminFileStatistics,
+    AdminNoteListResponse,
+    UsersRestrictionsStats,
+    ReportsStats,
+    AdminStatsResponse,
 )
 from ..schemas.note_comment import (
     NoteCommentBase,
@@ -94,8 +97,11 @@ __all__ = [
     "SavedNoteListResponse",
     "SavedNoteWithDetails",
     # Admin
-    "AdminStatistics",
+    "AdminFileStatistics",
     "AdminNoteListResponse",
+    "UsersRestrictionsStats",
+    "ReportsStats",
+    "AdminStatsResponse",
     # Note Comment
     "NoteCommentBase",
     "NoteCommentCreate",

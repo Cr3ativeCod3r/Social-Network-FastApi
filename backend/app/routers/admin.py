@@ -7,7 +7,7 @@ import math
 import os
 
 from ..schemas import user
-from ..schemas.admin import AdminNoteListResponse, AdminStatistics
+from ..schemas.admin import AdminNoteListResponse, AdminFileStatistics,AdminStatsResponse
 from ..db.base import get_db
 from ..core.dependencies import get_current_admin_user
 from ..models.user import User
@@ -339,7 +339,7 @@ def delete_user(
     }
 
 
-@router.get("/stats")
+@router.get("/stats", response_model=AdminStatsResponse)
 def get_admin_stats(
         current_admin: User = Depends(get_current_admin_user),
         db: Session = Depends(get_db)
@@ -355,10 +355,6 @@ def get_admin_stats(
     users_without_chat = db.query(func.count(User.user_id)).filter(User.chat_permission == False).scalar()
     users_without_comments = db.query(func.count(User.user_id)).filter(User.comment_permission == False).scalar()
     users_without_posts = db.query(func.count(User.user_id)).filter(User.post_permission == False).scalar()
-
-    total_notes = db.query(func.count(Note.note_id)).scalar()
-    total_ratings = db.query(func.count(NoteRating.note_id)).scalar()
-    total_saved_notes = db.query(func.count(SavedNote.user_id)).scalar()
 
     total_reports = db.query(func.count(Report.report_id)).scalar()
     total_resolved_reports = db.query(func.count(Report.report_id)).filter(Report.status == "resolved").scalar()
@@ -377,11 +373,6 @@ def get_admin_stats(
             "without_comments": users_without_comments,
             "without_posts": users_without_posts
         },
-        "notes_stats": {
-            "total_notes": total_notes,
-            "total_ratings": total_ratings,
-            "total_saved_notes": total_saved_notes
-        },
         "reports_stats":{
             "total_reports": total_reports,
             "total_resolved_reports": total_resolved_reports,
@@ -392,7 +383,7 @@ def get_admin_stats(
     }
 
 
-@router.get("/notes/stats", response_model=AdminStatistics)
+@router.get("/notes/stats", response_model=AdminFileStatistics)
 def get_notes_statistics(
         current_admin: User = Depends(get_current_admin_user),
         db: Session = Depends(get_db)

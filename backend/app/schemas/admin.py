@@ -21,8 +21,27 @@ class AdminNoteListResponse(BaseModel):
 
     model_config = ConfigDict(from_attributes=True)
 
+class UsersRestrictionsStats(BaseModel):
+    without_chat: int
+    without_comments: int
+    without_posts: int
 
-class AdminStatistics(BaseModel):
+class ReportsStats(BaseModel):
+    total_reports: int
+    total_resolved_reports: int
+    total_in_progress_reports: int
+    total_pending_reports: int
+    total_rejected_reports: int
+
+class AdminStatsResponse(BaseModel):
+    total_users: int
+    verified_users: int
+    banned_users: int
+    admin_users: int
+    users_with_restrictions: UsersRestrictionsStats
+    reports_stats: ReportsStats
+
+class AdminFileStatistics(BaseModel):
     """Ogólne statystyki systemu"""
     total_notes: int
     notes_with_files: int
