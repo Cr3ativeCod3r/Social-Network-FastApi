@@ -1,10 +1,25 @@
 import { Check, X } from 'lucide-react';
-import type { EditData, NoteDetail } from '../types';
+import type { NoteDetail } from '../types';
+
+interface Subject {
+    subject_id: number;
+    name: string;
+}
+
+interface EditData {
+    title: string;
+    content: string;
+    subject_id: number | string;
+    file: File | null;
+    removeFile: boolean;
+}
 
 interface NoteEditFormProps {
     editData: EditData;
     setEditData: (data: EditData) => void;
     note: NoteDetail;
+    subjects: Subject[];
+    loadingSubjects: boolean;
     onSave: () => void;
     onCancel: () => void;
     isSaving: boolean;
@@ -13,7 +28,9 @@ interface NoteEditFormProps {
 export default function NoteEditForm({ 
     editData, 
     setEditData, 
-    note, 
+    note,
+    subjects,
+    loadingSubjects,
     onSave, 
     onCancel, 
     isSaving 
@@ -32,12 +49,22 @@ export default function NoteEditForm({
             
             <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">Przedmiot</label>
-                <input
-                    type="text"
-                    value={editData.subject}
-                    onChange={(e) => setEditData({ ...editData, subject: e.target.value })}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-                />
+                <select
+                    value={editData.subject_id}
+                    onChange={(e) => setEditData({ ...editData, subject_id: e.target.value })}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500 bg-white text-black"
+                    disabled={loadingSubjects}
+                >
+                    <option value="">Wybierz przedmiot</option>
+                    {subjects.map((subject) => (
+                        <option key={subject.subject_id} value={subject.subject_id}>
+                            {subject.name}
+                        </option>
+                    ))}
+                </select>
+                {loadingSubjects && (
+                    <p className="text-sm text-gray-500 mt-1">Ładowanie przedmiotów...</p>
+                )}
             </div>
             
             <div>

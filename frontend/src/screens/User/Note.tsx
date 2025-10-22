@@ -7,7 +7,20 @@ import NoteComments from '../../modules/Notes/components/Comments';
 import UserProfileCard from '../../modules/Notes/components/UserProfileCard';
 import NoteContent from '../../modules/Notes/components/NoteContect';
 import NoteEditForm from '../../modules/Notes/components/NoteEditForm';
-import type { NoteDetail as NoteDetailType, NoteResponseData, UserProfile, EditData } from '../modules/Notes/types';
+import type { NoteDetail as NoteDetailType, NoteResponseData, UserProfile } from '../modules/Notes/types';
+
+interface Subject {
+    subject_id: number;
+    name: string;
+}
+
+interface EditData {
+    title: string;
+    content: string;
+    subject_id: number | string;
+    file: File | null;
+    removeFile: boolean;
+}
 
 export default function NoteDetail() {
     const { id } = useParams<{ id: string }>();
@@ -20,10 +33,12 @@ export default function NoteDetail() {
     const [isEditing, setIsEditing] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
+    const [subjects, setSubjects] = useState<Subject[]>([]);
+    const [loadingSubjects, setLoadingSubjects] = useState(false);
     const [editData, setEditData] = useState<EditData>({
         title: '',
         content: '',
-        subject: '',
+        subject_id: '',
         file: null,
         removeFile: false,
     });
@@ -44,7 +59,7 @@ export default function NoteDetail() {
                 setEditData({
                     title: response.data.note.title,
                     content: response.data.note.content,
-                    subject: response.data.note.subject,
+                    subject_id: response.data.note.subject_id,
                     file: null,
                     removeFile: false,
                 });
@@ -61,6 +76,25 @@ export default function NoteDetail() {
 
         fetchNote();
     }, [id]);
+
+    const fetchSubjects = async () => {
+        try {
+            setLoadingSubjects(true);
+            const response = await axiosInstance.get('/subjects/');
+            const data = response.data.subjects || response.data;
+            setSubjects(Array.isArray(data) ? data : []);
+        } catch (err: any) {
+            console.error('Błąd podczas pobierania przedmiotów:', err);
+        } finally {
+            setLoadingSubjects(false);
+        }
+    };
+
+    useEffect(() => {
+        if (isEditing) {
+            fetchSubjects();
+        }
+    }, [isEditing]);
 
     const handleDownload = async () => {
         if (!id || !note?.file_path) return;
@@ -107,8 +141,8 @@ export default function NoteDetail() {
             if (editData.content !== note.content) {
                 formData.append('content', editData.content);
             }
-            if (editData.subject !== note.subject) {
-                formData.append('subject', editData.subject);
+            if (editData.subject_id !== note.subject_id) {
+                formData.append('subject_id', editData.subject_id.toString());
             }
 
             if (editData.file) {
@@ -130,7 +164,7 @@ export default function NoteDetail() {
             setEditData({
                 title: response.data.title,
                 content: response.data.content,
-                subject: response.data.subject,
+                subject_id: response.data.subject_id,
                 file: null,
                 removeFile: false,
             });
@@ -159,7 +193,7 @@ export default function NoteDetail() {
         setEditData({
             title: note.title,
             content: note.content,
-            subject: note.subject,
+            subject_id: note.subject_id,
             file: null,
             removeFile: false,
         });
@@ -210,6 +244,8 @@ export default function NoteDetail() {
                         editData={editData}
                         setEditData={setEditData}
                         note={note}
+                        subjects={subjects}
+                        loadingSubjects={loadingSubjects}
                         onSave={handleSaveEdit}
                         onCancel={handleCancelEdit}
                         isSaving={isSaving}

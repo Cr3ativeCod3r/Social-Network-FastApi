@@ -5,7 +5,7 @@ import UsersList from "../../screens/Admin/AdminUsers";
 import NotesList from "../Notes/ReadNotes";
 import AdminStats from "../../screens/Admin/AdminStats";
 import SubjectsCrud from "../../screens/Admin/SubjectsCrud";
-import ReportsList from "../../screens/Admin/Reports";
+import ReportsList from "../../screens/Admin/ReportsList";
 
 const Admin = () => {
   return (

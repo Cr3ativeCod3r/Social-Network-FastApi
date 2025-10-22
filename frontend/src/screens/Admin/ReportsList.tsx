@@ -121,7 +121,7 @@ export default function ReportsList({ refreshTrigger}: ReportsListProps) {
     };
 
     return (
-        <div className="space-y-4">
+        <div className="space-y-4 max-w-4xl mx-auto">
             {/* Filters */}
             <div className="bg-white p-4 rounded-lg shadow">
                 <label className="block text-sm font-medium text-gray-700 mb-2">

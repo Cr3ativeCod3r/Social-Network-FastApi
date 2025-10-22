@@ -5,7 +5,7 @@ import Profile from "../../screens/User/Profile";
 import UserNotes from "../../screens/User/UserNotes";
 import SavedNotes from "../../screens/User/SavedNotes";
 import UserProfile from "../../screens/User/UserProfile";
-import ReportsList from "../../screens/Admin/Reports";
+import ReportsList from "../../screens/Admin/ReportsList";
 
 const User = () => {
   return (
