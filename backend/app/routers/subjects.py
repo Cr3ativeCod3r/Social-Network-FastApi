@@ -76,7 +76,7 @@ async def update_subject(
     if existing_subject:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Subject with this name already exists"
+            detail="Przedmiot o takiej nazwie już istnieje"
         )
 
     db_subject.name = subject.name
@@ -120,7 +120,7 @@ async def delete_subject(
     if notes_count > 0:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail=f"Cannot delete subject with {notes_count} associated notes"
+            detail=f"Nie można usunąc przedmiotu z notatkami: {notes_count}  "
         )
 
     db.delete(subject)

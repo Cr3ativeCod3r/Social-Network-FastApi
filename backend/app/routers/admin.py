@@ -14,6 +14,7 @@ from ..models.user import User
 from ..models.note import Note
 from ..models.note_rating import NoteRating
 from ..models.saved_note import SavedNote
+from ..models.report import Report
 
 router = APIRouter()
 
@@ -313,7 +314,7 @@ def delete_user(
         db: Session = Depends(get_db)
 ):
     """
-    Usuń użytkownika (ostrożnie!)
+    Usuń użytkownika
     """
     user = db.query(User).filter(User.user_id == user_id).first()
     if not user:
@@ -355,10 +356,16 @@ def get_admin_stats(
     users_without_comments = db.query(func.count(User.user_id)).filter(User.comment_permission == False).scalar()
     users_without_posts = db.query(func.count(User.user_id)).filter(User.post_permission == False).scalar()
 
-    # Dodaj statystyki notatek
     total_notes = db.query(func.count(Note.note_id)).scalar()
     total_ratings = db.query(func.count(NoteRating.note_id)).scalar()
     total_saved_notes = db.query(func.count(SavedNote.user_id)).scalar()
+
+    total_reports = db.query(func.count(Report.report_id)).scalar()
+    total_resolved_reports = db.query(func.count(Report.report_id)).filter(Report.status == "resolved").scalar()
+    total_in_progress_reports = db.query(func.count(Report.report_id)).filter(Report.status == "in_progress").scalar()
+    total_pending_reports = db.query(func.count(Report.report_id)).filter(Report.status == "pending").scalar()
+    total_rejected_reports = db.query(func.count(Report.report_id)).filter(Report.status == "rejected").scalar()
+
 
     return {
         "total_users": total_users,
@@ -374,6 +381,13 @@ def get_admin_stats(
             "total_notes": total_notes,
             "total_ratings": total_ratings,
             "total_saved_notes": total_saved_notes
+        },
+        "reports_stats":{
+            "total_reports": total_reports,
+            "total_resolved_reports": total_resolved_reports,
+            "total_in_progress_reports": total_in_progress_reports,
+            "total_pending_reports": total_pending_reports,
+            "total_rejected_reports": total_rejected_reports,
         }
     }
 
@@ -392,7 +406,7 @@ def get_notes_statistics(
     total_saved = db.query(func.count(SavedNote.user_id)).scalar()
     avg_rating = db.query(func.avg(Note.average_rating)).scalar()
 
-    # Notatki z ostatnich 30 dni
+
     thirty_days_ago = datetime.utcnow() - timedelta(days=30)
     notes_last_30_days = db.query(func.count(Note.note_id)).filter(
         Note.created_at >= thirty_days_ago
