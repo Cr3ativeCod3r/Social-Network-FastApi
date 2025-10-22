@@ -4,10 +4,15 @@ import EmojiPicker from 'emoji-picker-react';
 import type { EmojiClickData } from 'emoji-picker-react';
 import axiosInstance from '../../../api/axiosInstance';
 
+interface Subject {
+  name: string;
+  subject_id: number;
+}
+
 interface Note {
   note_id: number;
   title: string;
-  subject: string;
+  subject: Subject;
   created_at: string;
   user_id: number;
   average_rating: string;
@@ -48,7 +53,7 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, onChange, onSend, onLike, 
     if (showNotesModal) {
       fetchNotes();
     }
-  }, [showNotesModal]);
+  }, [showNotesModal, userId]);
 
   const handleKeyPress = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -70,16 +75,15 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, onChange, onSend, onLike, 
     }
   };
 
- const handleNoteSelect = (noteId: number, title: string, subject: string) => {
-    const message = `/notes/${noteId}/${title}/${subject}`;
-    onSendNote(message); 
+  const handleNoteSelect = (noteId: number, title: string, subjectName: string) => {
+    const message = `/notes/${noteId}/${title}/${subjectName}`;
+    onSendNote(message);
     setShowNotesModal(false);
   };
 
-
   return (
     <>
-      <div className="bg-white border-t border-gray-300 p-4">
+      <div className="bg-white border-t border-gray-300 p-4 ">
         <div className="flex gap-2 items-end relative">
           <div className="relative">
             <button
@@ -121,14 +125,13 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, onChange, onSend, onLike, 
             className="p-2 text-blue-500 hover:text-blue-600 transition"
             type="button"
           >
-            {value.trim() ? <Send size={20} /> : <ThumbsUp size={32} className='z-999' />}
+            {value.trim() ? <Send size={20} /> : <ThumbsUp size={32} />}
           </button>
         </div>
       </div>
 
       {showNotesModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          {/* ... reszta modala bez zmian ... */}
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 animate-fade-in">
           <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 max-h-[80vh] flex flex-col">
             <div className="flex items-center justify-between p-4 border-b border-gray-200">
               <h2 className="text-xl font-semibold text-gray-800">Wybierz notatkę do udostępnienia</h2>
@@ -141,22 +144,24 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, onChange, onSend, onLike, 
             </div>
 
             <div className="flex-1 overflow-y-auto p-4">
-              {!loading && !error && notes.length > 0 && (
+              {loading && <p>Ładowanie notatek...</p>}
+              {error && <p className="text-red-500">Błąd: {error}</p>}
+              {!loading && !error && notes.length > 0 ? (
                 <div className="space-y-2">
                   {notes.map((note) => (
                     <button
                       key={note.note_id}
-                      onClick={() => handleNoteSelect(note.note_id, note.title, note.subject)}
+                      onClick={() => handleNoteSelect(note.note_id, note.title, note.subject.name)}
                       className="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 hover:border-blue-300 transition"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">
                           <h3 className="font-semibold text-gray-800 mb-1">{note.title}</h3>
-                          <p className="text-sm text-gray-600">{note.subject}</p>
+                          <p className="text-sm text-gray-600">{note.subject.name}</p>
                         </div>
-                        <div className="text-xs text-gray-500 ml-4">
+                        <div className="text-xs text-gray-500 ml-4 flex-shrink-0">
                           {note.rating_count > 0 && (
-                            <div>⭐ {note.average_rating} ({note.rating_count})</div>
+                            <span>⭐ {note.average_rating} ({note.rating_count})</span>
                           )}
                         </div>
                       </div>
@@ -166,6 +171,8 @@ const ChatInput: React.FC<ChatInputProps> = ({ value, onChange, onSend, onLike, 
                     </button>
                   ))}
                 </div>
+              ) : (
+                !loading && <p>Nie znaleziono żadnych notatek.</p>
               )}
             </div>
 

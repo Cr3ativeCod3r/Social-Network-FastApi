@@ -5,6 +5,7 @@ import UsersList from "../../screens/Admin/AdminUsers";
 import NotesList from "../Notes/ReadNotes";
 import AdminStats from "../../screens/Admin/AdminStats";
 import SubjectsCrud from "../../screens/Admin/SubjectsCrud";
+import ReportsList from "../../screens/Admin/Reports";
 
 const Admin = () => {
   return (
@@ -49,8 +50,16 @@ const Admin = () => {
           </Layout>
         }
       />
-
-      
+      <Route
+        path="/reports"
+        element={
+          <Layout>
+            <AdminLayout>
+              <ReportsList />
+            </AdminLayout>
+          </Layout>
+        }
+      />
     </Routes>
   );
 };

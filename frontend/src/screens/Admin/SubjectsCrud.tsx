@@ -119,7 +119,6 @@ const SubjectsCrud: React.FC = () => {
   return (
     <>
       <div className="max-w-4xl mx-auto p-6 animate-fade-in">
-        <h1 className="text-2xl font-semibold mb-6">Zarządzanie przedmiotami</h1>
 
         <div className="mb-6">
           {!isCreating && !editingId && (

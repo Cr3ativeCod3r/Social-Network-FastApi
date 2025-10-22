@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { User, LogOut, MessageSquare, FileText, Shield, Menu, X } from "lucide-react";
+import { User, LogOut, MessageSquare, FileText, Shield, Menu, X,MessageCircleWarning } from "lucide-react";
 import { useAuthStore } from "../store/authStore";
 import { useNavigate, useLocation } from "react-router-dom";
 import image from "../assets/image/ico.svg"
 import student from "../assets/image/student.svg"
+import CreateReportModal from "../modules/User/components/ReportModal";
 
 
 const Navbar: React.FC = () => {
@@ -23,18 +24,18 @@ const Navbar: React.FC = () => {
     setMenuOpen((prev) => !prev);
   };
 
-const isActive = (path: string) => {
-  if (path.endsWith("/*")) {
-    const base = path.replace("/*", "");
-    return location.pathname.startsWith(base);
-  }
-  return location.pathname === path;
-};
+  const isActive = (path: string) => {
+    if (path.endsWith("/*")) {
+      const base = path.replace("/*", "");
+      return location.pathname.startsWith(base);
+    }
+    return location.pathname === path;
+  };
 
   const getLinkClasses = (path: string) => {
     const baseClasses = "flex items-center gap-2 uppercase hover:text-[var(--color-basic1)] transition";
-    return isActive(path) 
-      ? `${baseClasses} text-[var(--color-basic1)] border-b-2 border-[var(--color-basic1)]` 
+    return isActive(path)
+      ? `${baseClasses} text-[var(--color-basic1)] border-b-2 border-[var(--color-basic1)]`
       : baseClasses;
   };
 
@@ -80,7 +81,7 @@ const isActive = (path: string) => {
           href="/notatki"
           className="flex items-center gap-2 text-2xl font-semibold"
         >
-         <img src={image} className="h-12 "/>
+          <img src={image} className="h-12 " />
           <span className="hidden sm:inline">Study Share</span>
         </a>
         <ul className="hidden lg:flex gap-8 text-md font-medium items-center">
@@ -108,6 +109,8 @@ const isActive = (path: string) => {
                 <User className="w-4 h-4" />
                 Moje konto
               </button>
+          
+              <CreateReportModal/>
               <button
                 onClick={handleLogout}
                 className="flex items-center gap-2 w-full text-left px-4 py-2 hover:bg-gray-100 text-red-600"
