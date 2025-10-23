@@ -65,7 +65,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
     return (
         <>
 
-            <div className="fixed inset-0 z-[999] flex items-center justify-center bg-black/50 w-screen h-screen">
+            <div className="fixed inset-0 flex items-center justify-center bg-black/50 w-screen h-screen" style={{ zIndex: 999 }}>
 
                 <div className="bg-white rounded-lg shadow-2xl w-full max-w-md transform transition-all">
                     <div className="bg-gradient-to-r from-green-600 to-green-700 px-6 py-4 flex items-center justify-between rounded-t-lg">
@@ -188,7 +188,7 @@ const ChangePasswordModal: React.FC<ChangePasswordModalProps> = ({ isOpen, onClo
 import axiosInstance from '../../../api/axiosInstance';
 
 
-function Demo() {
+function ChangePasswordmodal() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -215,7 +215,7 @@ function Demo() {
 
     return (
         <div>
-            <div className="mx-auto ml-4 mt-2 text-sm flex items-center">
+            <div className="mx-auto ml-4 mt-2 text-sm flex items-center z-[999]">
                 <button
                     onClick={() => setIsModalOpen(true)}
                     className="flex items-center text-gray-700 hover:text-blue-600 transition"
@@ -235,4 +235,4 @@ function Demo() {
     );
 }
 
-export default Demo;
+export default ChangePasswordmodal;

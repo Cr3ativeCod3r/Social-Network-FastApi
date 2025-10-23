@@ -1,7 +1,7 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { Shield, Users, FileText, BarChart3 } from "lucide-react";
-import Demo from "../components/ChangePasswordModal";
+import ChangePasswordmodal from "../components/ChangePasswordModal";
 import { useAuthStore } from "../../../store/authStore";
 
 const Navbar: React.FC = () => {
@@ -17,13 +17,12 @@ const Navbar: React.FC = () => {
     <nav
       className="
         bg-white border-gray-200 shadow-sm 
-        flex flex-col
+
         w-full md:w-56
         border-b md:border-b-0 md:border-r
-        md:min-h-screen md:sticky md:top-0
+
       "
     >
-      {/* Logo / Tytuł */}
       <div className="flex items-center justify-center md:justify-start gap-2 p-3 text-lg font-semibold border-b border-gray-100 text-gray-800">
         <Shield className="w-5 h-5 text-green-500" />
         <span>User Panel</span>
@@ -37,6 +36,7 @@ const Navbar: React.FC = () => {
           items-center md:items-stretch 
           gap-1 md:space-y-1 
           p-2 md:p-3
+       
         "
       >
         {links.map(({ name, path, icon: Icon }) => (
@@ -65,7 +65,7 @@ const Navbar: React.FC = () => {
             </NavLink>
           </li>
         ))}
-        <Demo />
+        <ChangePasswordmodal />
       </ul>
     </nav>
   );

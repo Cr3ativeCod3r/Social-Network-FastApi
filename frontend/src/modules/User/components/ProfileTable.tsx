@@ -93,7 +93,7 @@ const ProfileTable: React.FC<ProfileTableProps> = ({
   return (
     <>
 
-      <div className="min-h-screen flex items-center justify-center ">
+      <div className="min-h-screen flex items-center justify-center" style={{ zIndex: 0 }}>
         <div className="bg-white rounded-xl shadow-lg p-8 max-w-4xl w-full animate-fade-in">
 
           <div className="flex flex-col items-center text-center mb-8">
