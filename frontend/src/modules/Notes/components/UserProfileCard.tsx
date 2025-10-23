@@ -32,11 +32,8 @@ export default function UserProfileCard({ user, user_id }: UserProfileCardProps)
                         <h2 className="text-xl font-semibold text-gray-900">
                             {user.first_name} {user.last_name}
                         </h2>
-                        {user.department && (
-                            <p className="text-gray-600">{user.department}</p>
-                        )}
-                        {user.university && (
-                            <p className="text-gray-600 text-sm">{user.university}</p>
+                        {user.bio && (
+                            <p className="text-gray-600 text-sm">{user.bio}</p>
                         )}
                     </div>
                 </div>

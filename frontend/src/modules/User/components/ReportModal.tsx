@@ -126,7 +126,7 @@ export default function CreateReportModal({ fetchReports }: CreateReportModalPro
 
                             <div className="bg-yellow-50 border border-yellow-200 rounded p-3">
                                 <p className="text-sm text-yellow-800">
-                                    <strong>Uwaga:</strong> Zgłoszenie zostanie przesłane do administracji. Otrzymasz odpowiedź jak najszybciej.
+                                    <strong>Uwaga:</strong> Zgłoszenie zostanie przesłane do administracji.
                                 </p>
                             </div>
 

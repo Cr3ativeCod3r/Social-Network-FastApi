@@ -1,3 +1,5 @@
+import type { StringifyOptions } from "node:querystring";
+
 export interface Note {
   note_id: number;
   title: string;
@@ -29,7 +31,8 @@ export interface UserProfile {
     profile_picture: string;
     university: string;
     department: string;
-    user_id: Number;
+    user_id: StringifyOptions;
+    bio: string;
 }
 
 export interface EditData {

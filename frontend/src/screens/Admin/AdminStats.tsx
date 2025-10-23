@@ -16,6 +16,11 @@ import {
   CalendarClock,
   Loader2,
   AlertTriangle,
+  Flag,
+  CheckCircle,
+  Clock,
+  XCircle,
+  AlertCircle,
 } from 'lucide-react';
 
 import StatCard from '../../modules/Admin/components/StatCard';
@@ -63,7 +68,7 @@ export default function AdminStats() {
   }
 
   return (
-    <div className=" bg-gray-50 animate-fade-in">
+    <div className="bg-gray-50 animate-fade-in">
       <div className="bg-white p-6 rounded-lg shadow-md mb-8">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Użytkownicy</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -83,6 +88,17 @@ export default function AdminStats() {
         </div>
       </div>
 
+      <div className="bg-white p-6 rounded-lg shadow-md mb-8">
+        <h2 className="text-xl font-semibold text-gray-700 mb-4">Zgłoszenia</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+          <StatCard label="Wszystkie" value={adminStats.reports_stats.total_reports} icon={Flag} color="text-blue-500" />
+          <StatCard label="Oczekujące" value={adminStats.reports_stats.total_pending_reports} icon={AlertCircle} color="text-yellow-500" />
+          <StatCard label="W trakcie" value={adminStats.reports_stats.total_in_progress_reports} icon={Clock} color="text-orange-500" />
+          <StatCard label="Rozwiązane" value={adminStats.reports_stats.total_resolved_reports} icon={CheckCircle} color="text-green-500" />
+          <StatCard label="Odrzucone" value={adminStats.reports_stats.total_rejected_reports} icon={XCircle} color="text-red-500" />
+        </div>
+      </div>
+
       <div className="bg-white p-6 rounded-lg shadow-md">
         <h2 className="text-xl font-semibold text-gray-700 mb-4">Statystyki notatek</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -99,4 +115,3 @@ export default function AdminStats() {
     </div>
   );
 }
-

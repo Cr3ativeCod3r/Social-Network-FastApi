@@ -17,8 +17,10 @@ const Navbar: React.FC = () => {
     <nav
       className="
         bg-white border-gray-200 shadow-sm 
-        flex flex-col md:flex-col md:w-56 md:h-screen
-        w-full md:border-r border-b md:border-b-0
+        flex flex-col
+        w-full md:w-56
+        border-b md:border-b-0 md:border-r
+        md:min-h-screen md:sticky md:top-0
       "
     >
       {/* Logo / Tytuł */}
