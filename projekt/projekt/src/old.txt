@@ -1,0 +1,445 @@
+<div className="w-full ">
+      {/* View 1 - Chat */}
+      <div className="h-screen border-4 border-black p-2 bg-gray-100 ">
+        <div className="mb-2 text-lg font-bold">Widok czatu</div>
+        <div className="space-y-2">
+          {/* Admin messages - left */}
+          <div className="flex justify-start">
+            <div className="bg-white p-2 border border-gray-400 max-w-xs text-sm">
+              <div className="font-bold">
+                admin system{" "}
+                <span className="bg-yellow-300 px-2 text-xs">Admin</span> 17:10
+              </div>
+              <div>Hej</div>
+            </div>
+          </div>
+
+          <div className="flex justify-start">
+            <div className="bg-white p-2 border border-gray-400 max-w-xs text-sm">
+              <div className="font-bold">
+                admin system{" "}
+                <span className="bg-yellow-300 px-2 text-xs">Admin</span> 17:10
+              </div>
+              <div>wiadomość</div>
+            </div>
+          </div>
+
+          <div className="flex justify-start">
+            <div className="bg-white p-2 border border-gray-400 max-w-xs text-sm">
+              <div className="font-bold">
+                admin system{" "}
+                <span className="bg-yellow-300 px-2 text-xs">Admin</span> 17:10
+              </div>
+              <div>wiadomość</div>
+              <div className="text-xs text-gray-500">Cpp</div>
+              <div className="bg-blue-100 p-1 mt-1 text-xs">
+                Klasy i obiekty
+              </div>
+              <button className="bg-blue-500 text-white px-2 py-0.5 mt-1 text-xs rounded">
+                Otwórz notatke
+              </button>
+            </div>
+          </div>
+
+          {/* User messages - right */}
+          <div className="flex justify-end">
+            <div className="bg-white p-2 border border-gray-400 max-w-xs text-sm">
+              <div className="font-bold">User 17:10</div>
+              <div>wiadomość</div>
+            </div>
+          </div>
+
+          <div className="flex justify-end">
+            <div className="bg-white p-2 border border-gray-400 max-w-xs text-sm">
+              <div className="font-bold">User 17:10</div>
+              <div>wiadomość</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Input i przycisk */}
+        <div className="absolute bottom-4 right-4">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded w-[8vw] border-black border-2 text-sm">
+            Wyślij
+          </button>
+        </div>
+        <div className="absolute bottom-4 left-4 border border-gray-400 p-2 bg-white w-[90vw]">
+          <input
+            type="text"
+            placeholder="Wpisz wiadomość..."
+            className="w-full text-sm"
+          />
+        </div>
+      </div>
+
+      {/* View 2 - Dashboard */}
+      <div className="h-screen border-4 border-black p-4 bg-gray-50">
+        <div className="mb-4 text-xl font-bold">Statystyki</div>
+        <div className="mb-6">
+          <div className="font-bold mb-2">Użytkownicy</div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+          </div>
+        </div>
+        <div className="mb-6">
+          <div className="font-bold mb-2">Ograniczenia użytkowników</div>
+          <div className="grid grid-cols-3 gap-2">
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+          </div>
+        </div>
+        <div className="mb-6">
+          <div className="font-bold mb-2">Zgłoszenia</div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="font-bold mb-2">Statystyki notatek</div>
+          <div className="grid grid-cols-4 gap-2">
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+            <div className="border border-gray-400 p-2 bg-white">
+              Statystyki
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* View 3 - New Note Modal */}
+      <div className="h-screen border-4 border-black p-4 bg-gray-100 flex items-center justify-center">
+        <div className="bg-white border-2 border-black p-6 w-96">
+          <div className="text-xl font-bold mb-4">Nowa notatka</div>
+          <div className="mb-3">
+            <div className="text-sm mb-1">Tytuł *</div>
+            <input type="text" className="w-full border border-gray-400 p-1" />
+          </div>
+          <div className="mb-3">
+            <div className="text-sm mb-1">Zawartość *</div>
+            <textarea className="w-full border border-gray-400 p-1 h-32"></textarea>
+          </div>
+          <div className="mb-3">
+            <div className="text-sm mb-1">Wybierz przedmiot</div>
+            <select className="w-full border border-gray-400 p-1">
+              <option>-</option>
+            </select>
+          </div>
+          <div className="mb-3 border border-dashed border-gray-400 p-4 text-center text-sm text-gray-500">
+            Kliknij aby dodać plik
+          </div>
+          <button className="w-full bg-blue-600 text-white p-2">
+            Utwórz notatkę
+          </button>
+        </div>
+      </div>
+
+      {/* View 4 - Rate Note */}
+      <div className="h-screen border-4 border-black p-4 bg-white">
+        <div className="text-xl font-bold mb-4">Oceń tę notatkę</div>
+        <div className="mb-4">
+          <div className="text-2xl">★ ★ ★ ★ ☆ Twoja ocena: 4/5</div>
+          <div className="text-sm text-gray-500">
+            Możesz zmienić swoją ocenę w każdej chwili.
+          </div>
+        </div>
+        <div className="mb-4">
+          <div className="font-bold mb-2">Statystyki ocen</div>
+          <div className="text-2xl font-bold">4.0 /5 (1 ocen)</div>
+          <div className="space-y-1 mt-2">
+            <div className="flex items-center gap-2">
+              <div>5 ★</div>
+              <div className="flex-1 bg-gray-200 h-4"></div>
+              <div>0%</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div>4 ★</div>
+              <div className="flex-1 bg-green-500 h-4"></div>
+              <div>100%</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div>3 ★</div>
+              <div className="flex-1 bg-gray-200 h-4"></div>
+              <div>0%</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div>2 ★</div>
+              <div className="flex-1 bg-gray-200 h-4"></div>
+              <div>0%</div>
+            </div>
+            <div className="flex items-center gap-2">
+              <div>1 ★</div>
+              <div className="flex-1 bg-gray-200 h-4"></div>
+              <div>0%</div>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <div className="font-bold mb-2">Dodaj komentarz</div>
+          <textarea
+            placeholder="Wpisz swój komentarz..."
+            className="w-full border border-gray-400 p-2 h-24"
+          ></textarea>
+          <button className="bg-green-400 px-4 py-2 mt-2 float-right">
+            Dodaj komentarz
+          </button>
+        </div>
+        <div className="clear-both mt-8">
+          <div className="border-t pt-4">
+            <div className="font-bold">Jan Kowalski</div>
+            <div className="text-xs text-gray-500">23 paź 2025, 17:21</div>
+            <div className="mt-2">Komentarz pod notatką</div>
+          </div>
+        </div>
+      </div>
+
+      {/* View 5 - Note Detail */}
+      <div className="h-screen border-4 border-black p-4 bg-gray-50">
+        <div className="mb-4">← Wróć</div>
+        <div className="bg-gray-200 p-4 mb-4">
+          <div className="flex items-center gap-2 mb-2">
+            <div className="w-12 h-12 bg-gray-400 rounded-full"></div>
+            <div>
+              <div className="font-bold">admin system</div>
+              <div className="text-sm text-gray-600">admin</div>
+            </div>
+          </div>
+        </div>
+        <div className="bg-white p-4 border border-gray-300">
+          <div className="flex gap-4 mb-4">
+            <div>★ Ocena (0)</div>
+            <div>📗 Zapisania 1</div>
+            <div>💬 Komentarze 0</div>
+            <div>🔖</div>
+          </div>
+          <div className="text-2xl font-bold mb-2">Klasy i obiekty</div>
+          <div className="text-gray-600 mb-4">Podstawy Elektrotechniki</div>
+          <div className="grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <div className="font-bold">Utworzone:</div>
+              <div>23 października 2025</div>
+            </div>
+            <div>
+              <div className="font-bold">Zmienione:</div>
+              <div>23 października 2025</div>
+            </div>
+          </div>
+          <div className="mt-4">Treść...</div>
+        </div>
+      </div>
+
+      {/* View 6 - Notes List */}
+      <div className="h-screen border-4 border-black p-4 bg-white">
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Dodaj swoją notatkę..."
+            className="w-full border border-gray-400 p-2"
+          />
+        </div>
+        <div className="mb-4">
+          <input
+            type="text"
+            placeholder="Szukaj po tytule lub treści"
+            className="w-full border border-gray-400 p-2"
+          />
+        </div>
+        <div className="flex gap-2 mb-4">
+          <select className="border border-gray-400 p-1">
+            <option>Przefiltruj</option>
+          </select>
+          <select className="border border-gray-400 p-1">
+            <option>Najnowsze</option>
+          </select>
+          <select className="border border-gray-400 p-1">
+            <option>Pliki</option>
+          </select>
+          <select className="border border-gray-400 p-1">
+            <option>Małejąco</option>
+          </select>
+        </div>
+        <div className="space-y-2">
+          <div className="border border-gray-400 p-3 bg-gray-50">
+            <div className="font-bold mb-1">Klasy i obiekty</div>
+            <div className="text-sm text-gray-600">
+              ☐ Podstawy Elektrotechniki
+            </div>
+            <div className="text-xs text-gray-400">23 października 2025</div>
+            <div className="flex gap-4 mt-2 text-sm">
+              <div>★ Ocena (0)</div>
+              <div>📗 Zapisania 1</div>
+              <div>💬 Komentarze 0</div>
+            </div>
+          </div>
+          <div className="border border-gray-400 p-3 bg-gray-50">
+            <div className="font-bold mb-1">Obwody szeregowe</div>
+            <div className="text-sm text-gray-600">
+              ☐ Podstawy Elektrotechniki
+            </div>
+            <div className="text-xs text-gray-400">23 października 2025</div>
+            <div className="flex gap-4 mt-2 text-sm">
+              <div>★ Ocena (0)</div>
+              <div>📗 Zapisania 1</div>
+              <div>💬 Komentarze 0</div>
+            </div>
+          </div>
+          <div className="border border-gray-400 p-3 bg-gray-50">
+            <div className="font-bold mb-1">Całki</div>
+            <div className="text-sm text-gray-600">☐ Wstęp do matematyki</div>
+            <div className="text-xs text-gray-400">23 października 2025</div>
+            <div className="flex gap-4 mt-2 text-sm">
+              <div>★ Ocena (0)</div>
+              <div>📗 Zapisania 0</div>
+              <div>💬 Komentarze 0</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* View 7 - Login */}
+      <div className="h-screen border-4 border-black p-4  from-green-300 to-green-100 flex">
+        <div className="w-1/2 flex items-center justify-center">
+          <div>
+            <div className="text-5xl font-bold text-green-800 mb-2">
+              StudyShare
+            </div>
+            <div className="text-sm">
+              StudyShare to portal dla studentów,
+              <br />
+              umożliwiający wymianę notatek i materiałów
+              <br />
+              edukacyjnych.
+            </div>
+          </div>
+        </div>
+        <div className="w-1/2 flex items-center justify-center">
+          <div className="bg-white p-8 border-2 border-gray-300 w-80">
+            <div className="text-2xl font-bold mb-6 text-center">
+              Witamy ponownie
+            </div>
+            <div className="mb-3">
+              <div className="text-sm mb-1">email</div>
+              <input
+                type="text"
+                className="w-full border border-gray-400 p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <div className="text-sm mb-1">hasło</div>
+              <input
+                type="password"
+                className="w-full border border-gray-400 p-2"
+              />
+            </div>
+            <button className="w-full bg-green-700 text-white p-2 mb-2">
+              Zaloguj się
+            </button>
+            <div className="text-center text-sm">
+              Nie masz konta? <span className="underline">Zarejestruj się</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* View 8 - Register */}
+      <div className="h-screen border-4 border-black p-4  from-cyan-300 to-cyan-100 flex">
+        <div className="w-1/2 flex items-center justify-center">
+          <div>
+            <div className="text-5xl font-bold text-teal-800 mb-2">
+              StudyShare
+            </div>
+            <div className="text-sm">
+              StudyShare to portal dla studentów,
+              <br />
+              umożliwiający wymianę notatek i materiałów
+              <br />
+              edukacyjnych.
+            </div>
+          </div>
+        </div>
+        <div className="w-1/2 flex items-center justify-center">
+          <div className="bg-white p-8 border-2 border-gray-300 w-80">
+            <div className="text-2xl font-bold mb-6 text-center text-teal-700">
+              Dołącz do nas
+            </div>
+            <div className="mb-3">
+              <div className="text-sm mb-1">email</div>
+              <input
+                type="text"
+                className="w-full border border-gray-400 p-2"
+              />
+            </div>
+            <div className="mb-3">
+              <div className="text-sm mb-1">hasło</div>
+              <input
+                type="password"
+                className="w-full border border-gray-400 p-2"
+              />
+            </div>
+            <div className="mb-3">
+              <div className="text-sm mb-1">Imię</div>
+              <input
+                type="text"
+                className="w-full border border-gray-400 p-2"
+              />
+            </div>
+            <div className="mb-4">
+              <div className="text-sm mb-1">Nazwisko</div>
+              <input
+                type="text"
+                className="w-full border border-gray-400 p-2"
+              />
+            </div>
+            <button className="w-full bg-teal-600 text-white p-2 mb-2">
+              Zarejestruj się
+            </button>
+            <div className="text-center text-sm">
+              Masz już konto? <span className="underline">Zaloguj się</span>
+            </div>
+          </div>
+        </div>
+      </div>
