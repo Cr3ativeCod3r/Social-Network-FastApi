@@ -23,7 +23,6 @@ class User(Base):
     post_permission = Column(Boolean, default=True)
     chat_permission = Column(Boolean, default=True)
 
-    #Relations
     notes = relationship("Note", back_populates="user", cascade="all, delete-orphan")
     note_ratings = relationship("NoteRating", back_populates="user", cascade="all, delete-orphan")
     saved_notes = relationship("SavedNote", back_populates="user", cascade="all, delete-orphan")

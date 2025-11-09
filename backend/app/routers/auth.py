@@ -29,8 +29,6 @@ def register(user_data: user.UserRegister, db: Session = Depends(get_db)):
         password=hashed_password,
         first_name=user_data.first_name,
         last_name=user_data.last_name,
-        university=user_data.university,
-        department=user_data.department,
     )
 
     db.add(db_user)
@@ -77,7 +75,7 @@ def login(credentials: user.UserLogin, db: Session = Depends(get_db)):
     response = JSONResponse(
         content={
             "token_type": "bearer",
-            "user": jsonable_encoder(user_obj) 
+            "user": access_token
         }
     )
     

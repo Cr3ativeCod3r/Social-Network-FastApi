@@ -75,7 +75,7 @@ def save_upload_file(file: UploadFile, note_id: int) -> str:
 async def create_note(
         title: str = Form(..., max_length=255),
         content: str = Form(...),
-        subject_id: int = Form(...),  # Wymagane!
+        subject_id: int = Form(...),  
         file: Optional[UploadFile] = File(None),
         db: Session = Depends(get_db),
         current_user: User = Depends(get_current_user)

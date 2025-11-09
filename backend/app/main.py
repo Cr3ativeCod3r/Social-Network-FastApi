@@ -17,7 +17,6 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """
-    Lifecycle events - uruchamiane przy starcie i zatrzymaniu aplikacji
     """
     db = SessionLocal()
     try:
