@@ -38,7 +38,7 @@ async def send_message(
     if not current_user.chat_permission:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="You don't have permission to use chat",
+            detail="Nie masz uprawnień do korzystania z czatu",
         )
 
     db_message = ChatMessage(user_id=current_user.user_id, content=message.content)

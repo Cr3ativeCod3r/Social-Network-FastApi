@@ -84,7 +84,7 @@ async def create_note(
     if not current_user.post_permission:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
-            detail="User does not have permission to create notes"
+            detail="Użytkownik nie ma uprawnień do tworzenia notatek"
         )
 
     subject = db.query(SubjectModel).filter(SubjectModel.subject_id == subject_id).first()

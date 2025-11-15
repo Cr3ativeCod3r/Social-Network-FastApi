@@ -15,6 +15,10 @@ const page_size = import.meta.env.VITE_PAGE_SIZE_NOTES || 20;
 interface Subject {
     subject_id: number;
     name: string;
+    subject: {
+        subject_id: number;
+        name: string;
+    };
 }
 
 export default function NotesList() {
