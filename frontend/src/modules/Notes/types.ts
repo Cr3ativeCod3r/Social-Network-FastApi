@@ -3,11 +3,14 @@ import type { StringifyOptions } from "node:querystring";
 export interface Note {
   note_id: number;
   title: string;
-  subject: string;
   created_at: string;
   user_id: number;
   average_rating: string;
   rating_count: number;
+    subject: {
+        subject_id: number;
+        name: string;
+    };
 }
 
 

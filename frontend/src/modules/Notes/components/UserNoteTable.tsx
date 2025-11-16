@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Book, Star, Users, ArrowRight, Calendar } from 'lucide-react';
+import { Book, Star, Users, Calendar } from 'lucide-react';
 import type { Note as UserNoteTableProps } from "../types"
 import formatDate from '../../../components/dateFormat';
 

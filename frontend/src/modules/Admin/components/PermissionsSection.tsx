@@ -12,7 +12,7 @@ interface PermissionsSectionProps {
   formData: FormData;
   saving: boolean;
   onToggle: (field: keyof FormData) => void;
-  onUpdate: () => Promise<boolean>; 
+  onUpdate: () => Promise<void>; 
 }
 
 export function PermissionsSection({
@@ -56,8 +56,8 @@ export function PermissionsSection({
 
         <PermissionCheckbox
           icon={<FileText size={18} />}
-          label="Posty"
-          description="Możliwość tworzenia postów"
+          label="Notatki"
+          description="Możliwość tworzenia notatek"
           checked={formData.post_permission}
           onChange={() => onToggle('post_permission')}
         />

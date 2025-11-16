@@ -28,8 +28,6 @@ interface RegisterData {
   password: string;
   first_name: string;
   last_name: string;
-  university: string;
-  department: string;
 }
 
 interface LoginResponse {
@@ -117,8 +115,6 @@ export const useAuthStore = create<AuthState>()(
               first_name: state.user.first_name,
               last_name: state.user.last_name,
               email: state.user.email,
-              university: state.user.university,
-              department: state.user.department,
               is_admin: state.user.is_admin,
             }
           : null,

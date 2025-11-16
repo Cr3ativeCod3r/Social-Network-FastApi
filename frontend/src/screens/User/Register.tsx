@@ -32,8 +32,6 @@ const Register: React.FC = () => {
             password: '',
             first_name: '',
             last_name: '',
-            university: '',
-            department: '',
         },
         validationSchema: registerSchema,
         onSubmit: async (values) => {
@@ -43,8 +41,6 @@ const Register: React.FC = () => {
                     password: values.password,
                     first_name: values.first_name,
                     last_name: values.last_name,
-                    university: values.university,
-                    department: values.department,
                 });
                 navigate('/', {
                     state: { message: 'Rejestracja zakończona pomyślnie! Możesz się teraz zalogować.' }

@@ -96,36 +96,11 @@ export default function NoteDetail() {
         }
     }, [isEditing]);
 
-    const handleDownload = async () => {
-        if (!id || !note?.file_path) return;
+const handleDownload = () => {
+    if (!id || !note?.file_path) return;
 
-        try {
-            const response = await axiosInstance.get(`/notes/${id}/download`, {
-                responseType: 'blob',
-            });
-
-            const disposition = response.headers['content-disposition'];
-            let filename = `note-${id}`;
-
-            if (disposition && disposition.includes('filename=')) {
-                const match = disposition.match(/filename="?([^"]+)"?/);
-                if (match && match[1]) {
-                    filename = match[1];
-                }
-            }
-
-            const url = window.URL.createObjectURL(response.data);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = filename;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-        } catch (err) {
-            console.error('Błąd przy pobieraniu pliku', err);
-        }
-    };
+    window.location.href = `${import.meta.env.VITE_API_URL}/notes/${id}/download`;
+};
 
     const handleSaveEdit = async () => {
         if (!id || !note) return;
