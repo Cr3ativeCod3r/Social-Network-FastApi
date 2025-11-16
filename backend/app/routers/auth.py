@@ -75,7 +75,7 @@ def login(credentials: user.UserLogin, db: Session = Depends(get_db)):
     response = JSONResponse(
         content={
             "token_type": "bearer",
-            "user": access_token
+            "user": jsonable_encoder(user_obj)
         }
     )
     
