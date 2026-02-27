@@ -1,4 +1,4 @@
-Social network for students to aplikacja internetowa zaprojektowana dla środowiska akademickiego. Jej głównym celem jest usprawnienie wymiany materiałów edukacyjnych (notatek) oraz ułatwienie komunikacji między studentami w czasie rzeczywistym. System wyróżnia się na tle konkurencji autorskim mechanizmem weryfikacji i oceny jakości materiałów przez samych użytkowników, co pozwala na szybkie filtrowanie najbardziej wartościowych treści
+Aplikacja internetowa zostala zaprojektowana dla środowiska akademickiego. Jej głównym celem jest usprawnienie wymiany materiałów edukacyjnych (notatek) oraz ułatwienie komunikacji między studentami w czasie rzeczywistym. System wyróżnia się na tle konkurencji autorskim mechanizmem weryfikacji i oceny jakości materiałów przez samych użytkowników, co pozwala na szybkie filtrowanie najbardziej wartościowych treści
 
 Kluczowe funkcjonalności:
 *  Zarządzanie notatkami: Udostępnianie, pobieranie, filtrowanie według przedmiotów oraz zapisywanie wybranych materiałów na profilu.  
